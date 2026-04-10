@@ -192,7 +192,7 @@ export function renderNavbar(containerId = 'navbar') {
             "
             onmouseover="this.style.background='#ffffff'; this.style.color='#000000';"
             onmouseout="this.style.background='#000000'; this.style.color='#ffffff';">
-                GET KAST
+                GET TOP
             </a>
         </nav>
     `;
