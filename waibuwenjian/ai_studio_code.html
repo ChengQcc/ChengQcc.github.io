@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数学之美：宇宙级3D粒子漩涡</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: #000;
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            user-select: none;
+        }
+        canvas {
+            display: block;
+        }
+        #ui-container {
+            position: absolute;
+            bottom: 8%;
+            width: 100%;
+            text-align: center;
+            pointer-events: none;
+            z-index: 10;
+        }
+        #curve-name {
+            font-size: 28px;
+            color: #ffffff;
+            letter-spacing: 6px;
+            font-weight: 300;
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.8), 0 0 30px rgba(0, 255, 255, 0.6);
+            transition: opacity 1.5s ease-in-out;
+            opacity: 0;
+        }
+        #prompt {
+            font-size: 13px;
+            color: #aaaaaa;
+            margin-top: 12px;
+            letter-spacing: 3px;
+        }
+    </style>
+    <!-- 使用 Import Map 加载 Three.js -->
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://unpkg.com/three@0.150.1/build/three.module.js",
+            "three/addons/": "https://unpkg.com/three@0.150.1/examples/jsm/"
+        }
+    }
+    </script>
+</head>
+<body>
+    <div id="ui-container">
+        <div id="curve-name">初始化宇宙参数...</div>
+        <div id="prompt">鼠标拖拽旋转视角 | 滚轮缩放</div>
+    </div>
+
+    <script type="module">
+        import * as THREE from 'three';
+        import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+        import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+        import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+        import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+
+        // ================= 配置参数 =================
+        const PARTICLE_COUNT = 30000;
+        const INTERVAL_MS = 10000; // 每10秒切换一次形态
+        const LERP_FACTOR = 0.02;  // 粒子变形缓动因子
+
+        // 场景、相机与渲染器
+        const scene = new THREE.Scene();
+        scene.fog = new THREE.FogExp2(0x000000, 0.002);
+
+        const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 1000);
+        camera.position.set(0, 40, 180);
+
+        const renderer = new THREE.WebGLRenderer({ antialias: false, powerPreference: "high-performance" });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        document.body.appendChild(renderer.domElement);
+
+        // ================= 后期处理：辉光效果 =================
+        const renderScene = new RenderPass(scene, camera);
+        const bloomPass = new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 1.8, 0.5, 0.1);
+        const composer = new EffectComposer(renderer);
+        composer.addPass(renderScene);
+        composer.addPass(bloomPass);
+
+        // ================= 轨道控制器 =================
+        const controls = new OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true;
+        controls.dampingFactor = 0.05;
+        controls.autoRotate = true;     // 自动旋转，增强宏大宇宙漩涡感
+        controls.autoRotateSpeed = 0.8; 
+        controls.maxDistance = 400;
+
+        // ================= 预生成：科赫曲线点集 =================
+        const kochPoints =[];
+        function initKoch() {
+            const p1 = new THREE.Vector3(-80, -40, 0);
+            const p2 = new THREE.Vector3(80, -40, 0);
+            const p3 = new THREE.Vector3(0, 80 * Math.sqrt(3) - 40, 0);
+
+            function subdivide(a, b, depth) {
+                if (depth === 0) {
+                    kochPoints.push(a);
+                    return;
+                }
+                const dir = new THREE.Vector3().subVectors(b, a);
+                const step = dir.clone().multiplyScalar(1/3);
+                const pA = new THREE.Vector3().addVectors(a, step);
+                const pB = new THREE.Vector3().addVectors(a, step.clone().multiplyScalar(2));
+                const pTop = pA.clone();
+                pTop.add(step.clone().applyAxisAngle(new THREE.Vector3(0, 0, 1), Math.PI / 3));
+
+                subdivide(a, pA, depth - 1);
+                subdivide(pA, pTop, depth - 1);
+                subdivide(pTop, pB, depth - 1);
+                subdivide(pB, b, depth - 1);
+            }
+            subdivide(p1, p2, 5);
+            subdivide(p2, p3, 5);
+            subdivide(p3, p1, 5);
+            kochPoints.push(p1); // 闭合
+        }
+        initKoch();
+
+        // ================= 定义所有数学形态 =================
+        const shapesConfig =[
+            { id: 'Archimedean', name: '阿基米德螺旋线 / Archimedean Spiral' },
+            { id: 'Cardioid',    name: '心形线 / Cardioid' },
+            { id: 'Butterfly',   name: '蝴蝶曲线 / Butterfly Curve' },
+            { id: 'Lemniscate',  name: '伯努利双扭线 / Lemniscate of Bernoulli' },
+            { id: 'Rose',        name: '玫瑰曲线 / Rose Curve' },
+            { id: 'Catenary',    name: '悬链线 / Catenary (Catenoid)' },
+            { id: 'Koch',        name: '科赫曲线 / Koch Curve' }
+        ];
+
+        const shapesData =[]; // 保存预计算好的每种形态的坐标和颜色
+        const colorA = new THREE.Color();
+        const colorB = new THREE.Color();
+
+        function precalculateShapes() {
+            for (let s = 0; s < shapesConfig.length; s++) {
+                const type = shapesConfig[s].id;
+                const pos = new Float32Array(PARTICLE_COUNT * 3);
+                const col = new Float32Array(PARTICLE_COUNT * 3);
+
+                for (let i = 0; i < PARTICLE_COUNT; i++) {
+                    let i3 = i * 3;
+                    let t = i / PARTICLE_COUNT;
+                    let x = 0, y = 0, z = 0;
+
+                    // 1. 根据纯数学方程计算基础形态
+                    switch (type) {
+                        case 'Archimedean': // 银河漩涡系
+                            colorA.setHex(0x00ffff); colorB.setHex(0xaa00ff);
+                            let thetaA = Math.pow(t, 0.6) * Math.PI * 2 * 15;
+                            let rA = 2 * thetaA;
+                            x = rA * Math.cos(thetaA);
+                            z = rA * Math.sin(thetaA);
+                            y = (Math.random() - 0.5) * (1500 / (rA + 10)); // 银河中心厚，边缘薄
+                            break;
+
+                        case 'Cardioid': // 宇宙跳动之心 (使用视觉更佳的心形方程)
+                            colorA.setHex(0xff2a2a); colorB.setHex(0xff7a7a);
+                            let tC = Math.random() * Math.PI * 2;
+                            let rC = Math.random() * 2 + 4.5; // 分层厚度
+                            x = rC * 16 * Math.pow(Math.sin(tC), 3);
+                            y = rC * (13 * Math.cos(tC) - 5 * Math.cos(2*tC) - 2 * Math.cos(3*tC) - Math.cos(4*tC));
+                            z = (Math.random() - 0.5) * 20;
+                            break;
+
+                        case 'Butterfly': // 灵动星蝶
+                            colorA.setHex(0x00aaff); colorB.setHex(0x00ffcc);
+                            let tB = Math.random() * Math.PI * 2 * 10;
+                            let expr = Math.exp(Math.sin(tB)) - 2 * Math.cos(4*tB) + Math.pow(Math.sin((2*tB - Math.PI)/24), 5);
+                            let rB = 15 * expr;
+                            x = rB * Math.sin(tB);
+                            y = rB * Math.cos(tB);
+                            z = (Math.random() - 0.5) * 20;
+                            break;
+
+                        case 'Lemniscate': // 无尽维度 (无限符号)
+                            colorA.setHex(0xffaa00); colorB.setHex(0xff0055);
+                            let tL = Math.random() * Math.PI * 2;
+                            let denom = 1 + Math.pow(Math.sin(tL), 2);
+                            let aL = 90 + Math.random() * 30; // 离散的厚度带
+                            x = aL * Math.cos(tL) / denom;
+                            y = aL * Math.sin(tL) * Math.cos(tL) / denom;
+                            z = (Math.random() - 0.5) * 20;
+                            break;
+
+                        case 'Rose': // 时空之花
+                            colorA.setHex(0xaa00ff); colorB.setHex(0xff00aa);
+                            let tR = Math.random() * Math.PI * 2 * 10;
+                            let rR = 80 * Math.cos(4 * tR); // 8瓣玫瑰
+                            x = rR * Math.cos(tR);
+                            y = rR * Math.sin(tR);
+                            z = (Math.random() - 0.5) * 15;
+                            break;
+
+                        case 'Catenary': // 星际虫洞 (悬链面)
+                            colorA.setHex(0xaaff00); colorB.setHex(0x00aa00);
+                            let u = Math.random() * Math.PI * 2;
+                            let v = (Math.random() - 0.5) * 60; // 高度
+                            let cC = 15;
+                            x = cC * Math.cosh(v/cC) * Math.cos(u);
+                            z = cC * Math.cosh(v/cC) * Math.sin(u);
+                            y = v;
+                            break;
+
+                        case 'Koch': // 碎形冰晶
+                            colorA.setHex(0xffffff); colorB.setHex(0x88ccff);
+                            let seg = Math.floor(Math.random() * (kochPoints.length - 1));
+                            let pA = kochPoints[seg];
+                            let pB = kochPoints[seg + 1];
+                            let tK = Math.random();
+                            x = pA.x + (pB.x - pA.x) * tK;
+                            y = pA.y + (pB.y - pA.y) * tK;
+                            z = pA.z + (pB.z - pA.z) * tK;
+                            break;
+                    }
+
+                    // 2. 加入混沌散射 (让它看起来像星尘而不是生硬的线)
+                    if (type !== 'Catenary' && type !== 'Koch' && type !== 'Archimedean') {
+                        x += (Math.random() - 0.5) * 3;
+                        y += (Math.random() - 0.5) * 3;
+                        z += (Math.random() - 0.5) * 3;
+                    } else if (type === 'Koch') {
+                        z += (Math.random() - 0.5) * 25; // 让二维的科赫曲线拥有厚实的深度感
+                    }
+
+                    pos[i3] = x;
+                    pos[i3+1] = y;
+                    pos[i3+2] = z;
+
+                    // 3. 颜色渐变
+                    let c = new THREE.Color().copy(colorA).lerp(colorB, Math.random());
+                    col[i3] = c.r;
+                    col[i3+1] = c.g;
+                    col[i3+2] = c.b;
+                }
+                shapesData.push({ positions: pos, colors: col });
+            }
+        }
+        precalculateShapes();
+
+        // ================= 粒子系统搭建 =================
+        const geometry = new THREE.BufferGeometry();
+        // 初始位置和颜色(随便生成一个球体)
+        const currentPositions = new Float32Array(PARTICLE_COUNT * 3);
+        const currentColors = new Float32Array(PARTICLE_COUNT * 3);
+        
+        for(let i=0; i<PARTICLE_COUNT*3; i++) {
+            currentPositions[i] = (Math.random() - 0.5) * 200;
+            currentColors[i] = 1.0;
+        }
+
+        geometry.setAttribute('position', new THREE.BufferAttribute(currentPositions, 3));
+        geometry.setAttribute('color', new THREE.BufferAttribute(currentColors, 3));
+
+        // 使用自定义着色器实现发光的柔和圆点以及呼吸感
+        const customMaterial = new THREE.ShaderMaterial({
+            uniforms: {
+                uTime: { value: 0 }
+            },
+            vertexShader: `
+                uniform float uTime;
+                varying vec3 vColor;
+                void main() {
+                    vColor = color;
+                    vec3 pos = position;
+                    
+                    // 为粒子赋予生命力：轻微的混沌呼吸律动
+                    float dist = length(pos);
+                    pos.x += sin(uTime * 1.2 + dist * 0.05) * 0.4;
+                    pos.y += cos(uTime * 1.5 + dist * 0.05) * 0.4;
+                    pos.z += sin(uTime * 1.8 + dist * 0.05) * 0.4;
+
+                    vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
+                    
+                    // 深度透视缩放，增强三维空间感
+                    gl_PointSize = (120.0 / -mvPosition.z) * (1.0 + sin(pos.x * 10.0)*0.2);
+                    gl_Position = projectionMatrix * mvPosition;
+                }
+            `,
+            fragmentShader: `
+                varying vec3 vColor;
+                void main() {
+                    // 将方形点转换为带柔和边缘的圆形，实现星光质感
+                    vec2 xy = gl_PointCoord.xy - vec2(0.5);
+                    float ll = length(xy);
+                    if(ll > 0.5) discard;
+                    
+                    float alpha = (0.5 - ll) * 2.0; // 边缘淡化
+                    gl_FragColor = vec4(vColor, alpha * 0.9);
+                }
+            `,
+            transparent: true,
+            blending: THREE.AdditiveBlending, // 叠加发光模式！极其关键
+            depthWrite: false,
+            vertexColors: true
+        });
+
+        const particles = new THREE.Points(geometry, customMaterial);
+        scene.add(particles);
+
+        // ================= 增加一层静态星空背景 =================
+        const bgGeo = new THREE.BufferGeometry();
+        const bgCount = 4000;
+        const bgPos = new Float32Array(bgCount * 3);
+        for(let i=0; i<bgCount*3; i++) bgPos[i] = (Math.random() - 0.5) * 1200;
+        bgGeo.setAttribute('position', new THREE.BufferAttribute(bgPos, 3));
+        const bgMat = new THREE.PointsMaterial({ color: 0x444455, size: 1.5, transparent: true, opacity: 0.6 });
+        const bgStars = new THREE.Points(bgGeo, bgMat);
+        scene.add(bgStars);
+
+        // ================= 变形逻辑控制器 =================
+        let currentShapeIndex = -1;
+        let targetPositions = shapesData[0].positions;
+        let targetColors = shapesData[0].colors;
+
+        function nextShape() {
+            currentShapeIndex = (currentShapeIndex + 1) % shapesConfig.length;
+            targetPositions = shapesData[currentShapeIndex].positions;
+            targetColors = shapesData[currentShapeIndex].colors;
+
+            // UI 切换特效
+            const uiTitle = document.getElementById('curve-name');
+            uiTitle.style.opacity = 0;
+            setTimeout(() => {
+                uiTitle.innerText = shapesConfig[currentShapeIndex].name;
+                uiTitle.style.opacity = 1;
+            }, 1000);
+        }
+
+        // 立即触发第一个
+        nextShape();
+        setInterval(nextShape, INTERVAL_MS);
+
+        // ================= 动画与渲染循环 =================
+        const clock = new THREE.Clock();
+
+        function animate() {
+            requestAnimationFrame(animate);
+            const elapsedTime = clock.getElapsedTime();
+
+            // 1. 每帧动态计算坐标和颜色的平滑过渡（Lerp）
+            // JavaScript 在现代浏览器中处理 3万 级别的数据迭代速度极快 (0.x ms)
+            const positions = geometry.attributes.position.array;
+            const colors = geometry.attributes.color.array;
+
+            for (let i = 0; i < PARTICLE_COUNT * 3; i++) {
+                // 指数衰减缓动，形成极其自然的粒子汇聚与飞舞感
+                positions[i] += (targetPositions[i] - positions[i]) * LERP_FACTOR;
+                colors[i] += (targetColors[i] - colors[i]) * LERP_FACTOR;
+            }
+            
+            geometry.attributes.position.needsUpdate = true;
+            geometry.attributes.color.needsUpdate = true;
+
+            // 2. 更新 Shader 中的时间，驱动混沌呼吸效果
+            customMaterial.uniforms.uTime.value = elapsedTime;
+
+            // 3. 驱动外层旋转，造成宏大宇宙漩涡现象
+            controls.update();
+
+            // 4. 渲染通过 Post-processing 流水线
+            composer.render();
+        }
+
+        animate();
+
+        // ================= 窗口尺寸自适应 =================
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            composer.setSize(window.innerWidth, window.innerHeight);
+        });
+    </script>
+</body>
+</html>

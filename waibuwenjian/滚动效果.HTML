@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Story Foundation 滚动过渡效果复刻</title>
+    
+    <!-- 引入 GSAP 核心库和 ScrollTrigger 插件 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <!-- 引入 Lenis 实现丝滑的惯性滚动 (顶级网站标配) -->
+    <script src="https://unpkg.com/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+
+    <style>
+        /* --- 基础重置 --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #000;
+            color: #fff;
+            overflow-x: hidden;
+            /* 隐藏默认滚动条，让视觉更干净 */
+            scrollbar-width: none; 
+        }
+        body::-webkit-scrollbar { display: none; }
+
+        .container {
+            position: relative;
+        }
+
+        /* --- 核心区块布局 --- */
+        .panel {
+            height: 100vh;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        /* 第一屏：黑夜模式（固定在底层） */
+        .dark-panel {
+            background-color: #000;
+            position: sticky;
+            top: 0;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        /* 第二屏：白天模式（层级高，滚动时会覆盖黑夜模式） */
+        .light-panel {
+            background-color: #fff;
+            position: relative;
+            z-index: 2;
+            border-top-left-radius: 40px;
+            border-top-right-radius: 40px;
+            box-shadow: 0 -20px 50px rgba(0,0,0,0.5);
+        }
+
+        /* 第三屏：为了展示滚动延续的占位 */
+        .footer-panel {
+            height: 50vh;
+            background-color: #111;
+            position: relative;
+            z-index: 3;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* --- 视觉光晕特效 (复刻图片中的蓝光过渡) --- */
+        /* 黑底蓝光：在第一屏底部 */
+        .bottom-glow {
+            position: absolute;
+            bottom: -10vh;
+            width: 100%;
+            height: 50vh;
+            background: radial-gradient(ellipse at bottom, rgba(0, 102, 255, 0.6) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* 白顶蓝光：在第二屏顶部，模拟覆盖时的强光边缘 */
+        .top-glow {
+            position: absolute;
+            top: -80px;
+            left: 0;
+            width: 100%;
+            height: 200px;
+            background: radial-gradient(ellipse at top, rgba(0, 102, 255, 0.8) 0%, transparent 70%);
+            pointer-events: none;
+            border-top-left-radius: 40px;
+            border-top-right-radius: 40px;
+            z-index: 5;
+        }
+
+        /* --- 内容排版与动画 --- */
+        .content {
+            text-align: center;
+            z-index: 10;
+            max-width: 800px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1, h2 {
+            font-size: 4.5rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            letter-spacing: -2px;
+        }
+
+        p {
+            font-size: 1.25rem;
+            line-height: 1.6;
+            color: #a0a0a0;
+            max-width: 600px;
+        }
+
+        .text-black { color: #111; }
+        .text-gray { color: #666; font-size: 1.1rem; }
+
+        /* 初始状态隐藏，交由 JS 控制淡入 */
+        .fade-up {
+            opacity: 0;
+            transform: translateY(60px);
+        }
+
+        /* 模拟图片底部的 UI 卡片 */
+        .mock-cards {
+            margin-top: 60px;
+            width: 80%;
+            max-width: 600px;
+            height: 280px;
+            background: linear-gradient(180deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 24px;
+            border: 1px solid #e5e5e5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #333;
+            font-weight: bold;
+            font-size: 1.5rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+        }
+    </style>
+</head>
+<body>
+
+    <main class="container">
+        <!-- 帧1：起始帧 (黑色背景 + 底部蓝光) -->
+        <section class="panel dark-panel" id="section1">
+            <div class="content parallax-content">
+                <h1 class="fade-up">Story Protocol</h1>
+                <p class="fade-up">The Programmable IP Layer</p>
+            </div>
+            <div class="bottom-glow parallax-glow"></div>
+        </section>
+
+        <!-- 帧2 & 帧3：过程帧与结束帧 (白色背景上滑覆盖) -->
+        <section class="panel light-panel" id="section2">
+            <!-- 顶部溢出的蓝色发光层，营造覆盖时的光晕感 -->
+            <div class="top-glow"></div> 
+            
+            <div class="content">
+                <h2 class="fade-up text-black">Purpose-built for IP</h2>
+                <p class="fade-up text-gray">Story is the infrastructure layer that makes IP<br>and real-world data programmable,<br>enforceable, and monetizable.</p>
+                
+                <div class="mock-cards fade-up">
+                    Programmable Licensing UI
+                </div>
+            </div>
+        </section>
+
+        <section class="footer-panel">
+            <h3 class="fade-up text-gray">Scroll to top to see the effect again.</h3>
+        </section>
+    </main>
+
+    <script>
+        // 1. 初始化 Lenis 平滑滚动 (非常关键，能让滚动如黄油般丝滑)
+        const lenis = new Lenis({
+            duration: 1.2,
+            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // 经典的缓动曲线
+            smoothWheel: true
+        });
+
+        // 将 Lenis 的滚动事件与 GSAP ScrollTrigger 绑定
+        lenis.on('scroll', ScrollTrigger.update);
+        gsap.ticker.add((time) => {
+            lenis.raf(time * 1000);
+        });
+        gsap.ticker.lagSmoothing(0);
+
+        // 2. 注册 GSAP 插件
+        gsap.registerPlugin(ScrollTrigger);
+
+        // 3. 通用文字淡入动画 (所有带 .fade-up 类的元素)
+        const fadeElements = gsap.utils.toArray('.fade-up');
+        fadeElements.forEach((elem) => {
+            gsap.to(elem, {
+                opacity: 1,
+                y: 0,
+                duration: 1.2,
+                ease: "power3.out",
+                scrollTrigger: {
+                    trigger: elem,
+                    start: "top 85%", // 当元素顶部进入屏幕 85% 位置时触发
+                    toggleActions: "play none none reverse" // 向下滚播放，向上滚反向收起
+                }
+            });
+        });
+
+        // 4. 视差覆盖特效 (核心交互)
+        // 当白色的 Section2 向上滚覆盖黑色的 Section1 时，让 Section1 里的文字产生向下掉落的视差错觉
+        gsap.to(".parallax-content", {
+            y: "30vh",      // 向下位移
+            opacity: 0.2,   // 变暗
+            scale: 0.95,    // 微微缩小营造纵深感
+            ease: "none",
+            scrollTrigger: {
+                trigger: "#section2", // 触发器是第二个区块
+                start: "top bottom",  // 白块刚刚触碰屏幕底部时开始
+                end: "top top",       // 白块完全覆盖屏幕时结束
+                scrub: true           // Scrub 开启，完全绑定滚轮进度
+            }
+        });
+
+        // 让底部的蓝色光晕也在覆盖时向下退散
+        gsap.to(".parallax-glow", {
+            y: "15vh",
+            opacity: 0,
+            ease: "none",
+            scrollTrigger: {
+                trigger: "#section2",
+                start: "top bottom",
+                end: "top 30%",
+                scrub: true
+            }
+        });
+    </script>
+</body>
+</html>

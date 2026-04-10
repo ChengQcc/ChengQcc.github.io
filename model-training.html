@@ -1,0 +1,1917 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>京东营销&amp;IPLORA训练 - 项目详情</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --color-primary: #1ED760;
+            --color-primary-dark: #1a5a3a;
+            --color-bg: #0D0D0D;
+            --color-card: rgba(255,255,255,0.03);
+            --color-border: rgba(255,255,255,0.08);
+            --color-text: #ffffff;
+            --color-text-secondary: rgba(255,255,255,0.6);
+            --color-text-muted: rgba(255,255,255,0.4);
+        }
+        
+        html {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        }
+        
+        body {
+            background: var(--color-bg);
+            color: var(--color-text);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        /* 导航栏占位 */
+        #navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 100;
+        }
+        
+        .navbar-spacer {
+            height: 60px;
+        }
+        
+        /* 返回箭头 */
+        .back-arrow {
+            position: fixed;
+            left: 60px;
+            top: 90px;
+            z-index: 100;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .back-arrow:hover {
+            background: rgba(30, 215, 96, 0.15);
+            border-color: rgba(30, 215, 96, 0.4);
+            color: #1ED760;
+            transform: translateX(-3px);
+        }
+        
+        /* 主容器 */
+        .project-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 60px 100px;
+        }
+        
+        /* 顶部封面图 */
+        .project-cover {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            border-radius: 16px;
+            overflow: hidden;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+            margin-bottom: 48px;
+            position: relative;
+        }
+        
+        .project-cover img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .project-cover-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #1a3a2a 0%, #0D0D0D 100%);
+        }
+        
+        .project-cover-placeholder span {
+            font-size: 14px;
+            color: var(--color-text-muted);
+            letter-spacing: 0.1em;
+        }
+        
+        /* 项目名称 */
+        .project-title {
+            font-size: 48px;
+            font-weight: 900;
+            color: var(--color-text);
+            margin-bottom: 48px;
+            letter-spacing: -0.02em;
+        }
+        
+        .project-title .highlight {
+            color: var(--color-primary);
+        }
+        
+        /* 两列布局：背景(60%) + 职责/目标(40%) */
+        .info-row {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr;
+            gap: 24px;
+            margin-bottom: 48px;
+        }
+        
+        /* 右侧列：职责和目标上下堆叠 */
+        .info-right-column {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+        
+        /* 右侧卡片样式调整 */
+        .info-right-column .info-card {
+            padding: 24px;
+        }
+        
+        .info-right-column .info-card-header {
+            margin-bottom: 16px;
+        }
+        
+        .info-right-column .info-card-title {
+            font-size: 16px;
+        }
+        
+        .info-right-column .info-card-number {
+            font-size: 18px;
+        }
+        
+        /* 项目背景/职责/目标三个卡片背景 */
+        .info-row .info-card {
+            background: rgba(0, 255, 136, 0.027);
+            border-color: rgba(0, 255, 136, 0.2);
+        }
+        
+        /* 信息卡片 */
+        .info-card {
+            background: var(--color-card);
+            border: 1px solid var(--color-border);
+            border-radius: 16px;
+            padding: 32px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .info-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 3px;
+            height: 100%;
+            background: var(--color-primary);
+            border-radius: 16px 0 0 16px;
+        }
+        
+        .info-card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .info-card-number {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--color-primary);
+        }
+        
+        .info-card-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--color-text);
+        }
+        
+        .info-card-content {
+            font-size: 15px;
+            line-height: 1.8;
+            color: var(--color-text-secondary);
+        }
+        
+        /* 标签列表 */
+        .tag-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 16px;
+        }
+        
+        .tag {
+            display: inline-flex;
+            align-items: center;
+            padding: 8px 16px;
+            background: var(--color-primary-dark);
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--color-text);
+        }
+        
+        /* 章节标题样式 */
+        .section-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--color-text);
+            margin-bottom: 32px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .section-title::before {
+            content: '';
+            width: 4px;
+            height: 28px;
+            background: var(--color-primary);
+            border-radius: 2px;
+        }
+        
+        /* 章节正文内容 */
+        .section-content {
+            font-size: 15px;
+            line-height: 1.8;
+            color: var(--color-text-secondary);
+            margin-bottom: 32px;
+        }
+        
+        /* 系统集成流程图模块 */
+        .integration-section {
+            margin-top: 64px;
+        }
+        
+        .integration-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 48px;
+            align-items: start;
+        }
+        
+        .integration-flow {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+        
+        .integration-flow svg text {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+        }
+        
+        /* 流程图交互动画 */
+        .flow-card {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .flow-card:hover .card-bg {
+            filter: brightness(1.3);
+        }
+        
+        .flow-card:hover .card-glow {
+            opacity: 0.6;
+        }
+        
+        /* 节点脉冲动画 */
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.2); }
+        }
+        
+        .flow-node-pulse {
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        /* 箭头流动动画 */
+        @keyframes flowRight {
+            0% { stroke-dashoffset: 14; }
+            100% { stroke-dashoffset: 0; }
+        }
+        
+        @keyframes flowRightToLeft {
+            0% { stroke-dashoffset: -14; }
+            100% { stroke-dashoffset: 0; }
+        }
+        
+        @keyframes flowDown {
+            0% { stroke-dashoffset: 15; }
+            100% { stroke-dashoffset: 0; }
+        }
+        
+        .flow-arrow-right {
+            stroke-dasharray: 8, 6;
+            animation: flowRight 0.8s linear infinite;
+        }
+        
+        .flow-arrow-right-to-left {
+            stroke-dasharray: 8, 6;
+            animation: flowRightToLeft 0.8s linear infinite;
+        }
+        
+        .flow-arrow-down {
+            stroke-dasharray: 10, 5;
+            animation: flowDown 0.6s linear infinite;
+        }
+        
+        /* 第4步虚线 - 独立控制 */
+        @keyframes flowStep4 {
+            0% { stroke-dashoffset: 0; }
+            100% { stroke-dashoffset: 14; }
+        }
+        .flow-arrow-step4 {
+            stroke-dasharray: 8, 6;
+            animation: flowStep4 0.8s linear infinite;
+        }
+        
+        /* 第5步虚线 - 独立控制 */
+        @keyframes flowStep5 {
+            0% { stroke-dashoffset: 0; }
+            100% { stroke-dashoffset: 14; }
+        }
+        .flow-arrow-step5 {
+            stroke-dasharray: 8, 6;
+            animation: flowStep5 0.8s linear infinite;
+        }
+        
+        /* 垂直线呼吸动画 */
+        @keyframes breathe {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.6; }
+        }
+        
+        .flow-line-breathe {
+            animation: breathe 3s ease-in-out infinite;
+        }
+        
+        /* 步骤标签悬浮效果 */
+        .flow-step-group {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .flow-step-group:hover .step-label-bg {
+            fill: rgba(30, 215, 96, 0.2);
+        }
+        
+        .flow-step-group:hover .step-number {
+            fill: #00FF88;
+        }
+        
+        .integration-image {
+            border-radius: 16px;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            aspect-ratio: 4 / 3;
+        }
+        
+        .integration-image:hover {
+            transform: scale(1.02);
+            border-color: rgba(30, 215, 96, 0.3);
+        }
+        
+        .integration-image img {
+            width: 100%;
+            display: block;
+        }
+        
+        /* 响应式 */
+        
+        /* 导航栏响应式 - 与首页一致 */
+        @media (min-width: 2400px) and (max-width: 3000px) {
+            .navbar-link { font-size: 18px !important; }
+            .navbar-links { gap: 64px !important; }
+        }
+        
+        @media (min-width: 3001px) {
+            .navbar-link { font-size: 24px !important; }
+            .navbar-links { gap: 80px !important; }
+        }
+        
+        /* 2K 屏幕 - 整体放大 1.25 倍 */
+        @media (min-width: 2400px) and (max-width: 3000px) {
+            .project-container {
+                zoom: 1.25;
+            }
+            .navbar-spacer {
+                height: 76px;
+            }
+            .back-arrow {
+                left: 80px;
+                top: 110px;
+                width: 50px;
+                height: 50px;
+                border-radius: 12px;
+            }
+            .back-arrow svg {
+                width: 24px;
+                height: 24px;
+            }
+        }
+        
+        /* 4K 屏幕 - 整体放大 1.6 倍 */
+        @media (min-width: 3001px) {
+            .project-container {
+                zoom: 1.6;
+            }
+            .navbar-spacer {
+                height: 96px;
+            }
+            .back-arrow {
+                left: 100px;
+                top: 140px;
+                width: 64px;
+                height: 64px;
+                border-radius: 16px;
+            }
+            .back-arrow svg {
+                width: 32px;
+                height: 32px;
+            }
+        }
+
+        /* 图片模态框 */
+        .image-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 9999;
+            background: rgba(0, 0, 0, 0.9);
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+            box-sizing: border-box;
+        }
+        .image-modal.active {
+            display: flex;
+            overflow-y: auto;
+            padding: 40px 0;
+        }
+        .image-modal img {
+            max-width: 85%;
+            max-height: none;
+            object-fit: contain;
+            border-radius: 12px;
+            margin: auto;
+        }
+        .image-modal-close {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            color: #ffffff;
+            font-size: 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        .image-modal-close:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* 飞书多维表格模块 */
+        .feishu-section {
+            margin-top: 80px;
+        }
+
+        .feishu-gallery {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+            margin-top: 32px;
+        }
+
+        .feishu-gallery-item {
+            aspect-ratio: 21 / 9;
+            border-radius: 12px;
+            overflow: hidden;
+            background: linear-gradient(135deg, #1a2a1a 0%, #0D0D0D 100%);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .feishu-gallery-item:hover {
+            transform: scale(1.02);
+            border-color: rgba(30, 215, 96, 0.3);
+            box-shadow: 0 8px 32px rgba(30, 215, 96, 0.1);
+        }
+
+        .feishu-gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .feishu-gallery-placeholder {
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 14px;
+            letter-spacing: 0.1em;
+        }
+
+        /* ========== 品牌营销模型：流程图 + 展示（色调与 ai-tool / 首页统一） ========== */
+        /* 上部：流程图 */
+        .brand-flow-chart {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            flex-wrap: nowrap;
+            margin-top: 24px;
+            padding: 28px 20px;
+            background: var(--color-card);
+            border: 1px solid var(--color-border);
+            border-radius: 16px;
+        }
+
+        .brand-flow-node {
+            flex: 1;
+            min-width: 0;
+            text-align: center;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .brand-flow-chart.is-visible .brand-flow-node {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .brand-flow-chart.is-visible .brand-flow-node:nth-child(1) { transition-delay: 0s; }
+        .brand-flow-chart.is-visible .brand-flow-node:nth-child(3) { transition-delay: 0.1s; }
+        .brand-flow-chart.is-visible .brand-flow-node:nth-child(5) { transition-delay: 0.2s; }
+        .brand-flow-chart.is-visible .brand-flow-node:nth-child(7) { transition-delay: 0.3s; }
+
+        .brand-flow-chip {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            max-width: 200px;
+            margin: 0 auto;
+            padding: 12px 16px;
+            font-size: 15px;
+            font-weight: 600;
+            color: #ffffff;
+            letter-spacing: 0.02em;
+            background: rgba(30, 215, 96, 0.1);
+            border: 1px solid rgba(30, 215, 96, 0.35);
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(30, 215, 96, 0.06);
+            transition: transform 0.3s ease, border-color 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .brand-flow-chip:hover {
+            transform: scale(1.02);
+            border-color: rgba(30, 215, 96, 0.55);
+            background: rgba(30, 215, 96, 0.16);
+            box-shadow: 0 6px 24px rgba(30, 215, 96, 0.12);
+        }
+
+        .brand-flow-arrow {
+            flex: 0 0 auto;
+            width: 28px;
+            height: 20px;
+            color: var(--color-primary);
+            flex-shrink: 0;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .brand-flow-chart.is-visible .brand-flow-arrow:nth-child(2) { opacity: 1; transition-delay: 0.05s; }
+        .brand-flow-chart.is-visible .brand-flow-arrow:nth-child(4) { opacity: 1; transition-delay: 0.15s; }
+        .brand-flow-chart.is-visible .brand-flow-arrow:nth-child(6) { opacity: 1; transition-delay: 0.25s; }
+
+        .brand-flow-arrow svg {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        /* 咔叔 IP 模块：五条在背景框内横向排满，chip 内文案居中 */
+        .brand-flow-chart--chip-row {
+            width: 100%;
+            flex-wrap: nowrap;
+            justify-content: flex-start;
+            align-items: stretch;
+            gap: 10px;
+        }
+
+        .brand-flow-chart--chip-row .brand-flow-node {
+            flex: 1 1 0;
+            min-width: 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        .brand-flow-chart--chip-row .brand-flow-chip {
+            width: 100%;
+            max-width: none;
+            margin: 0;
+            white-space: normal;
+            text-align: center;
+            line-height: 1.35;
+            min-height: 48px;
+        }
+
+        .brand-flow-chart--chip-row.is-visible .brand-flow-node:nth-child(1) { transition-delay: 0s; }
+        .brand-flow-chart--chip-row.is-visible .brand-flow-node:nth-child(2) { transition-delay: 0.08s; }
+        .brand-flow-chart--chip-row.is-visible .brand-flow-node:nth-child(3) { transition-delay: 0.16s; }
+        .brand-flow-chart--chip-row.is-visible .brand-flow-node:nth-child(4) { transition-delay: 0.24s; }
+        .brand-flow-chart--chip-row.is-visible .brand-flow-node:nth-child(5) { transition-delay: 0.32s; }
+
+        /* 下部：展示（图片容器与 scroll-reveal「UGC视频SOP」.ugc-sop-image 一致） */
+        .brand-showcase {
+            margin-top: 40px;
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.55fr);
+            gap: 16px;
+            align-items: stretch;
+        }
+
+        /* 咔叔 IP：训练集 + 出图展示，右侧列出图列占满原「训练+出图」总宽度 */
+        .brand-showcase.brand-showcase--kashu-two {
+            grid-template-columns: minmax(0, 1fr) minmax(0, 2.55fr);
+        }
+
+        /* 京东医生：三列等宽（男医生 / 女医生 / 女护士） */
+        .brand-showcase.brand-showcase--doctor-three {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+
+        .brand-showcase-col {
+            display: flex;
+            min-width: 0;
+            border: 1px solid var(--color-border);
+            border-radius: 12px;
+            overflow: hidden;
+            background: rgba(0, 0, 0, 0.25);
+            opacity: 0;
+            transform: translateY(16px);
+            transition: opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.55s cubic-bezier(0.16, 1, 0.3, 1),
+                border-color 0.3s ease,
+                box-shadow 0.3s ease;
+        }
+
+        .brand-showcase.is-visible .brand-showcase-col:nth-child(1) {
+            opacity: 1;
+            transform: translateY(0);
+            transition-delay: 0.05s;
+        }
+
+        .brand-showcase.is-visible .brand-showcase-col:nth-child(2) {
+            opacity: 1;
+            transform: translateY(0);
+            transition-delay: 0.12s;
+        }
+
+        .brand-showcase.is-visible .brand-showcase-col:nth-child(3) {
+            opacity: 1;
+            transform: translateY(0);
+            transition-delay: 0.19s;
+        }
+
+        .brand-showcase-col:hover {
+            border-color: rgba(30, 215, 96, 0.22);
+        }
+
+        .brand-showcase-rail {
+            flex: 0 0 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 0.12em;
+            color: var(--color-primary);
+            background: rgba(30, 215, 96, 0.08);
+            border-right: 1px solid var(--color-border);
+        }
+
+        .brand-showcase-body {
+            flex: 1;
+            min-width: 0;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .brand-showcase-block-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.85);
+            padding: 6px 8px;
+            background: rgba(0, 0, 0, 0.45);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 6px;
+            text-align: center;
+            line-height: 1.35;
+        }
+
+        /* 与 scroll-reveal.html .ugc-sop-image / :hover 规则对齐 */
+        .ugc-sop-image {
+            transition: transform 0.3s ease;
+            border-radius: 16px;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .ugc-sop-image:hover {
+            transform: scale(1.02);
+        }
+
+        .ugc-sop-image img {
+            width: 100%;
+            display: block;
+        }
+
+        .brand-img-placeholder {
+            width: 100%;
+            aspect-ratio: 16 / 10;
+            min-height: 120px;
+            border-radius: 0;
+            border: none;
+            background: linear-gradient(145deg, rgba(30, 215, 96, 0.06) 0%, rgba(255, 255, 255, 0.03) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.38);
+            letter-spacing: 0.06em;
+        }
+
+        .ugc-sop-image .brand-img-placeholder--tall {
+            aspect-ratio: 4 / 3;
+            min-height: 180px;
+        }
+
+        /* 展示列单图铺满内容区（无内边距 + 绝对定位裁切，三列共用） */
+        .brand-showcase-body--fullbleed {
+            gap: 0;
+            min-height: 0;
+            padding: 0;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .brand-showcase-body--fullbleed .ugc-sop-image--fullbleed {
+            flex: 1 1 auto;
+            width: 100%;
+            min-height: 560px;
+            min-width: 0;
+            position: relative;
+            overflow: hidden;
+            border-radius: 0;
+        }
+
+        .brand-showcase-body--fullbleed .ugc-sop-image--fullbleed img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            display: block;
+            filter: blur(0px);
+            transition: filter 0.3s ease;
+        }
+
+        /* 「出图展示」：与 ai-manju「全局架构」.architecture-image 一致的指针 + 点击放大预览 */
+        .brand-showcase-output-image {
+            cursor: pointer;
+        }
+
+        /* 电商配饰 LoRA：16:9 主图，交互同医生模块图片 */
+        .ecommerce-lora-showcase {
+            margin-top: 40px;
+        }
+
+        .ecommerce-lora-showcase-reveal {
+            opacity: 0;
+            transform: translateY(16px);
+            transition: opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .ecommerce-lora-showcase-reveal.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .ugc-sop-image--ratio-16x9 {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            position: relative;
+            overflow: hidden;
+            border-radius: 12px;
+        }
+
+        .ugc-sop-image--ratio-16x9 img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            display: block;
+            filter: blur(0px);
+            transition: filter 0.3s ease;
+        }
+
+        /* 万物迁移：第 1 行 60%|40%，第 2 行 50%|50% */
+        .wanyi-migration-grid {
+            margin-top: 32px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .wanyi-migration-row {
+            display: grid;
+            gap: 16px;
+            align-items: stretch;
+        }
+
+        /* 上行固定可视高度；仅 min-height 时会被大图内容撑满，故用 height + 子项 min-height:0（高度较原设计缩减 10%） */
+        .wanyi-migration-row--top {
+            grid-template-columns: minmax(0, 6fr) minmax(0, 4fr);
+            height: clamp(140px, 18.36vw, 259px);
+            align-items: stretch;
+        }
+
+        .wanyi-migration-row--top > .wanyi-migration-cell {
+            min-height: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .wanyi-migration-row--top .wanyi-migration-img-wrap {
+            flex: 1;
+            min-height: 0;
+            height: auto;
+        }
+
+        /* 上行右侧卡：缩略仍 contain；左侧 workflow 由下方专用规则 cover */
+        .wanyi-migration-row--top .wanyi-migration-cell--card .wanyi-migration-img-wrap img {
+            max-width: 100%;
+            max-height: 100%;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+        }
+
+        .wanyi-migration-row--bottom {
+            grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+            min-height: clamp(144px, 20.16vw, 288px);
+        }
+
+        .wanyi-migration-grid-reveal {
+            opacity: 0;
+            transform: translateY(16px);
+            transition: opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .wanyi-migration-grid-reveal.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .wanyi-migration-cell {
+            border-radius: 12px;
+            overflow: hidden;
+            background: var(--color-card);
+            border: 1px solid var(--color-border);
+            transition: border-color 0.3s ease;
+        }
+
+        .wanyi-migration-cell:hover {
+            border-color: rgba(30, 215, 96, 0.22);
+        }
+
+        /* 演示卡：灰底框内图片与符号整块水平垂直居中 */
+        .wanyi-migration-cell--card {
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            justify-content: center;
+            min-height: 0;
+        }
+
+        .wanyi-migration-img-wrap {
+            display: block;
+            width: 100%;
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+
+        .wanyi-migration-img-wrap:hover {
+            transform: scale(1.02);
+        }
+
+        /* 左上 ComfyUI：铺满格内裁切；点击模态框见全图（openImageModal 加大 scale） */
+        .wanyi-migration-cell--workflow .wanyi-migration-img-wrap {
+            padding: 0;
+            height: 100%;
+            min-height: 0;
+            position: relative;
+            overflow: hidden;
+            display: block;
+            background: rgba(0, 0, 0, 0.32);
+            box-sizing: border-box;
+        }
+
+        .wanyi-migration-cell--workflow .wanyi-migration-img-wrap img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            border-radius: 0;
+            display: block;
+        }
+
+        .wanyi-migration-cell--card .wanyi-migration-img-wrap {
+            flex: 1 1 auto;
+            min-height: 0;
+            align-self: stretch;
+            padding: 12px;
+            margin: 0;
+            border: none;
+            border-radius: 10px;
+            background: transparent;
+            box-sizing: border-box;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .wanyi-migration-cell--card .wanyi-migration-img-wrap img {
+            width: auto;
+            height: auto;
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            object-position: center;
+            display: block;
+            border-radius: 6px;
+        }
+
+        /* 产品/人物换背景：第 1 行 4:3:3，第 2 行 1:1:1；视觉与万物迁移单元格一致 */
+        .bg-replace-grid {
+            margin-top: 32px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .bg-replace-row {
+            display: grid;
+            gap: 16px;
+            align-items: stretch;
+        }
+
+        .bg-replace-row--top {
+            grid-template-columns: minmax(0, 4fr) minmax(0, 3fr) minmax(0, 3fr);
+            height: clamp(140px, 18.36vw, 259px);
+        }
+
+        .bg-replace-row--top > .wanyi-migration-cell {
+            min-height: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .bg-replace-row--bottom {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            min-height: clamp(144px, 20.16vw, 288px);
+        }
+
+        .bg-replace-row--bottom > .wanyi-migration-cell {
+            min-height: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .bg-replace-grid-reveal {
+            opacity: 0;
+            transform: translateY(16px);
+            transition: opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .bg-replace-grid-reveal.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .wanyi-migration-cell--card > .bg-replace-pair {
+            flex: 1 1 auto;
+            min-height: 0;
+            align-self: stretch;
+        }
+
+        .bg-replace-pair {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px;
+            box-sizing: border-box;
+        }
+
+        .bg-replace-pair-img {
+            flex: 1 1 0;
+            min-width: 0;
+            max-height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s ease;
+        }
+
+        .bg-replace-pair-img:hover {
+            transform: scale(1.02);
+        }
+
+        .bg-replace-pair-img img {
+            max-width: 100%;
+            max-height: 100%;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            object-position: center;
+            border-radius: 6px;
+            display: block;
+        }
+
+        .bg-replace-arrow {
+            flex-shrink: 0;
+            color: var(--color-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 0;
+        }
+
+        .bg-replace-arrow svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* 打光溶图：第 1 行 4:3:3，第 2 行 1:1:1；仅左上工作流单图 cover，其余格单图 contain（同万物迁移卡片） */
+        .daguang-rongtu-section {
+            margin-bottom: 200px;
+        }
+
+        .daguang-rongtu-grid {
+            margin-top: 32px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .daguang-rongtu-row {
+            display: grid;
+            gap: 16px;
+            align-items: stretch;
+        }
+
+        .daguang-rongtu-row--top {
+            grid-template-columns: minmax(0, 4fr) minmax(0, 3fr) minmax(0, 3fr);
+            height: clamp(140px, 18.36vw, 259px);
+        }
+
+        .daguang-rongtu-row--top > .wanyi-migration-cell {
+            min-height: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .daguang-rongtu-row--bottom {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            min-height: clamp(144px, 20.16vw, 288px);
+        }
+
+        .daguang-rongtu-row--bottom > .wanyi-migration-cell {
+            min-height: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .daguang-rongtu-grid-reveal {
+            opacity: 0;
+            transform: translateY(16px);
+            transition: opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .daguang-rongtu-grid-reveal.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .daguang-rongtu-row--top .wanyi-migration-img-wrap {
+            flex: 1;
+            min-height: 0;
+            height: auto;
+        }
+
+        @media (max-width: 900px) {
+            .wanyi-migration-row--top,
+            .wanyi-migration-row--bottom {
+                grid-template-columns: 1fr;
+                min-height: 0;
+            }
+
+            .wanyi-migration-row--top {
+                height: auto;
+                max-height: none;
+            }
+
+            .wanyi-migration-row--top > .wanyi-migration-cell {
+                display: block;
+            }
+
+            .wanyi-migration-row--top .wanyi-migration-img-wrap {
+                flex: none;
+                height: auto;
+                min-height: 0;
+            }
+
+            .wanyi-migration-row--top .wanyi-migration-cell--card .wanyi-migration-img-wrap {
+                padding: 12px;
+            }
+
+            .wanyi-migration-row--top .wanyi-migration-cell--card .wanyi-migration-img-wrap img {
+                max-height: none;
+                width: 100%;
+                height: auto;
+            }
+
+            .wanyi-migration-cell--workflow .wanyi-migration-img-wrap {
+                min-height: 162px;
+                height: 180px;
+                position: relative;
+                overflow: hidden;
+                padding: 0;
+            }
+
+            .wanyi-migration-cell--workflow .wanyi-migration-img-wrap img {
+                position: absolute;
+                inset: 0;
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+
+            .bg-replace-row--top,
+            .bg-replace-row--bottom {
+                grid-template-columns: 1fr;
+                min-height: 0;
+            }
+
+            .bg-replace-row--top {
+                height: auto;
+            }
+
+            .bg-replace-row--bottom > .wanyi-migration-cell {
+                min-height: clamp(120px, 40vw, 220px);
+            }
+
+            .bg-replace-pair {
+                flex-wrap: nowrap;
+            }
+
+            .bg-replace-pair-img img {
+                max-height: min(42vw, 280px);
+            }
+
+            .bg-replace-row--top .wanyi-migration-cell--workflow .wanyi-migration-img-wrap {
+                min-height: 162px;
+                height: 180px;
+                position: relative;
+                overflow: hidden;
+                padding: 0;
+            }
+
+            .bg-replace-row--top .wanyi-migration-cell--workflow .wanyi-migration-img-wrap img {
+                position: absolute;
+                inset: 0;
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+
+            .daguang-rongtu-row--top,
+            .daguang-rongtu-row--bottom {
+                grid-template-columns: 1fr;
+                min-height: 0;
+            }
+
+            .daguang-rongtu-row--top {
+                height: auto;
+            }
+
+            .daguang-rongtu-row--bottom > .wanyi-migration-cell {
+                min-height: clamp(120px, 40vw, 220px);
+            }
+
+            .daguang-rongtu-row--top > .wanyi-migration-cell {
+                display: block;
+            }
+
+            .daguang-rongtu-row--top .wanyi-migration-img-wrap {
+                flex: none;
+                height: auto;
+                min-height: 0;
+            }
+
+            .daguang-rongtu-row--top .wanyi-migration-cell--card .wanyi-migration-img-wrap {
+                padding: 12px;
+            }
+
+            .daguang-rongtu-row--top .wanyi-migration-cell--card .wanyi-migration-img-wrap img {
+                max-height: none;
+                width: 100%;
+                height: auto;
+            }
+
+            .daguang-rongtu-row--top .wanyi-migration-cell--workflow .wanyi-migration-img-wrap {
+                min-height: 162px;
+                height: 180px;
+                position: relative;
+                overflow: hidden;
+                padding: 0;
+            }
+
+            .daguang-rongtu-row--top .wanyi-migration-cell--workflow .wanyi-migration-img-wrap img {
+                position: absolute;
+                inset: 0;
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+        }
+
+        @media (max-width: 1100px) {
+            .brand-showcase {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .brand-showcase-col:nth-child(3) {
+                grid-column: 1 / -1;
+            }
+
+            .brand-flow-chart--chip-row {
+                flex-wrap: wrap;
+            }
+
+            .brand-flow-chart--chip-row .brand-flow-node {
+                flex: 1 1 calc(33.333% - 8px);
+                min-width: 140px;
+            }
+
+            .brand-flow-chart--chip-row-4 .brand-flow-node {
+                flex: 1 1 calc(50% - 8px);
+            }
+
+            .brand-showcase.brand-showcase--kashu-two {
+                grid-template-columns: minmax(0, 1fr) minmax(0, 1.65fr);
+            }
+
+            .brand-showcase.brand-showcase--doctor-three {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .brand-showcase.brand-showcase--doctor-three .brand-showcase-col:nth-child(3) {
+                grid-column: 1 / -1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .brand-flow-chart {
+                flex-wrap: wrap;
+                justify-content: center;
+                row-gap: 16px;
+            }
+            .brand-flow-node {
+                flex: 0 0 calc(50% - 24px);
+            }
+            .brand-flow-arrow {
+                display: none;
+            }
+            .brand-flow-chart--chip-row .brand-flow-node {
+                flex: 1 1 calc(50% - 8px);
+                min-width: 0;
+            }
+            .brand-showcase {
+                grid-template-columns: 1fr;
+            }
+
+            .brand-showcase.brand-showcase--kashu-two,
+            .brand-showcase.brand-showcase--doctor-three {
+                grid-template-columns: 1fr;
+            }
+
+            .brand-showcase-body--fullbleed .ugc-sop-image--fullbleed {
+                min-height: 400px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .brand-flow-node,
+            .brand-flow-arrow,
+            .brand-flow-chip,
+            .brand-showcase-col,
+            .ugc-sop-image {
+                transition: none !important;
+            }
+            .brand-flow-node,
+            .brand-flow-arrow {
+                opacity: 1 !important;
+                transform: none !important;
+            }
+            .brand-flow-chip:hover,
+            .ugc-sop-image:hover,
+            .brand-showcase-output-image:hover {
+                transform: none !important;
+            }
+            .brand-showcase-col,
+            .brand-showcase.is-visible .brand-showcase-col {
+                opacity: 1 !important;
+                transform: none !important;
+            }
+
+            .ecommerce-lora-showcase-reveal,
+            .ecommerce-lora-showcase-reveal.is-visible {
+                opacity: 1 !important;
+                transform: none !important;
+                transition: none !important;
+            }
+
+            .wanyi-migration-grid-reveal,
+            .wanyi-migration-grid-reveal.is-visible {
+                opacity: 1 !important;
+                transform: none !important;
+                transition: none !important;
+            }
+
+            .wanyi-migration-img-wrap:hover {
+                transform: none !important;
+            }
+
+            .bg-replace-grid-reveal,
+            .bg-replace-grid-reveal.is-visible {
+                opacity: 1 !important;
+                transform: none !important;
+                transition: none !important;
+            }
+
+            .bg-replace-pair-img:hover {
+                transform: none !important;
+            }
+
+            .daguang-rongtu-grid-reveal,
+            .daguang-rongtu-grid-reveal.is-visible {
+                opacity: 1 !important;
+                transform: none !important;
+                transition: none !important;
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <!-- 返回箭头 - 固定定位 -->
+    <a href="index.html#works" class="back-arrow" title="返回作品集">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+    </a>
+    
+    <!-- 导航栏 -->
+    <div id="navbar"></div>
+    <div class="navbar-spacer"></div>
+    
+    <!-- 主内容 -->
+    <main class="project-container">
+        <!-- 封面图 -->
+        <div class="project-cover">
+            <img src="/public/images/fengmian/未标题-1.jpg" alt="模型训练与 ComfyUI 工作流封面" loading="lazy">
+        </div>
+
+        <!-- ComfyUI 工作流：标题字体与大小同页名「京东营销&IPLORA训练」.project-title -->
+        <section class="comfyui-workflow-section" aria-label="ComfyUI 工作流">
+            <h2 class="project-title">ComfyUI<span class="highlight">工作流</span></h2>
+        </section>
+
+        <!-- 万物迁移：上行 ComfyUI|演示1（6:4≈60%|40%），下行 演示2|演示3（1:1）；图：public/images/comfyui/wanwuqianyi/ -->
+        <section class="integration-section brand-model-section wanyi-migration-section" aria-label="万物迁移工作流">
+            <h2 class="section-title">万物迁移工作流</h2>
+            <div class="wanyi-migration-grid wanyi-migration-grid-reveal">
+                <div class="wanyi-migration-row wanyi-migration-row--top">
+                    <div class="wanyi-migration-cell wanyi-migration-cell--workflow">
+                        <div class="wanyi-migration-img-wrap brand-showcase-output-image" onclick="openImageModal('/public/images/comfyui/wanwuqianyi/图层 11@1.25x.png', 3.2)">
+                            <img src="/public/images/comfyui/wanwuqianyi/图层 11@1.25x.png" alt="ComfyUI 工作流" loading="lazy">
+                        </div>
+                    </div>
+                    <div class="wanyi-migration-cell wanyi-migration-cell--card wanyi-migration-cell--card1">
+                        <div class="wanyi-migration-img-wrap brand-showcase-output-image" onclick="openImageModal('/public/images/comfyui/wanwuqianyi/组 2@1.25x.png', 3.2)">
+                            <img src="/public/images/comfyui/wanwuqianyi/组 2@1.25x.png" alt="万物迁移演示 1" loading="lazy">
+                        </div>
+                    </div>
+                </div>
+                <div class="wanyi-migration-row wanyi-migration-row--bottom">
+                    <div class="wanyi-migration-cell wanyi-migration-cell--card wanyi-migration-cell--card2">
+                        <div class="wanyi-migration-img-wrap brand-showcase-output-image" onclick="openImageModal('/public/images/comfyui/wanwuqianyi/组 3@1.25x.png', 3.2)">
+                            <img src="/public/images/comfyui/wanwuqianyi/组 3@1.25x.png" alt="万物迁移演示 2" loading="lazy">
+                        </div>
+                    </div>
+                    <div class="wanyi-migration-cell wanyi-migration-cell--card wanyi-migration-cell--card3">
+                        <div class="wanyi-migration-img-wrap brand-showcase-output-image" onclick="openImageModal('/public/images/comfyui/wanwuqianyi/组 4@1.25x.png', 3.2)">
+                            <img src="/public/images/comfyui/wanwuqianyi/组 4@1.25x.png" alt="万物迁移演示 3" loading="lazy">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="integration-section brand-model-section bg-replace-section" aria-label="产品/人物换背景工作流">
+            <h2 class="section-title">产品/人物换背景工作流</h2>
+            <!-- 图片目录：public/images/comfyui/huanbeijing/ -->
+            <div class="bg-replace-grid bg-replace-grid-reveal">
+                <div class="bg-replace-row bg-replace-row--top">
+                    <div class="wanyi-migration-cell wanyi-migration-cell--workflow">
+                        <div class="wanyi-migration-img-wrap brand-showcase-output-image" onclick="openImageModal('/public/images/comfyui/huanbeijing/图层 16.png', 3.2)">
+                            <img src="/public/images/comfyui/huanbeijing/图层 16.png" alt="换背景工作流节点图" loading="lazy">
+                        </div>
+                    </div>
+                    <div class="wanyi-migration-cell wanyi-migration-cell--card">
+                        <div class="bg-replace-pair">
+                            <div class="bg-replace-pair-img brand-showcase-output-image" onclick="openImageModal('/public/images/comfyui/huanbeijing/图层 13@2x.png', 3.2)">
+                                <img src="/public/images/comfyui/huanbeijing/图层 13@2x.png" alt="案例 1 原图" loading="lazy">
+                            </div>
+                            <span class="bg-replace-arrow" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+                            </span>
+                            <div class="bg-replace-pair-img brand-showcase-output-image" onclick="openImageModal('/public/images/comfyui/huanbeijing/ComfyUI_temp_xthfp_00002_.png', 3.2)">
+                                <img src="/public/images/comfyui/huanbeijing/ComfyUI_temp_xthfp_00002_.png" alt="案例 1 换背景后" loading="lazy">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="wanyi-migration-cell wanyi-migration-cell--card">
+                        <div class="bg-replace-pair">
+                            <div class="bg-replace-pair-img brand-showcase-output-image" onclick="openImageModal('/public/images/comfyui/huanbeijing/图层 13@2x.png', 3.2)">
+                                <img src="/public/images/comfyui/huanbeijing/图层 13@2x.png" alt="案例 2 原图" loading="lazy">
+                            </div>
+                            <span class="bg-replace-arrow" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+                            </span>
+                            <div class="bg-replace-pair-img brand-showcase-output-image" onclick="openImageModal('/public/images/comfyui/huanbeijing/ComfyUI_temp_xthfp_00001_.png', 3.2)">
+                                <img src="/public/images/comfyui/huanbeijing/ComfyUI_temp_xthfp_00001_.png" alt="案例 2 换背景后" loading="lazy">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-replace-row bg-replace-row--bottom">
+                    <div class="wanyi-migration-cell wanyi-migration-cell--card">
+                        <div class="bg-replace-pair">
+                            <div class="bg-replace-pair-img brand-showcase-output-image" onclick="openImageModal('/public/images/comfyui/huanbeijing/图层 14@2x.png', 3.2)">
+                                <img src="/public/images/comfyui/huanbeijing/图层 14@2x.png" alt="示例 A 原图" loading="lazy">
+                            </div>
+                            <span class="bg-replace-arrow" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+                            </span>
+                            <div class="bg-replace-pair-img brand-showcase-output-image" onclick="openImageModal('/public/images/comfyui/huanbeijing/ComfyUI_temp_pkxmj_00001_.png', 3.2)">
+                                <img src="/public/images/comfyui/huanbeijing/ComfyUI_temp_pkxmj_00001_.png" alt="示例 A 换背景后" loading="lazy">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="wanyi-migration-cell wanyi-migration-cell--card">
+                        <div class="bg-replace-pair">
+                            <div class="bg-replace-pair-img brand-showcase-output-image" onclick="openImageModal('/public/images/comfyui/huanbeijing/图层 15@2x.png', 3.2)">
+                                <img src="/public/images/comfyui/huanbeijing/图层 15@2x.png" alt="示例 B 原图" loading="lazy">
+                            </div>
+                            <span class="bg-replace-arrow" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+                            </span>
+                            <div class="bg-replace-pair-img brand-showcase-output-image" onclick="openImageModal('/public/images/comfyui/huanbeijing/ComfyUI_temp_pkxmj_00003_.png', 3.2)">
+                                <img src="/public/images/comfyui/huanbeijing/ComfyUI_temp_pkxmj_00003_.png" alt="示例 B 换背景后" loading="lazy">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="wanyi-migration-cell wanyi-migration-cell--card">
+                        <div class="bg-replace-pair">
+                            <div class="bg-replace-pair-img brand-showcase-output-image" onclick="openImageModal('/public/images/comfyui/huanbeijing/d8d2b7ebd9afd4eeb1ebea3f33e07e2bb1f891e0b1d15db4f8da6460749cb399@2x.png', 3.2)">
+                                <img src="/public/images/comfyui/huanbeijing/d8d2b7ebd9afd4eeb1ebea3f33e07e2bb1f891e0b1d15db4f8da6460749cb399@2x.png" alt="示例 C 原图" loading="lazy">
+                            </div>
+                            <span class="bg-replace-arrow" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+                            </span>
+                            <div class="bg-replace-pair-img brand-showcase-output-image" onclick="openImageModal('/public/images/comfyui/huanbeijing/d8d2b7ebd9afd4eeb1ebea3f33e07e2bb1f891e0b1d15db4f8da6460749cb399.png', 3.2)">
+                                <img src="/public/images/comfyui/huanbeijing/d8d2b7ebd9afd4eeb1ebea3f33e07e2bb1f891e0b1d15db4f8da6460749cb399.png" alt="示例 C 换背景后" loading="lazy">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="integration-section brand-model-section daguang-rongtu-section" aria-label="打光溶图">
+            <h2 class="section-title">打光溶图（打光模型+工作流）</h2>
+            <!-- 图目录：public/images/comfyui/daguang/ -->
+            <div class="daguang-rongtu-grid daguang-rongtu-grid-reveal">
+                <div class="daguang-rongtu-row daguang-rongtu-row--top">
+                    <div class="wanyi-migration-cell wanyi-migration-cell--workflow">
+                        <div class="wanyi-migration-img-wrap brand-showcase-output-image" onclick="openImageModal('/public/images/comfyui/daguang/图层-16.jpg', 3.2)">
+                            <img src="/public/images/comfyui/daguang/图层-16.jpg" alt="打光溶图工作流" loading="lazy">
+                        </div>
+                    </div>
+                    <div class="wanyi-migration-cell wanyi-migration-cell--card">
+                        <div class="wanyi-migration-img-wrap brand-showcase-output-image" onclick="openImageModal('/public/images/comfyui/daguang/4.png', 3.2)">
+                            <img src="/public/images/comfyui/daguang/4.png" alt="打光溶图 上行案例 1" loading="lazy">
+                        </div>
+                    </div>
+                    <div class="wanyi-migration-cell wanyi-migration-cell--card">
+                        <div class="wanyi-migration-img-wrap brand-showcase-output-image" onclick="openImageModal('/public/images/comfyui/daguang/5.png', 3.2)">
+                            <img src="/public/images/comfyui/daguang/5.png" alt="打光溶图 上行案例 2" loading="lazy">
+                        </div>
+                    </div>
+                </div>
+                <div class="daguang-rongtu-row daguang-rongtu-row--bottom">
+                    <div class="wanyi-migration-cell wanyi-migration-cell--card">
+                        <div class="wanyi-migration-img-wrap brand-showcase-output-image" onclick="openImageModal('/public/images/comfyui/daguang/1.jpg', 3.2)">
+                            <img src="/public/images/comfyui/daguang/1.jpg" alt="打光溶图 下行示例 A" loading="lazy">
+                        </div>
+                    </div>
+                    <div class="wanyi-migration-cell wanyi-migration-cell--card">
+                        <div class="wanyi-migration-img-wrap brand-showcase-output-image" onclick="openImageModal('/public/images/comfyui/daguang/2.jpg', 3.2)">
+                            <img src="/public/images/comfyui/daguang/2.jpg" alt="打光溶图 下行示例 B" loading="lazy">
+                        </div>
+                    </div>
+                    <div class="wanyi-migration-cell wanyi-migration-cell--card">
+                        <div class="wanyi-migration-img-wrap brand-showcase-output-image" onclick="openImageModal('/public/images/comfyui/daguang/6.jpg', 3.2)">
+                            <img src="/public/images/comfyui/daguang/6.jpg" alt="打光溶图 下行示例 C" loading="lazy">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 项目名称 -->
+        <h1 class="project-title">京东营销&amp;<span class="highlight">IPLORA训练</span></h1>
+        
+        <!-- 两列信息 -->
+        <div class="info-row">
+            <!-- 项目背景 -->
+            <div class="info-card">
+                <div class="info-card-header">
+                    <span class="info-card-number">01</span>
+                    <h2 class="info-card-title">项目背景</h2>
+                </div>
+                <div class="info-card-content">
+                    为满足京东在3D知识产权内容、营销设计及在线医疗咨询的特定需求，京东需要一些定制的LoRA模型，该项目包括3D_IP_LoRA、营销设计LoRA和真人医生LoRA，旨在通过AI技术提升内容创作效率与质量，优化用户体验，增强市场竞争力，助力京东实现更高效的业务运营与服务创新。
+                </div>
+            </div>
+            
+            <!-- 右侧列：职责 + 目标 -->
+            <div class="info-right-column">
+                <!-- 项目职责 -->
+                <div class="info-card">
+                    <div class="info-card-header">
+                        <span class="info-card-number">02</span>
+                        <h2 class="info-card-title">项目职责</h2>
+                    </div>
+                    <div class="info-card-content">
+                        <div class="tag-list">
+                            <span class="tag">模型训练</span>
+                            <span class="tag">模型测试</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 项目目标 -->
+                <div class="info-card">
+                    <div class="info-card-header">
+                        <span class="info-card-number">03</span>
+                        <h2 class="info-card-title">项目目标</h2>
+                    </div>
+                    <div class="info-card-content">
+                        <div class="tag-list">
+                            <span class="tag">降本增效</span>
+                            <span class="tag">增强营销</span>
+                            <span class="tag">业务创新</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 品牌营销模型：上为流程图，下为展示图片 -->
+        <section class="integration-section brand-model-section">
+            <h2 class="section-title">品牌营销模型</h2>
+
+            <!-- 上部：流程图 -->
+            <div class="brand-flow-chart" aria-label="模型训练流程">
+                <div class="brand-flow-node">
+                    <div class="brand-flow-chip">创意方案</div>
+                </div>
+                <div class="brand-flow-arrow" aria-hidden="true">
+                    <svg viewBox="0 0 28 20" fill="none"><path d="M4 10h16m0 0l-5-5m5 5l-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+                <div class="brand-flow-node">
+                    <div class="brand-flow-chip">训练集</div>
+                </div>
+                <div class="brand-flow-arrow" aria-hidden="true">
+                    <svg viewBox="0 0 28 20" fill="none"><path d="M4 10h16m0 0l-5-5m5 5l-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+                <div class="brand-flow-node">
+                    <div class="brand-flow-chip">模型测试</div>
+                </div>
+                <div class="brand-flow-arrow" aria-hidden="true">
+                    <svg viewBox="0 0 28 20" fill="none"><path d="M4 10h16m0 0l-5-5m5 5l-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+                <div class="brand-flow-node">
+                    <div class="brand-flow-chip">交付模型</div>
+                </div>
+            </div>
+
+            <!-- 下部：展示（每框单图；出图列交互同 ai-manju「全局架构」图：悬停缩放 + 点击模态放大） -->
+            <div class="brand-showcase" id="brand-showcase">
+                <div class="brand-showcase-col">
+                    <div class="brand-showcase-rail">创意方案</div>
+                    <div class="brand-showcase-body brand-showcase-body--fullbleed">
+                        <div class="ugc-sop-image ugc-sop-image--fullbleed">
+                            <img src="/public/images/model_xunlian/pinpaiyingxiao/Snipaste_2026-04-08_23-43-02.png" alt="创意方案">
+                        </div>
+                    </div>
+                </div>
+                <div class="brand-showcase-col">
+                    <div class="brand-showcase-rail">训练集</div>
+                    <div class="brand-showcase-body brand-showcase-body--fullbleed">
+                        <div class="ugc-sop-image ugc-sop-image--fullbleed">
+                            <img src="/public/images/model_xunlian/pinpaiyingxiao/Snipaste_2026-04-08_23-34-26.png" alt="训练集">
+                        </div>
+                    </div>
+                </div>
+                <div class="brand-showcase-col">
+                    <div class="brand-showcase-rail">出图展示</div>
+                    <div class="brand-showcase-body brand-showcase-body--fullbleed">
+                        <div class="ugc-sop-image ugc-sop-image--fullbleed brand-showcase-output-image" onclick="openImageModal('/public/images/model_xunlian/pinpaiyingxiao/Snipaste_2026-04-08_23-34-44.png')">
+                            <img src="/public/images/model_xunlian/pinpaiyingxiao/Snipaste_2026-04-08_23-34-44.png" alt="出图展示">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 品牌营销模型（副本，供后续调整文案与素材） -->
+        <section class="integration-section brand-model-section">
+            <h2 class="section-title">咔叔IP模型</h2>
+
+            <!-- 上部：能力要点（横向排列、自动换行，无箭头） -->
+            <div class="brand-flow-chart brand-flow-chart--chip-row" aria-label="咔叔 IP 模型能力要点">
+                <div class="brand-flow-node">
+                    <div class="brand-flow-chip">模型性能达到直出4选1</div>
+                </div>
+                <div class="brand-flow-node">
+                    <div class="brand-flow-chip">加强IP主体控制</div>
+                </div>
+                <div class="brand-flow-node">
+                    <div class="brand-flow-chip">多表情和动作</div>
+                </div>
+                <div class="brand-flow-node">
+                    <div class="brand-flow-chip">简单和复杂背景</div>
+                </div>
+                <div class="brand-flow-node">
+                    <div class="brand-flow-chip">涵盖单、双、多人场景</div>
+                </div>
+            </div>
+
+            <!-- 下部：训练集 + 出图展示（右侧列拉宽） -->
+            <div class="brand-showcase brand-showcase--kashu-two">
+                <div class="brand-showcase-col">
+                    <div class="brand-showcase-rail">训练集</div>
+                    <div class="brand-showcase-body brand-showcase-body--fullbleed">
+                        <div class="ugc-sop-image ugc-sop-image--fullbleed">
+                            <img src="/public/images/model_xunlian/kashuIP/Snipaste_2026-04-09_00-08-19.png" alt="训练集">
+                        </div>
+                    </div>
+                </div>
+                <div class="brand-showcase-col">
+                    <div class="brand-showcase-rail">出图展示</div>
+                    <div class="brand-showcase-body brand-showcase-body--fullbleed">
+                        <div class="ugc-sop-image ugc-sop-image--fullbleed brand-showcase-output-image" onclick="openImageModal('/public/images/model_xunlian/kashuIP/Snipaste_2026-04-09_00-08-27.png')">
+                            <img src="/public/images/model_xunlian/kashuIP/Snipaste_2026-04-09_00-08-27.png" alt="出图展示">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 京东模型训练—医生（初稿复制咔叔 IP 模块结构，待改文案与素材） -->
+        <section class="integration-section brand-model-section">
+            <h2 class="section-title">京东模型训练—医生</h2>
+
+            <!-- 上部：能力要点 4 条（横向排列、自动换行，无箭头） -->
+            <div class="brand-flow-chart brand-flow-chart--chip-row brand-flow-chart--chip-row-4" aria-label="京东医生模型能力要点">
+                <div class="brand-flow-node">
+                    <div class="brand-flow-chip">模型性能达到直出4选1</div>
+                </div>
+                <div class="brand-flow-node">
+                    <div class="brand-flow-chip">加强人物主体控制</div>
+                </div>
+                <div class="brand-flow-node">
+                    <div class="brand-flow-chip">多表情和动作</div>
+                </div>
+                <div class="brand-flow-node">
+                    <div class="brand-flow-chip">简单和复杂背景</div>
+                </div>
+            </div>
+
+            <!-- 下部：男医生 / 女医生 / 女护士（素材可替换为各自独立配图） -->
+            <div class="brand-showcase brand-showcase--doctor-three">
+                <div class="brand-showcase-col">
+                    <div class="brand-showcase-rail">男医生</div>
+                    <div class="brand-showcase-body brand-showcase-body--fullbleed">
+                        <div class="ugc-sop-image ugc-sop-image--fullbleed brand-showcase-output-image" onclick="openImageModal('/public/images/model_xunlian/doctor/Snipaste_2026-04-09_00-35-55.png')">
+                            <img src="/public/images/model_xunlian/doctor/Snipaste_2026-04-09_00-35-55.png" alt="男医生">
+                        </div>
+                    </div>
+                </div>
+                <div class="brand-showcase-col">
+                    <div class="brand-showcase-rail">女医生</div>
+                    <div class="brand-showcase-body brand-showcase-body--fullbleed">
+                        <div class="ugc-sop-image ugc-sop-image--fullbleed brand-showcase-output-image" onclick="openImageModal('/public/images/model_xunlian/doctor/Snipaste_2026-04-09_00-36-52.png')">
+                            <img src="/public/images/model_xunlian/doctor/Snipaste_2026-04-09_00-36-52.png" alt="女医生">
+                        </div>
+                    </div>
+                </div>
+                <div class="brand-showcase-col">
+                    <div class="brand-showcase-rail">女护士</div>
+                    <div class="brand-showcase-body brand-showcase-body--fullbleed">
+                        <div class="ugc-sop-image ugc-sop-image--fullbleed brand-showcase-output-image" onclick="openImageModal('/public/images/model_xunlian/doctor/Snipaste_2026-04-09_00-36-38.png')">
+                            <img src="/public/images/model_xunlian/doctor/Snipaste_2026-04-09_00-36-38.png" alt="女护士">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 模型展示：标题字体与样式同页首「京东营销&IPLORA训练」.project-title -->
+        <section class="integration-section model-display-section" aria-label="模型展示">
+            <h2 class="project-title">模型<span class="highlight">展示</span></h2>
+        </section>
+
+        <!-- 模型展示子模块顺序：超现实 → CG → 美妆 → 配饰 -->
+        <section class="integration-section brand-model-section" aria-label="电商超现实场景">
+            <h2 class="section-title">电商超现实场景</h2>
+            <div class="ecommerce-lora-showcase ecommerce-lora-showcase-reveal">
+                <div class="ugc-sop-image ugc-sop-image--ratio-16x9 brand-showcase-output-image" onclick="openImageModal('/public/images/model_xunlian/model_zhanshi/Snipaste_2026-04-09_00-56-47.png')">
+                    <img src="/public/images/model_xunlian/model_zhanshi/Snipaste_2026-04-09_00-56-47.png" alt="电商超现实场景">
+                </div>
+            </div>
+        </section>
+
+        <section class="integration-section brand-model-section" aria-label="CG角色设计">
+            <h2 class="section-title">CG角色设计</h2>
+            <div class="ecommerce-lora-showcase ecommerce-lora-showcase-reveal">
+                <div class="ugc-sop-image ugc-sop-image--ratio-16x9 brand-showcase-output-image" onclick="openImageModal('/public/images/model_xunlian/model_zhanshi/Snipaste_2026-04-09_00-52-55.png')">
+                    <img src="/public/images/model_xunlian/model_zhanshi/Snipaste_2026-04-09_00-52-55.png" alt="CG角色设计">
+                </div>
+            </div>
+        </section>
+
+        <section class="integration-section brand-model-section" aria-label="电商美妆极简摄影">
+            <h2 class="section-title">电商美妆极简摄影</h2>
+            <div class="ecommerce-lora-showcase ecommerce-lora-showcase-reveal">
+                <div class="ugc-sop-image ugc-sop-image--ratio-16x9 brand-showcase-output-image" onclick="openImageModal('/public/images/model_xunlian/model_zhanshi/Snipaste_2026-04-09_00-59-35.png')">
+                    <img src="/public/images/model_xunlian/model_zhanshi/Snipaste_2026-04-09_00-59-35.png" alt="电商美妆极简摄影">
+                </div>
+            </div>
+        </section>
+
+        <section class="integration-section brand-model-section ecommerce-lora-section" aria-label="电商配饰">
+            <h2 class="section-title">电商配饰</h2>
+            <div class="ecommerce-lora-showcase ecommerce-lora-showcase-reveal">
+                <div class="ugc-sop-image ugc-sop-image--ratio-16x9 brand-showcase-output-image" onclick="openImageModal('/public/images/model_xunlian/model_zhanshi/Snipaste_2026-04-09_00-55-46.png')">
+                    <img src="/public/images/model_xunlian/model_zhanshi/Snipaste_2026-04-09_00-55-46.png" alt="电商配饰展示">
+                </div>
+            </div>
+        </section>
+        
+    </main>
+
+    <!-- 引入导航栏 -->
+    <script type="module">
+        import { renderNavbar } from '/src/components/navbar.js';
+        renderNavbar('navbar');
+    </script>
+
+    <!-- 图片模态框 -->
+    <div id="image-modal" class="image-modal" onclick="closeImageModal(event)">
+        <button class="image-modal-close" onclick="closeImageModal(event)">×</button>
+        <img id="modal-image" src="" alt="大图预览">
+    </div>
+
+    <!-- 模态框控制脚本 -->
+    <script>
+        function openImageModal(src, scale = 1) {
+            const modal = document.getElementById('image-modal');
+            const img = document.getElementById('modal-image');
+            img.src = src;
+            const baseSize = 30 * scale;
+            img.style.maxWidth = baseSize + '%';
+            img.style.maxHeight = scale >= 2 ? '92vh' : '';
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeImageModal(event) {
+            if (event.target.id === 'modal-image') return;
+            const modal = document.getElementById('image-modal');
+            const img = document.getElementById('modal-image');
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+            img.style.maxWidth = '';
+            img.style.maxHeight = '';
+        }
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                const imageModal = document.getElementById('image-modal');
+                if (imageModal.classList.contains('active')) {
+                    imageModal.classList.remove('active');
+                    document.body.style.overflow = '';
+                }
+            }
+        });
+
+        (function brandSectionReveal() {
+            if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelectorAll('.brand-flow-chart, .brand-showcase, .ecommerce-lora-showcase-reveal, .wanyi-migration-grid-reveal, .bg-replace-grid-reveal, .daguang-rongtu-grid-reveal').forEach(function (el) {
+                    el.classList.add('is-visible');
+                });
+                return;
+            }
+            var io = new IntersectionObserver(function (entries) {
+                entries.forEach(function (en) {
+                    if (!en.isIntersecting) return;
+                    en.target.classList.add('is-visible');
+                    io.unobserve(en.target);
+                });
+            }, { rootMargin: '0px 0px -8% 0px', threshold: 0.12 });
+            document.querySelectorAll('.brand-flow-chart, .brand-showcase, .ecommerce-lora-showcase-reveal, .wanyi-migration-grid-reveal, .bg-replace-grid-reveal, .daguang-rongtu-grid-reveal').forEach(function (el) {
+                io.observe(el);
+            });
+        })();
+    </script>
+</body>
+</html>

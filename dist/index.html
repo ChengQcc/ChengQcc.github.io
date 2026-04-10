@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Particleify - Portfolio</title>
+    <style>
+        /* 首页特定的响应式样式 */
+        @media (max-width: 768px) {
+            .hero-section {
+                flex: 1 !important;
+                width: 100% !important;
+                padding-top: 1rem !important;
+                padding-bottom: 1rem !important;
+                justify-content: flex-start !important;
+                background: linear-gradient(to bottom, rgba(3,3,5,0.85) 0%, rgba(3,3,5,0.4) 60%, transparent 100%);
+            }
+            
+            .hero-title {
+                margin-bottom: 1rem !important;
+            }
+            
+            .hero-desc {
+                margin-bottom: 1.5rem !important;
+            }
+        }
+    </style>
+  <script type="module" crossorigin src="/assets/main-D5wcnw77.js"></script>
+  <link rel="modulepreload" crossorigin href="/assets/footer-CIcIOABB.js">
+  <link rel="stylesheet" crossorigin href="/assets/footer-Dud5q09q.css">
+</head>
+<body class="bg-[var(--color-bg)] text-white overflow-hidden select-none">
+
+    <div id="app" class="flex flex-col h-screen w-screen" style="pointer-events: none;">
+        <!-- WebGL 全屏底层 -->
+        <section class="fixed top-0 left-0 w-screen h-screen z-0" style="pointer-events: auto;" id="webgl-container"></section>
+
+        <!-- 导航栏 -->
+        <div id="navbar" style="pointer-events: auto;" class="relative z-50"></div>
+
+        <!-- 主内容区域 -->
+        <main class="flex flex-1 relative z-10 pt-20">
+            <section class="hero-section flex-[0_0_45%] px-[var(--layout-padding)] flex flex-col justify-center" style="pointer-events: auto;">
+                <h1 class="hero-title text-[clamp(2.5rem,5vw,6rem)] leading-[1.05] font-black tracking-tight mb-8 uppercase">
+                    <span class="text-white block">Turn Static</span>
+                    <span class="text-[var(--color-text-muted)] block">Images Into</span>
+                    <span class="text-[var(--color-primary)] block">3D Particles</span>
+                </h1>
+                <p class="hero-desc font-mono text-[var(--color-text-dark)] text-sm leading-relaxed max-w-[400px] mb-10">
+                    Turn static images into interactive 3D particle visuals. Create, customize, and export ready-to-use HTML in minutes.
+                </p>
+                <div class="flex flex-col">
+                    <button class="btn-primary"><span>📥</span> EXPORT HTML</button>
+                    <span class="font-mono text-[0.7rem] text-[var(--color-border)] mt-4">Click the gear icon to upload images and customize effects...</span>
+                </div>
+            </section>
+        </main>
+
+        <!-- 页脚 -->
+        <div id="footer" style="pointer-events: auto;" class="relative z-10"></div>
+    </div>
+
+</body>
+</html>

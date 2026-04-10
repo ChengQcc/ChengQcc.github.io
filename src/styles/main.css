@@ -1,0 +1,259 @@
+/* Tailwind CSS */
+@import "tailwindcss";
+
+/* 设计系统 */
+@import "./variables.css";
+@import "./glassmorphism.css";
+@import "./animations.css";
+
+/* 全局基础样式 */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background-color: var(--color-bg);
+    color: var(--color-text-main);
+    font-family: var(--font-heading);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+a { color: inherit; text-decoration: none; }
+button { cursor: pointer; font-family: inherit; }
+
+/* 主色按钮 */
+.btn-primary {
+    background: var(--color-primary);
+    color: #000;
+    border: none;
+    padding: 0.9rem 2rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    border-radius: var(--radius-sm);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: all var(--transition-fast);
+    letter-spacing: 0.05em;
+}
+.btn-primary:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.1);
+    box-shadow: 0 8px 24px rgba(30, 215, 96, 0.25);
+}
+
+/* 描边按钮 - 参考原图样式 */
+.btn-outline {
+    background: transparent;
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    padding: 0.75rem 2rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    border-radius: var(--radius-sm);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all var(--transition-fast);
+    letter-spacing: 0.05em;
+}
+.btn-outline:hover {
+    border-color: rgba(255, 255, 255, 0.8);
+    background: rgba(255, 255, 255, 0.05);
+    transform: translateY(-2px);
+}
+
+/* 技能标签 */
+.skill-tag {
+    padding: 0.3rem 0.8rem;
+    font-size: 0.8rem;
+    border-radius: var(--radius-sm);
+    background: rgba(30, 215, 96, 0.1);
+    color: var(--color-primary);
+    border: 1px solid rgba(30, 215, 96, 0.2);
+}
+
+/* 筛选标签 */
+.filter-tag {
+    padding: 0.4rem 1rem;
+    font-size: 0.85rem;
+    border-radius: 999px;
+    border: 1px solid var(--glass-border);
+    background: transparent;
+    color: var(--color-text-muted);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+.filter-tag:hover {
+    border-color: var(--color-text-main);
+    color: var(--color-text-main);
+}
+.filter-tag.active {
+    background: var(--color-primary);
+    color: #000;
+    border-color: var(--color-primary);
+    font-weight: 600;
+}
+
+/* ============================================
+ * 固定断点响应式 - 参考 Moonshot 平台架构
+ * 断点：768px(移动端), 2400px(2K), 3001px(4K)
+ * ============================================ */
+
+/* 2K 屏幕 (2560px) */
+@media (min-width: 2400px) and (max-width: 3000px) {
+    /* 导航栏 */
+    .navbar-link { font-size: 18px !important; }
+    .navbar-links { gap: 64px !important; }
+    .nav-logo { height: 40px !important; left: 430px !important; }
+    .nav-cta { right: 310px !important; padding: 12px 28px !important; font-size: 14px !important; }
+    .nav-bg { height: 70px !important; }
+    .nav-content { padding: 24px 0 !important; }
+    
+    /* 页面标题 */
+    .page-title { font-size: 72px !important; }
+    .page-subtitle { font-size: 22px !important; }
+    
+    /* 卡片 */
+    .glass-card { padding: 32px !important; }
+    .card-title { font-size: 28px !important; }
+    .card-text { font-size: 18px !important; }
+    
+    /* 按钮 */
+    .btn-primary {
+        padding: 1.1rem 2.5rem !important;
+        font-size: 1.1rem !important;
+    }
+    .btn-outline {
+        padding: 0.9rem 2.5rem !important;
+        font-size: 1.1rem !important;
+    }
+    
+    /* 技能标签 */
+    .skill-tag {
+        padding: 0.4rem 1rem !important;
+        font-size: 1rem !important;
+    }
+    
+    /* 筛选标签 */
+    .filter-tag {
+        padding: 0.5rem 1.2rem !important;
+        font-size: 1rem !important;
+    }
+    
+    /* 联系方式 */
+    .contact-item { font-size: 18px !important; }
+    .contact-label { font-size: 14px !important; }
+    
+    /* 头像 */
+    .avatar { width: 160px !important; height: 160px !important; font-size: 64px !important; }
+}
+
+/* 4K 屏幕 (3840px) */
+@media (min-width: 3001px) {
+    /* 导航栏 */
+    .navbar-link { font-size: 28px !important; }
+    .navbar-links { gap: 80px !important; }
+    .nav-logo { height: 48px !important; left: 530px !important; }
+    .nav-cta { right: 380px !important; padding: 14px 32px !important; font-size: 16px !important; }
+    .nav-bg { height: 80px !important; }
+    .nav-content { padding: 20px 0 !important; }
+    
+    /* 页面标题 */
+    .page-title { font-size: 96px !important; }
+    .page-subtitle { font-size: 28px !important; }
+    
+    /* 卡片 */
+    .glass-card { padding: 48px !important; }
+    .card-title { font-size: 36px !important; }
+    .card-text { font-size: 22px !important; }
+    
+    /* 按钮 */
+    .btn-primary {
+        padding: 1.4rem 3.2rem !important;
+        font-size: 1.4rem !important;
+    }
+    .btn-outline {
+        padding: 1.2rem 3.2rem !important;
+        font-size: 1.4rem !important;
+    }
+    
+    /* 技能标签 */
+    .skill-tag {
+        padding: 0.5rem 1.2rem !important;
+        font-size: 1.2rem !important;
+    }
+    
+    /* 筛选标签 */
+    .filter-tag {
+        padding: 0.6rem 1.5rem !important;
+        font-size: 1.2rem !important;
+    }
+    
+    /* 联系方式 */
+    .contact-item { font-size: 24px !important; }
+    .contact-label { font-size: 16px !important; }
+    
+    /* 头像 */
+    .avatar { width: 200px !important; height: 200px !important; font-size: 80px !important; }
+}
+
+/* 移动端 (768px以下) */
+@media (max-width: 768px) {
+    .nav-logo { height: 24px !important; left: 24px !important; }
+    .nav-cta { display: none !important; }
+}
+
+/* ==================== 数据反馈验证结果 ==================== */
+.data-feedback-section {
+    padding: 80px 0;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.data-feedback-intro {
+    color: #FFFFFF;
+    font-size: 14px;
+    line-height: 1.8;
+    margin-bottom: 40px;
+    max-width: 500px;
+}
+
+/* 数据卡片 */
+.data-cards {
+    display: flex;
+    gap: 30px;
+    margin-bottom: 50px;
+}
+
+.data-card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 24px 32px;
+    min-width: 160px;
+}
+
+.data-label {
+    display: block;
+    color: #1ED760;
+    font-size: 14px;
+    margin-bottom: 12px;
+}
+
+.data-value {
+    display: block;
+    color: #FFFFFF;
+    font-size: 22px;
+    font-weight: 600;
+}
+
+/* 柱状图容器 */
+.chart-container {
+    width: 100%;
+    overflow-x: auto;
+}

@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI创意工坊 - 项目详情</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --color-primary: #1ED760;
+            --color-primary-dark: #1a5a3a;
+            --color-bg: #0D0D0D;
+            --color-card: rgba(255,255,255,0.03);
+            --color-border: rgba(255,255,255,0.08);
+            --color-text: #ffffff;
+            --color-text-secondary: rgba(255,255,255,0.6);
+            --color-text-muted: rgba(255,255,255,0.4);
+        }
+        
+        html {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        }
+        
+        body {
+            background: var(--color-bg);
+            color: var(--color-text);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        /* 导航栏占位 */
+        #navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 100;
+        }
+        
+        .navbar-spacer {
+            height: 60px;
+        }
+        
+        /* 返回箭头 */
+        .back-arrow {
+            position: fixed;
+            left: 60px;
+            top: 90px;
+            z-index: 100;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .back-arrow:hover {
+            background: rgba(30, 215, 96, 0.15);
+            border-color: rgba(30, 215, 96, 0.4);
+            color: #1ED760;
+            transform: translateX(-3px);
+        }
+        
+        /* 主容器 */
+        .project-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 60px 100px;
+        }
+        
+        /* 顶部封面图 */
+        .project-cover {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            border-radius: 16px;
+            overflow: hidden;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+            margin-bottom: 48px;
+            position: relative;
+        }
+        
+        .project-cover img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .project-cover-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #1a3a2a 0%, #0D0D0D 100%);
+        }
+        
+        .project-cover-placeholder span {
+            font-size: 14px;
+            color: var(--color-text-muted);
+            letter-spacing: 0.1em;
+        }
+        
+        /* 项目名称 */
+        .project-title {
+            font-size: 48px;
+            font-weight: 900;
+            color: var(--color-text);
+            margin-bottom: 48px;
+            letter-spacing: -0.02em;
+        }
+        
+        .project-title .highlight {
+            color: var(--color-primary);
+        }
+        
+        /* 两列布局：背景(60%) + 职责/目标(40%) */
+        .info-row {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr;
+            gap: 24px;
+            margin-bottom: 48px;
+        }
+        
+        /* 右侧列：职责和目标上下堆叠 */
+        .info-right-column {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+        
+        /* 右侧卡片样式调整 */
+        .info-right-column .info-card {
+            padding: 24px;
+        }
+        
+        .info-right-column .info-card-header {
+            margin-bottom: 16px;
+        }
+        
+        .info-right-column .info-card-title {
+            font-size: 16px;
+        }
+        
+        .info-right-column .info-card-number {
+            font-size: 18px;
+        }
+        
+        /* 项目背景/职责/目标三个卡片背景 */
+        .info-row .info-card {
+            background: rgba(0, 255, 136, 0.027);
+            border-color: rgba(0, 255, 136, 0.2);
+        }
+        
+        /* 信息卡片 */
+        .info-card {
+            background: var(--color-card);
+            border: 1px solid var(--color-border);
+            border-radius: 16px;
+            padding: 32px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .info-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 3px;
+            height: 100%;
+            background: var(--color-primary);
+            border-radius: 16px 0 0 16px;
+        }
+        
+        .info-card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .info-card-number {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--color-primary);
+        }
+        
+        .info-card-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--color-text);
+        }
+        
+        .info-card-content {
+            font-size: 15px;
+            line-height: 1.8;
+            color: var(--color-text-secondary);
+        }
+        
+        /* 标签列表 */
+        .tag-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 16px;
+        }
+        
+        .tag {
+            display: inline-flex;
+            align-items: center;
+            padding: 8px 16px;
+            background: var(--color-primary-dark);
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--color-text);
+        }
+        
+        /* 章节标题样式 */
+        .section-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--color-text);
+            margin-bottom: 32px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .section-title::before {
+            content: '';
+            width: 4px;
+            height: 28px;
+            background: var(--color-primary);
+            border-radius: 2px;
+        }
+        
+        /* 章节正文内容 */
+        .section-content {
+            font-size: 15px;
+            line-height: 1.8;
+            color: var(--color-text-secondary);
+            margin-bottom: 32px;
+        }
+        
+        /* 系统集成流程图模块 */
+        .integration-section {
+            margin-top: 64px;
+        }
+        
+        .integration-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 48px;
+            align-items: start;
+        }
+        
+        .integration-flow {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+        
+        .integration-flow svg text {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+        }
+        
+        /* 流程图交互动画 */
+        .flow-card {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .flow-card:hover .card-bg {
+            filter: brightness(1.3);
+        }
+        
+        .flow-card:hover .card-glow {
+            opacity: 0.6;
+        }
+        
+        /* 节点脉冲动画 */
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.2); }
+        }
+        
+        .flow-node-pulse {
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        /* 箭头流动动画 */
+        @keyframes flowRight {
+            0% { stroke-dashoffset: 14; }
+            100% { stroke-dashoffset: 0; }
+        }
+        
+        @keyframes flowRightToLeft {
+            0% { stroke-dashoffset: -14; }
+            100% { stroke-dashoffset: 0; }
+        }
+        
+        @keyframes flowDown {
+            0% { stroke-dashoffset: 15; }
+            100% { stroke-dashoffset: 0; }
+        }
+        
+        .flow-arrow-right {
+            stroke-dasharray: 8, 6;
+            animation: flowRight 0.8s linear infinite;
+        }
+        
+        .flow-arrow-right-to-left {
+            stroke-dasharray: 8, 6;
+            animation: flowRightToLeft 0.8s linear infinite;
+        }
+        
+        .flow-arrow-down {
+            stroke-dasharray: 10, 5;
+            animation: flowDown 0.6s linear infinite;
+        }
+        
+        /* 第4步虚线 - 独立控制 */
+        @keyframes flowStep4 {
+            0% { stroke-dashoffset: 0; }
+            100% { stroke-dashoffset: 14; }
+        }
+        .flow-arrow-step4 {
+            stroke-dasharray: 8, 6;
+            animation: flowStep4 0.8s linear infinite;
+        }
+        
+        /* 第5步虚线 - 独立控制 */
+        @keyframes flowStep5 {
+            0% { stroke-dashoffset: 0; }
+            100% { stroke-dashoffset: 14; }
+        }
+        .flow-arrow-step5 {
+            stroke-dasharray: 8, 6;
+            animation: flowStep5 0.8s linear infinite;
+        }
+        
+        /* 垂直线呼吸动画 */
+        @keyframes breathe {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.6; }
+        }
+        
+        .flow-line-breathe {
+            animation: breathe 3s ease-in-out infinite;
+        }
+        
+        /* 步骤标签悬浮效果 */
+        .flow-step-group {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .flow-step-group:hover .step-label-bg {
+            fill: rgba(30, 215, 96, 0.2);
+        }
+        
+        .flow-step-group:hover .step-number {
+            fill: #00FF88;
+        }
+        
+        .integration-image {
+            border-radius: 16px;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            aspect-ratio: 4 / 3;
+        }
+        
+        .integration-image:hover {
+            transform: scale(1.02);
+            border-color: rgba(30, 215, 96, 0.3);
+        }
+        
+        .integration-image img {
+            width: 100%;
+            display: block;
+        }
+        
+        /* 响应式 */
+        
+        /* 导航栏响应式 - 与首页一致 */
+        @media (min-width: 2400px) and (max-width: 3000px) {
+            .navbar-link { font-size: 18px !important; }
+            .navbar-links { gap: 64px !important; }
+        }
+        
+        @media (min-width: 3001px) {
+            .navbar-link { font-size: 24px !important; }
+            .navbar-links { gap: 80px !important; }
+        }
+        
+        /* 2K 屏幕 - 整体放大 1.25 倍 */
+        @media (min-width: 2400px) and (max-width: 3000px) {
+            .project-container {
+                zoom: 1.25;
+            }
+            .navbar-spacer {
+                height: 76px;
+            }
+            .back-arrow {
+                left: 80px;
+                top: 110px;
+                width: 50px;
+                height: 50px;
+                border-radius: 12px;
+            }
+            .back-arrow svg {
+                width: 24px;
+                height: 24px;
+            }
+        }
+        
+        /* 4K 屏幕 - 整体放大 1.6 倍 */
+        @media (min-width: 3001px) {
+            .project-container {
+                zoom: 1.6;
+            }
+            .navbar-spacer {
+                height: 96px;
+            }
+            .back-arrow {
+                left: 100px;
+                top: 140px;
+                width: 64px;
+                height: 64px;
+                border-radius: 16px;
+            }
+            .back-arrow svg {
+                width: 32px;
+                height: 32px;
+            }
+        }
+
+        /* 图片模态框 */
+        .image-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 9999;
+            background: rgba(0, 0, 0, 0.9);
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+            box-sizing: border-box;
+        }
+        .image-modal.active {
+            display: flex;
+            overflow-y: auto;
+            padding: 40px 0;
+        }
+        .image-modal img {
+            max-width: 85%;
+            max-height: none;
+            object-fit: contain;
+            border-radius: 12px;
+            margin: auto;
+        }
+        .image-modal-close {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            color: #ffffff;
+            font-size: 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        .image-modal-close:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* 飞书多维表格模块 */
+        .feishu-section {
+            margin-top: 80px;
+        }
+
+        .feishu-gallery {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+            margin-top: 32px;
+        }
+
+        .feishu-gallery-item {
+            aspect-ratio: 21 / 9;
+            border-radius: 12px;
+            overflow: hidden;
+            background: linear-gradient(135deg, #1a2a1a 0%, #0D0D0D 100%);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .feishu-gallery-item:hover {
+            transform: scale(1.02);
+            border-color: rgba(30, 215, 96, 0.3);
+            box-shadow: 0 8px 32px rgba(30, 215, 96, 0.1);
+        }
+
+        .feishu-gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .feishu-gallery-placeholder {
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 14px;
+            letter-spacing: 0.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <!-- 返回箭头 - 固定定位 -->
+    <a href="index.html#works" class="back-arrow" title="返回作品集">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+    </a>
+    
+    <!-- 导航栏 -->
+    <div id="navbar"></div>
+    <div class="navbar-spacer"></div>
+    
+    <!-- 主内容 -->
+    <main class="project-container">
+        <!-- 封面图 -->
+        <div class="project-cover">
+            <img src="/public/images/manju2/jimeng-2026-04-08-2715-这张图片展示了一个充满科技感和节日氛围的3D渲染作品， 画面中心是一个银灰色的长....png" alt="AI创意工坊">
+        </div>
+        
+        <!-- 项目名称 -->
+        <h1 class="project-title">AI<span class="highlight">创意工坊</span></h1>
+        
+        <!-- 两列信息 -->
+        <div class="info-row">
+            <!-- 项目背景 -->
+            <div class="info-card">
+                <div class="info-card-header">
+                    <span class="info-card-number">01</span>
+                    <h2 class="info-card-title">项目背景</h2>
+                </div>
+                <div class="info-card-content">
+                    AI直播业务团队对AI能力需求迫切，鉴于业务具有长线且大量产出的特性，单纯依靠我部门承接已无法满足需求，且业务侧也表现出强烈的自主产出意愿，希望能拥抱AI技术。 然而，ComfyUI等现有工具操作复杂、学习成本高，难以规模化应用。为此，基于ComfyUI工作流底座，通过MCP协议深度集成飞书多维表格，将图像生成、视频处理等AI功能封装为标准化、轻量级的前端模块。通过统一“输入-输出”接口，打造开箱即用的AI工具，显著降低使用门槛，实现技术对业务的高效赋能。
+                </div>
+            </div>
+            
+            <!-- 右侧列：职责 + 目标 -->
+            <div class="info-right-column">
+                <!-- 项目职责 -->
+                <div class="info-card">
+                    <div class="info-card-header">
+                        <span class="info-card-number">02</span>
+                        <h2 class="info-card-title">项目职责</h2>
+                    </div>
+                    <div class="info-card-content">
+                        <div class="tag-list">
+                            <span class="tag">PM</span>
+                            <span class="tag">工作流搭建</span>
+                            <span class="tag">飞书多维表格搭建</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 项目目标 -->
+                <div class="info-card">
+                    <div class="info-card-header">
+                        <span class="info-card-number">03</span>
+                        <h2 class="info-card-title">项目目标</h2>
+                    </div>
+                    <div class="info-card-content">
+                        <div class="tag-list">
+                            <span class="tag">降本增效</span>
+                            <span class="tag">自动化搭建</span>
+                            <span class="tag">高效赋能</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 系统集成流程图 -->
+        <section class="integration-section">
+            <h2 class="section-title">系统集成流程图</h2>
+            <p class="section-content">
+                通过飞书多维表格接收用户输入，经 pixelle MCP 调用工具处理，由 runninghub 执行工作流生成内容，最终结果回传至飞书，实现全流程自动化。
+            </p>
+            
+            <div class="integration-content">
+                <!-- 左侧：SVG流程图 -->
+                <div class="integration-flow">
+                    <svg viewBox="0 0 600 440" width="100%" height="auto" style="max-width: 600px;">
+                        <defs>
+                            <!-- 卡片渐变 -->
+                            <linearGradient id="cardGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:rgba(30,215,96,0.2)"/>
+                                <stop offset="100%" style="stop-color:rgba(30,215,96,0.05)"/>
+                            </linearGradient>
+                            <!-- 光晕渐变 -->
+                            <radialGradient id="glowGradient" cx="50%" cy="50%" r="50%">
+                                <stop offset="0%" style="stop-color:rgba(30,215,96,0.4)"/>
+                                <stop offset="100%" style="stop-color:rgba(30,215,96,0)"/>
+                            </radialGradient>
+                            <!-- 节点渐变 -->
+                            <radialGradient id="nodeGradient" cx="30%" cy="30%" r="70%">
+                                <stop offset="0%" style="stop-color:#00FF88"/>
+                                <stop offset="100%" style="stop-color:#1ED760"/>
+                            </radialGradient>
+                            <!-- 箭头标记 -->
+                            <marker id="arrowHeadAnimated" markerWidth="12" markerHeight="8" refX="10" refY="4" orient="auto">
+                                <polygon points="0 0, 12 4, 0 8" fill="url(#nodeGradient)"/>
+                            </marker>
+                            <marker id="arrowHeadLeftAnimated" markerWidth="12" markerHeight="8" refX="2" refY="4" orient="auto">
+                                <polygon points="12 0, 0 4, 12 8" fill="url(#nodeGradient)"/>
+                            </marker>
+                            <!-- 向下箭头 -->
+                            <marker id="arrowHeadDown" markerWidth="8" markerHeight="12" refX="4" refY="10" orient="auto">
+                                <polygon points="0 0, 4 12, 8 0" fill="url(#nodeGradient)"/>
+                            </marker>
+                            <!-- 滤镜：发光效果 -->
+                            <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+                                <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                                <feMerge>
+                                    <feMergeNode in="coloredBlur"/>
+                                    <feMergeNode in="SourceGraphic"/>
+                                </feMerge>
+                            </filter>
+                        </defs>
+                        
+                        <!-- 背景装饰 -->
+                        <rect x="0" y="0" width="600" height="440" fill="transparent"/>
+                        
+                        <!-- ===== 三个系统卡片 ===== -->
+                        <!-- 飞书多维表格 -->
+                        <g class="flow-card" transform="translate(30, 25)">
+                            <ellipse class="card-glow" cx="75" cy="35" rx="80" ry="40" fill="url(#glowGradient)" opacity="0.3"/>
+                            <rect class="card-bg" x="0" y="0" width="150" height="70" rx="12" fill="url(#cardGradient)" stroke="#1ED760" stroke-width="1.5"/>
+                            <rect x="0" y="0" width="150" height="70" rx="12" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+                            <!-- 图标（绿色柱状图） -->
+                            <circle cx="30" cy="35" r="16" fill="rgba(30,215,96,0.15)" stroke="rgba(30,215,96,0.4)" stroke-width="1"/>
+                            <rect x="22" y="33" width="4" height="10" rx="1" fill="#1ED760"/>
+                            <rect x="28" y="28" width="4" height="15" rx="1" fill="#1ED760"/>
+                            <rect x="34" y="31" width="4" height="12" rx="1" fill="#1ED760"/>
+                            <!-- 文字 -->
+                            <text x="95" y="32" fill="#ffffff" font-size="12" font-weight="600" text-anchor="middle">飞书</text>
+                            <text x="95" y="48" fill="rgba(255,255,255,0.7)" font-size="11" text-anchor="middle">多维表格</text>
+                        </g>
+                        
+                        <!-- pixelle MCP -->
+                        <g class="flow-card" transform="translate(205, 25)">
+                            <ellipse class="card-glow" cx="75" cy="35" rx="80" ry="40" fill="url(#glowGradient)" opacity="0.3"/>
+                            <rect class="card-bg" x="0" y="0" width="150" height="70" rx="12" fill="url(#cardGradient)" stroke="#1ED760" stroke-width="1.5"/>
+                            <rect x="0" y="0" width="150" height="70" rx="12" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+                            <!-- 图标（绿色闪电） -->
+                            <circle cx="30" cy="35" r="16" fill="rgba(30,215,96,0.15)" stroke="rgba(30,215,96,0.4)" stroke-width="1"/>
+                            <polygon points="33,24 26,36 30,36 27,46 34,34 30,34" fill="#1ED760"/>
+                            <!-- 文字 -->
+                            <text x="95" y="32" fill="#ffffff" font-size="12" font-weight="600" text-anchor="middle">pixelle</text>
+                            <text x="95" y="48" fill="rgba(255,255,255,0.7)" font-size="11" text-anchor="middle">MCP</text>
+                        </g>
+                        
+                        <!-- runninghub -->
+                        <g class="flow-card" transform="translate(380, 25)">
+                            <ellipse class="card-glow" cx="75" cy="35" rx="80" ry="40" fill="url(#glowGradient)" opacity="0.3"/>
+                            <rect class="card-bg" x="0" y="0" width="150" height="70" rx="12" fill="url(#cardGradient)" stroke="#1ED760" stroke-width="1.5"/>
+                            <rect x="0" y="0" width="150" height="70" rx="12" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+                            <!-- 图标（绿色循环） -->
+                            <circle cx="30" cy="35" r="16" fill="rgba(30,215,96,0.15)" stroke="rgba(30,215,96,0.4)" stroke-width="1"/>
+                            <path d="M36,32 A7,7 0 1,1 24,32" fill="none" stroke="#1ED760" stroke-width="2" stroke-linecap="round"/>
+                            <polygon points="24,32 21,28 27,28" fill="#1ED760"/>
+                            <path d="M24,38 A7,7 0 1,1 36,38" fill="none" stroke="#1ED760" stroke-width="2" stroke-linecap="round"/>
+                            <polygon points="36,38 39,42 33,42" fill="#1ED760"/>
+                            <!-- 文字 -->
+                            <text x="95" y="32" fill="#ffffff" font-size="12" font-weight="600" text-anchor="middle">runninhub</text>
+                            <text x="95" y="48" fill="rgba(255,255,255,0.7)" font-size="11" text-anchor="middle">工作流</text>
+                        </g>
+                        
+                        <!-- ===== 垂直时间线（统一长度） ===== -->
+                        <line class="flow-line-breathe" x1="105" y1="95" x2="105" y2="430" stroke="rgba(30,215,96,0.25)" stroke-width="2"/>
+                        <line class="flow-line-breathe" x1="280" y1="95" x2="280" y2="430" stroke="rgba(30,215,96,0.25)" stroke-width="2" style="animation-delay: 0.5s"/>
+                        <line class="flow-line-breathe" x1="455" y1="95" x2="455" y2="430" stroke="rgba(30,215,96,0.25)" stroke-width="2" style="animation-delay: 1s"/>
+                        
+                        <!-- ===== 步骤1：输入文字/图片 ===== -->
+                        <g class="flow-step-group" transform="translate(0, 130)">
+                            <!-- 步骤编号（靠近虚线） -->
+                            <circle cx="60" cy="0" r="14" fill="rgba(30,215,96,0.15)" stroke="#1ED760" stroke-width="1.5"/>
+                            <text class="step-number" x="60" y="5" fill="#1ED760" font-size="11" font-weight="700" text-anchor="middle">01</text>
+                            <!-- 起始节点 -->
+                            <circle cx="105" cy="0" r="8" fill="url(#nodeGradient)" filter="url(#glow)"/>
+                            <!-- 箭头线（流动虚线+箭头） -->
+                            <line class="flow-arrow-right" x1="113" y1="0" x2="268" y2="0" stroke="#1ED760" stroke-width="2" stroke-dasharray="8,6" marker-end="url(#arrowHeadAnimated)"/>
+                            <!-- 标签（无背景框） -->
+                            <text x="190" y="-12" fill="#ffffff" font-size="12" font-weight="500" text-anchor="middle">输入文字/图片</text>
+                            <!-- 终止节点 -->
+                            <circle cx="280" cy="0" r="8" fill="url(#nodeGradient)" filter="url(#glow)"/>
+                        </g>
+                        
+                        <!-- ===== 步骤2：接收，调用工具 ===== -->
+                        <g class="flow-step-group" transform="translate(0, 200)">
+                            <!-- 步骤编号（靠近虚线） -->
+                            <circle cx="240" cy="0" r="14" fill="rgba(30,215,96,0.15)" stroke="#1ED760" stroke-width="1.5"/>
+                            <text class="step-number" x="240" y="5" fill="#1ED760" font-size="11" font-weight="700" text-anchor="middle">02</text>
+                            <!-- 起始节点 -->
+                            <circle cx="280" cy="0" r="8" fill="url(#nodeGradient)" filter="url(#glow)"/>
+                            <!-- 箭头线（流动虚线+箭头） -->
+                            <line class="flow-arrow-right" x1="288" y1="0" x2="443" y2="0" stroke="#1ED760" stroke-width="2" stroke-dasharray="8,6" marker-end="url(#arrowHeadAnimated)"/>
+                            <!-- 标签（无背景框） -->
+                            <text x="365" y="-12" fill="#ffffff" font-size="12" font-weight="500" text-anchor="middle">接收，调用工具</text>
+                            <!-- 终止节点 -->
+                            <circle cx="455" cy="0" r="8" fill="url(#nodeGradient)" filter="url(#glow)"/>
+                        </g>
+                        
+                        <!-- ===== 步骤3：调用工作流 ===== -->
+                        <g class="flow-step-group" transform="translate(0, 250)">
+                            <!-- 步骤编号（靠近虚线） -->
+                            <circle cx="490" cy="25" r="14" fill="rgba(30,215,96,0.15)" stroke="#1ED760" stroke-width="1.5"/>
+                            <text class="step-number" x="490" y="30" fill="#1ED760" font-size="11" font-weight="700" text-anchor="middle">03</text>
+                            <!-- 起始节点 -->
+                            <circle cx="455" cy="0" r="8" fill="url(#nodeGradient)" filter="url(#glow)"/>
+                            <!-- 向下连接线（流动虚线） -->
+                            <line class="flow-arrow-down" x1="455" y1="8" x2="455" y2="50" stroke="#1ED760" stroke-width="2" stroke-dasharray="10,5"/>
+                            <!-- 箭头（在虚线中间） -->
+                            <polygon points="455,42 449,32 461,32" fill="#1ED760"/>
+                            <!-- 标签（无背景框，在右侧，避开序号） -->
+                            <text x="520" y="32" fill="rgba(255,255,255,0.9)" font-size="12" font-weight="500" text-anchor="start">调用工作流</text>
+                            <!-- 终止节点 -->
+                            <circle cx="455" cy="50" r="8" fill="url(#nodeGradient)" filter="url(#glow)"/>
+                        </g>
+                        
+                        <!-- ===== 步骤4：接收上一步结果 ===== -->
+                        <g class="flow-step-group" transform="translate(0, 350)">
+                            <!-- 步骤编号（靠近虚线） -->
+                            <circle cx="490" cy="0" r="14" fill="rgba(30,215,96,0.15)" stroke="#1ED760" stroke-width="1.5"/>
+                            <text class="step-number" x="490" y="5" fill="#1ED760" font-size="11" font-weight="700" text-anchor="middle">04</text>
+                            <!-- 起始节点（右侧runninghub） -->
+                            <circle cx="455" cy="0" r="8" fill="url(#nodeGradient)" filter="url(#glow)"/>
+                            <!-- 虚线（独立控制方向，向左箭头） -->
+                            <line class="flow-arrow-step4" x1="292" y1="0" x2="447" y2="0" stroke="#1ED760" stroke-width="2" marker-start="url(#arrowHeadLeftAnimated)"/>
+                            <!-- 标签（无背景框） -->
+                            <text x="370" y="-12" fill="#ffffff" font-size="12" font-weight="500" text-anchor="middle">接收上一步结果</text>
+                            <!-- 终止节点（左侧pixelle MCP） -->
+                            <circle cx="280" cy="0" r="8" fill="url(#nodeGradient)" filter="url(#glow)"/>
+                        </g>
+                        
+                        <!-- ===== 步骤5：最终输出 ===== -->
+                        <g class="flow-step-group" transform="translate(0, 410)">
+                            <!-- 步骤编号（靠近虚线） -->
+                            <circle cx="60" cy="0" r="14" fill="rgba(30,215,96,0.15)" stroke="#1ED760" stroke-width="1.5"/>
+                            <text class="step-number" x="60" y="5" fill="#1ED760" font-size="11" font-weight="700" text-anchor="middle">05</text>
+                            <!-- 起始节点（右侧pixelle MCP） -->
+                            <circle cx="280" cy="0" r="8" fill="url(#nodeGradient)" filter="url(#glow)"/>
+                            <!-- 虚线（独立控制方向，向左箭头） -->
+                            <line class="flow-arrow-step5" x1="117" y1="0" x2="272" y2="0" stroke="#1ED760" stroke-width="2" marker-start="url(#arrowHeadLeftAnimated)"/>
+                            <!-- 标签（无背景框） -->
+                            <text x="195" y="-12" fill="#ffffff" font-size="12" font-weight="600" text-anchor="middle">最终输出</text>
+                            <!-- 终止节点（高亮，左侧飞书） -->
+                            <circle cx="105" cy="0" r="10" fill="url(#nodeGradient)" filter="url(#glow)"/>
+                        </g>
+                    </svg>
+                </div>
+                
+                <!-- 右侧：图片 -->
+                <div class="integration-image" onclick="openImageModal('/public/images/AIgongfang/资源 18@5x.png', 0.7)" style="cursor: pointer; overflow: hidden;">
+                    <img src="/public/images/AIgongfang/资源 18@5x.png" alt="系统集成流程图" style="width: 100%; height: 100%; object-fit: cover; object-position: top; transition: transform 0.3s ease;">
+                </div>
+            </div>
+        </section>
+        
+        <!-- 飞书多维表格模块 -->
+        <section class="feishu-section">
+            <h2 class="section-title">飞书多维表格</h2>
+            <p class="section-content">
+                围绕业务核心诉求，搭建了视频生成、视频换装、商品口播等AI驱动功能模块，有效支撑业务落地并提升内容生产效率。
+            </p>
+            
+            <div class="feishu-gallery">
+                <div class="feishu-gallery-item" onclick="openImageModal('/public/images/AIgongfang/资源 20@5x.png')">
+                    <img src="/public/images/AIgongfang/资源 20@5x.png" alt="飞书多维表格1">
+                </div>
+                <div class="feishu-gallery-item" onclick="openImageModal('/public/images/AIgongfang/资源 23@5x.png')">
+                    <img src="/public/images/AIgongfang/资源 23@5x.png" alt="飞书多维表格2">
+                </div>
+                <div class="feishu-gallery-item" onclick="openImageModal('/public/images/AIgongfang/资源 21@5x.png')">
+                    <img src="/public/images/AIgongfang/资源 21@5x.png" alt="飞书多维表格3">
+                </div>
+                <div class="feishu-gallery-item" onclick="openImageModal('/public/images/AIgongfang/资源 24@5x.png')">
+                    <img src="/public/images/AIgongfang/资源 24@5x.png" alt="飞书多维表格4">
+                </div>
+                <div class="feishu-gallery-item" onclick="openImageModal('/public/images/AIgongfang/资源 22@5x.png')">
+                    <img src="/public/images/AIgongfang/资源 22@5x.png" alt="飞书多维表格5">
+                </div>
+                <div class="feishu-gallery-item" onclick="openImageModal('/public/images/AIgongfang/资源 26@5x.png')">
+                    <img src="/public/images/AIgongfang/资源 26@5x.png" alt="飞书多维表格6">
+                </div>
+            </div>
+        </section>
+        
+    </main>
+
+    <!-- 引入导航栏 -->
+    <script type="module">
+        import { renderNavbar } from '/src/components/navbar.js';
+        renderNavbar('navbar');
+    </script>
+
+    <!-- 图片模态框 -->
+    <div id="image-modal" class="image-modal" onclick="closeImageModal(event)">
+        <button class="image-modal-close" onclick="closeImageModal(event)">×</button>
+        <img id="modal-image" src="" alt="大图预览">
+    </div>
+
+    <!-- 模态框控制脚本 -->
+    <script>
+        function openImageModal(src, scale = 1) {
+            const modal = document.getElementById('image-modal');
+            const img = document.getElementById('modal-image');
+            img.src = src;
+            // 根据scale参数调整图片大小
+            const baseSize = 30 * scale;
+            img.style.maxWidth = baseSize + '%';
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeImageModal(event) {
+            if (event.target.id === 'modal-image') return;
+            const modal = document.getElementById('image-modal');
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                const imageModal = document.getElementById('image-modal');
+                if (imageModal.classList.contains('active')) {
+                    imageModal.classList.remove('active');
+                    document.body.style.overflow = '';
+                }
+            }
+        });
+    </script>
+</body>
+</html>

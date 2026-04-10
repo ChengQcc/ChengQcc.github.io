@@ -1,0 +1,1888 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI直播矩阵 - 项目详情</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --color-primary: #1ED760;
+            --color-primary-dark: #1a5a3a;
+            --color-bg: #0D0D0D;
+            --color-card: rgba(255,255,255,0.03);
+            --color-border: rgba(255,255,255,0.08);
+            --color-text: #ffffff;
+            --color-text-secondary: rgba(255,255,255,0.6);
+            --color-text-muted: rgba(255,255,255,0.4);
+        }
+        
+        html {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        }
+        
+        body {
+            background: var(--color-bg);
+            color: var(--color-text);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        /* 导航栏占位 */
+        #navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 100;
+        }
+        
+        .navbar-spacer {
+            height: 60px;
+        }
+        
+        /* 返回箭头 */
+        .back-arrow {
+            position: fixed;
+            left: 60px;
+            top: 90px;
+            z-index: 100;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .back-arrow:hover {
+            background: rgba(30, 215, 96, 0.15);
+            border-color: rgba(30, 215, 96, 0.4);
+            color: #1ED760;
+            transform: translateX(-3px);
+        }
+        
+        /* 主容器 */
+        .project-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 60px 100px;
+        }
+        
+        /* 顶部封面图 */
+        .project-cover {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            border-radius: 16px;
+            overflow: hidden;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+            margin-bottom: 48px;
+            position: relative;
+        }
+        
+        .project-cover img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .project-cover-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #1a3a2a 0%, #0D0D0D 100%);
+        }
+        
+        .project-cover-placeholder span {
+            font-size: 14px;
+            color: var(--color-text-muted);
+            letter-spacing: 0.1em;
+        }
+        
+        /* 项目名称 */
+        .project-title {
+            font-size: 48px;
+            font-weight: 900;
+            color: var(--color-text);
+            margin-bottom: 48px;
+            letter-spacing: -0.02em;
+        }
+        
+        .project-title .highlight {
+            color: var(--color-primary);
+        }
+        
+        /* 两列布局：背景(60%) + 职责/目标(40%) */
+        .info-row {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr;
+            gap: 24px;
+            margin-bottom: 48px;
+        }
+        
+        /* 右侧列：职责和目标上下堆叠 */
+        .info-right-column {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+        
+        /* 右侧卡片样式调整 */
+        .info-right-column .info-card {
+            padding: 24px;
+        }
+        
+        .info-right-column .info-card-header {
+            margin-bottom: 16px;
+        }
+        
+        .info-right-column .info-card-title {
+            font-size: 16px;
+        }
+        
+        .info-right-column .info-card-number {
+            font-size: 18px;
+        }
+        
+        /* 项目背景/职责/目标三个卡片背景 */
+        .info-row .info-card {
+            background: rgba(0, 255, 136, 0.027);
+            border-color: rgba(0, 255, 136, 0.2);
+        }
+        
+        /* 信息卡片 */
+        .info-card {
+            background: var(--color-card);
+            border: 1px solid var(--color-border);
+            border-radius: 16px;
+            padding: 32px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .info-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 3px;
+            height: 100%;
+            background: var(--color-primary);
+            border-radius: 16px 0 0 16px;
+        }
+        
+        .info-card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .info-card-number {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--color-primary);
+        }
+        
+        .info-card-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--color-text);
+        }
+        
+        .info-card-content {
+            font-size: 15px;
+            line-height: 1.8;
+            color: var(--color-text-secondary);
+        }
+        
+        /* 标签列表 */
+        .tag-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 16px;
+        }
+        
+        .tag {
+            display: inline-flex;
+            align-items: center;
+            padding: 8px 16px;
+            background: var(--color-primary-dark);
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--color-text);
+        }
+        
+        /* 核心痛点区域 */
+        .pain-points-section {
+            margin-top: 88px;
+        }
+        
+        .section-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--color-text);
+            margin-bottom: 32px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .section-title::before {
+            content: '';
+            width: 4px;
+            height: 28px;
+            background: var(--color-primary);
+            border-radius: 2px;
+        }
+        
+        /* 2x2 网格 */
+        .pain-points-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+        }
+        
+        /* 痛点卡片 */
+        .pain-card {
+            background: var(--color-card);
+            border: 1px solid var(--color-border);
+            border-radius: 16px;
+            padding: 32px;
+            transition: all 0.3s ease;
+        }
+        
+        .pain-card:hover {
+            border-color: rgba(30, 215, 96, 0.3);
+            transform: translateY(-2px);
+        }
+        
+        .pain-card-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+        
+        .pain-card-number {
+            font-size: 32px;
+            font-weight: 900;
+            color: var(--color-primary);
+            opacity: 0.6;
+        }
+        
+        .pain-card-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--color-text);
+        }
+        
+        .pain-card-content {
+            font-size: 15px;
+            line-height: 1.8;
+            color: var(--color-text-secondary);
+        }
+        
+        .pain-card-quote {
+            margin-top: 16px;
+            padding: 16px;
+            background: rgba(30, 215, 96, 0.05);
+            border-left: 3px solid var(--color-primary);
+            border-radius: 0 8px 8px 0;
+            font-size: 14px;
+            color: var(--color-primary);
+            font-style: italic;
+        }
+        
+        /* SOP图片悬停效果 */
+        .sop-image {
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+        .sop-image:hover {
+            transform: scale(1.05);
+        }
+        
+        /* 图片模态框 */
+        .image-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 9999;
+            background: rgba(0, 0, 0, 0.9);
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+            box-sizing: border-box;
+        }
+        .image-modal.active {
+            display: flex;
+        }
+        .image-modal img {
+            max-width: none;
+            max-height: none;
+            object-fit: contain;
+        }
+        .image-modal-close {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            color: #ffffff;
+            font-size: 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        .image-modal-close:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        /* 搜索期章节样式 */
+        .search-phase-section {
+            margin-top: 128px;
+        }
+        
+        /* 搜索期标题样式 - 参考 section-title */
+        .search-phase-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--color-text);
+            margin-bottom: 32px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .search-phase-title::before {
+            content: '';
+            width: 4px;
+            height: 28px;
+            background: var(--color-primary);
+            border-radius: 2px;
+        }
+
+        .search-phase-content {
+            display: grid;
+            grid-template-columns: 2fr 3fr;  /* 左侧40% : 右侧60% */
+            gap: 48px;
+            align-items: stretch;  /* 左右两侧高度拉伸一致，底部对齐 */
+        }
+        
+        .search-phase-left {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .search-phase-intro {
+            font-size: 14px;
+            line-height: 2;
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .search-phase-case-tag {
+            display: inline-flex;
+            align-items: center;
+            padding: 10px 20px;
+            background: var(--color-primary);
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #0A1F2D;
+            width: fit-content;
+            margin-bottom: 4px;
+        }
+        
+        /* 前期探索案例区块 - 整体下移，使上下间距一致 */
+        .search-phase-case-wrapper {
+            margin-top: 32px;
+        }
+        
+        .search-phase-case-block {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 20px;
+        }
+        
+        .search-phase-case-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .search-phase-case-title svg {
+            width: 18px;
+            height: 18px;
+        }
+        
+        .search-phase-case-content {
+            font-size: 14px;
+            line-height: 1.9;
+            color: rgba(255, 255, 255, 0.65);
+        }
+        
+        .search-phase-right {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: repeat(2, 1fr);
+            gap: 12px;
+        }
+        
+        /* 视频卡片样式 */
+        .video-card {
+            position: relative;
+            aspect-ratio: 9 / 16;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .video-card:hover {
+            border-color: var(--color-primary);
+            transform: scale(1.02);
+        }
+        
+        .video-card video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        
+        .video-card .video-overlay {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.3);
+            transition: opacity 0.3s ease;
+        }
+        
+        .video-card:hover .video-overlay {
+            opacity: 0;
+        }
+        
+        .video-card .video-overlay svg {
+            width: 32px;
+            height: 32px;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 8px;
+        }
+        
+        .video-card .video-overlay span {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        /* 视频模态框 */
+        .video-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 9999;
+            background: rgba(0, 0, 0, 0.9);
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+            box-sizing: border-box;
+        }
+        
+        .video-modal.active {
+            display: flex;
+        }
+        
+        .video-modal video {
+            max-width: 90%;
+            max-height: 90%;
+            border-radius: 12px;
+        }
+        
+        .video-modal-close {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            color: #ffffff;
+            font-size: 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        
+        .video-modal-close:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        /* 气泡标签区 - 位于左侧底部 */
+        .bubble-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 32px;  /* 与上方内容保持固定间距 */
+        }
+        
+        .bubble-tag {
+            padding: 6px 14px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.6);
+            transition: all 0.3s ease;
+        }
+        
+        .bubble-tag:hover {
+            background: rgba(30, 215, 96, 0.1);
+            border-color: rgba(30, 215, 96, 0.3);
+            color: var(--color-primary);
+        }
+        
+        /* 响应式 */
+        
+        /* 导航栏响应式 - 与首页一致 */
+        @media (min-width: 2400px) and (max-width: 3000px) {
+            .navbar-link { font-size: 18px !important; }
+            .navbar-links { gap: 64px !important; }
+        }
+        
+        @media (min-width: 3001px) {
+            .navbar-link { font-size: 24px !important; }
+            .navbar-links { gap: 80px !important; }
+        }
+        
+        /* 2K 屏幕 - 整体放大 1.25 倍 */
+        @media (min-width: 2400px) and (max-width: 3000px) {
+            .project-container {
+                zoom: 1.25;
+            }
+            .navbar-spacer {
+                height: 76px;
+            }
+            .back-arrow {
+                left: 80px;
+                top: 110px;
+                width: 50px;
+                height: 50px;
+                border-radius: 12px;
+            }
+            .back-arrow svg {
+                width: 24px;
+                height: 24px;
+            }
+        }
+        
+        /* 4K 屏幕 - 整体放大 1.6 倍 */
+        @media (min-width: 3001px) {
+            .project-container {
+                zoom: 1.6;
+            }
+            .navbar-spacer {
+                height: 96px;
+            }
+            .back-arrow {
+                left: 100px;
+                top: 140px;
+                width: 64px;
+                height: 64px;
+                border-radius: 16px;
+            }
+            .back-arrow svg {
+                width: 32px;
+                height: 32px;
+            }
+        }
+
+        /* ========== 项目破局区块样式 ========== */
+        .breakthrough-section {
+            margin-top: 128px;
+        }
+
+        /* 标题样式 - 与搜索期标题一致 */
+        .breakthrough-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--color-text);
+            margin-bottom: 32px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+                
+        .breakthrough-title::before {
+            content: '';
+            width: 4px;
+            height: 28px;
+            background: var(--color-primary);
+            border-radius: 2px;
+        }
+
+        /* 左右分栏布局 - 强制等高 */
+        .breakthrough-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 48px;
+            position: relative;
+            margin-bottom: 48px;
+            align-items: stretch;
+        }
+        
+        /* 左右栏等高 */
+        .breakthrough-column {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* 背景框自动撑满剩余空间 */
+        .breakthrough-text-box {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 20px;
+            flex: 1;
+        }
+
+        /* 中间虚线分隔 */
+        .breakthrough-divider {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            transform: translateX(-50%);
+            width: 6px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .breakthrough-divider-dot {
+            width: 6px;
+            height: 6px;
+            background: var(--color-primary);
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        /* 改进办法标签 - 绿色圆角矩形 */
+        .breakthrough-label {
+            display: inline-flex;
+            align-items: center;
+            padding: 10px 20px;
+            background: var(--color-primary);
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #0A1F2D;
+            width: fit-content;
+            margin-bottom: 16px;
+        }
+
+
+
+        /* 正文内容 - 与搜索期正文字体一致 */
+        .breakthrough-text {
+            font-size: 14px;
+            line-height: 1.9;
+            color: rgba(255, 255, 255, 0.65);
+        }
+
+        /* 绿色高亮文字 */
+        .text-highlight {
+            color: var(--color-primary);
+        }
+
+        /* 底部视频区域 */
+        .breakthrough-videos {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 12px;
+        }
+
+        /* 视频卡片样式 - 与搜索期一致 */
+        .breakthrough-video-card {
+            position: relative;
+            aspect-ratio: 9 / 16;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .breakthrough-video-card:hover {
+            border-color: var(--color-primary);
+            transform: scale(1.02);
+        }
+
+        .breakthrough-video-card video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .breakthrough-video-card .video-overlay {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.3);
+            transition: opacity 0.3s ease;
+        }
+
+        .breakthrough-video-card:hover .video-overlay {
+            opacity: 0;
+        }
+
+        .breakthrough-video-card .video-overlay svg {
+            width: 32px;
+            height: 32px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        /* UGC视频SOP区块样式 */
+        .ugc-sop-section {
+            margin-top: 128px;
+        }
+
+        .ugc-sop-images {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            margin-top: 24px;
+        }
+
+        .ugc-sop-image {
+            transition: transform 0.3s ease;
+            border-radius: 16px;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .ugc-sop-image:hover {
+            transform: scale(1.02);
+        }
+
+        .ugc-sop-image img {
+            width: 100%;
+            display: block;
+        }
+
+        /* 混剪脚本图片并排展示 */
+        .mix-script-images {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+            margin-top: 24px;
+        }
+
+        .mix-script-image {
+            transition: transform 0.3s ease;
+            border-radius: 16px;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            height: 400px;
+        }
+
+        .mix-script-image:hover {
+            transform: scale(1.02);
+        }
+
+        .mix-script-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: top;
+        }
+
+
+        /* SKILL设计区块样式 */
+        .skill-design-section {
+            margin-top: 128px;
+        }
+
+        .skill-design-intro {
+            font-size: 14px;
+            line-height: 1.9;
+            color: rgba(255, 255, 255, 0.65);
+            margin-top: -20px;
+            margin-bottom: 24px;
+        }
+
+        .skill-design-content {
+            display: grid;
+            grid-template-columns: 40% 1fr;
+            gap: 48px;
+            align-items: start;
+        }
+
+        .skill-flow-svg {
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .skill-flow-svg svg text {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        .skill-image {
+            transition: transform 0.3s ease;
+            border-radius: 16px;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .skill-image:hover {
+            transform: scale(1.02);
+        }
+
+        .skill-image img {
+            width: 100%;
+            display: block;
+        }
+
+
+        /* ========== 数据反馈验证结果样式 ========== */
+        .data-feedback-section {
+            margin-top: 88px;
+        }
+
+        .data-feedback-intro {
+            font-size: 14px;
+            line-height: 1.9;
+            color: rgba(255, 255, 255, 0.65);
+            margin-bottom: 32px;
+        }
+
+        .data-cards {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+            margin-bottom: 48px;
+        }
+
+        .data-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .data-card:hover {
+            border-color: var(--color-primary);
+            transform: translateY(-2px);
+        }
+
+        .data-label {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .data-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--color-primary);
+        }
+
+        /* 柱状图容器 */
+        .chart-container {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 20px;
+            padding: 40px;
+            overflow: hidden;
+        }
+
+        .chart-title {
+            margin: 0 0 20px;
+            text-align: center;
+            font-size: 20px;
+            font-weight: 600;
+            letter-spacing: 0.12em;
+            color: rgba(255, 255, 255, 0.92);
+        }
+
+        .chart-svg {
+            display: block;
+            margin: 0 auto;
+        }
+
+        /* 柱状图入场动画 */
+        .chart-bar {
+            cursor: pointer;
+        }
+
+        .bar-rect {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-origin: bottom center;
+        }
+
+        /* 入场动画 - 从底部生长 */
+        @keyframes barGrow {
+            from {
+                transform: scaleY(0);
+                opacity: 0;
+            }
+            to {
+                transform: scaleY(1);
+                opacity: 1;
+            }
+        }
+
+        .chart-bar .bar-1 {
+            animation: barGrow 0.8s ease-out 0.1s both;
+        }
+        .chart-bar .bar-2 {
+            animation: barGrow 0.8s ease-out 0.25s both;
+        }
+        .chart-bar .bar-3 {
+            animation: barGrow 0.8s ease-out 0.4s both;
+        }
+        .chart-bar .bar-4 {
+            animation: barGrow 0.8s ease-out 0.55s both;
+        }
+
+        /* 悬停效果 */
+        .chart-bar:hover .bar-rect {
+            filter: brightness(1.3) url(#glow1);
+            transform: scaleY(1.02);
+        }
+
+        .chart-bar:hover .bar-value {
+            transform: scale(1.1);
+        }
+
+        .bar-value {
+            transition: transform 0.3s ease;
+        }
+
+        /* 工具提示样式 */
+        .chart-tooltip {
+            pointer-events: none;
+            transition: opacity 0.2s ease;
+        }
+
+        /* 减少动画偏好 */
+        @media (prefers-reduced-motion: reduce) {
+            .bar-rect {
+                animation: none;
+            }
+            .chart-bar .bar-1,
+            .chart-bar .bar-2,
+            .chart-bar .bar-3,
+            .chart-bar .bar-4 {
+                animation: none;
+                transform: scaleY(1);
+                opacity: 1;
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <!-- 返回箭头 - 固定定位 -->
+    <a href="index.html#works?expand=1" class="back-arrow" title="返回作品集">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+    </a>
+    
+    <!-- 导航栏 -->
+    <div id="navbar"></div>
+    <div class="navbar-spacer"></div>
+    
+    <!-- 主内容 -->
+    <main class="project-container">
+        <!-- 封面图 -->
+        <div class="project-cover">
+            <img src="/public/images/manju2/jimeng-2026-04-08-3364-图片1背景改成浅紫色渐变.png" alt="AI直播矩阵素材">
+        </div>
+        
+        <!-- 项目名称 -->
+        <h1 class="project-title">AI<span class="highlight">直播矩阵素材</span></h1>
+        
+        <!-- 两列信息 -->
+        <div class="info-row">
+            <!-- 项目背景 -->
+            <div class="info-card">
+                <div class="info-card-header">
+                    <span class="info-card-number">01</span>
+                    <h2 class="info-card-title">项目背景</h2>
+                </div>
+                <div class="info-card-content">
+                    为了直播的降本提效，在直播带货进入“降本增效”周期的背景下，AIGC业务组探索并搭建了一套极低成本的“AI自动化直播矩阵”。
+作为该矩阵的流量漏斗顶端，矩阵账号必须依靠每日极大量、高频次的短视频分发来撬动公域平台的推荐机制。这不仅是维持账号活跃度与平台权重的刚需，更是源源不断向直播间输送精准流量、完成最终商业转化的“大动脉”。
+                </div>
+            </div>
+            
+            <!-- 右侧列：职责 + 目标 -->
+            <div class="info-right-column">
+                <!-- 项目职责 -->
+                <div class="info-card">
+                    <div class="info-card-header">
+                        <span class="info-card-number">02</span>
+                        <h2 class="info-card-title">项目职责</h2>
+                    </div>
+                    <div class="info-card-content">
+                        <div class="tag-list">
+                            <span class="tag">PM</span>
+                            <span class="tag">自动化搭建</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 项目目标 -->
+                <div class="info-card">
+                    <div class="info-card-header">
+                        <span class="info-card-number">03</span>
+                        <h2 class="info-card-title">项目目标</h2>
+                    </div>
+                    <div class="info-card-content">
+                        <div class="tag-list">
+                            <span class="tag">AI赋能</span>
+                            <span class="tag">提高产能</span>
+                            <span class="tag">吸引流量</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 核心痛点 -->
+        <section class="pain-points-section">
+            <h2 class="section-title">核心痛点</h2>
+            
+            <div class="pain-points-grid">
+                <!-- 产能瓶颈 -->
+                <div class="pain-card">
+                    <div class="pain-card-header">
+                        <span class="pain-card-number">01</span>
+                        <h3 class="pain-card-title">产能瓶颈</h3>
+                    </div>
+                    <div class="pain-card-content">
+                        矩阵账号需要海量短视频，传统人工剪辑成本高、速度慢、产出极不稳定。
+                    </div>
+                    <div class="pain-card-quote">
+                        "如何利用AI，将视频生产升级为'量产'？"
+                    </div>
+                </div>
+                
+                <!-- 创意枯竭 -->
+                <div class="pain-card">
+                    <div class="pain-card-header">
+                        <span class="pain-card-number">02</span>
+                        <h3 class="pain-card-title">创意枯竭</h3>
+                    </div>
+                    <div class="pain-card-content">
+                        每天需要大量脚本和创意，人工策划容易同质化且效率低下。
+                    </div>
+                    <div class="pain-card-quote">
+                        "怎么去同质化，去低质化，避免被平台限流？"
+                    </div>
+                </div>
+                
+                <!-- 流程失序 -->
+                <div class="pain-card">
+                    <div class="pain-card-header">
+                        <span class="pain-card-number">03</span>
+                        <h3 class="pain-card-title">流程失序</h3>
+                    </div>
+                    <div class="pain-card-content">
+                        团队作业零散、缺乏标准SOP，导致产出质量参差不齐，
+                    </div>
+                    <div class="pain-card-quote">
+                        "如何从无序走向标准化管理？"
+                    </div>
+                </div>
+                
+                <!-- 场景失真 -->
+                <div class="pain-card">
+                    <div class="pain-card-header">
+                        <span class="pain-card-number">04</span>
+                        <h3 class="pain-card-title">场景失真</h3>
+                    </div>
+                    <div class="pain-card-content">
+                        用户观看时易产生审美疲劳，难以建立情感连接，导致转化率低、留存难，
+                    </div>
+                    <div class="pain-card-quote">
+                        "如何重塑真实与个性化体验？"
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 项目SOP -->
+        <section class="pain-points-section">
+            <h2 class="section-title">项目SOP</h2>
+            <div class="sop-content" style="font-size: 15px; line-height: 1.8; color: var(--color-text-secondary); margin-bottom: 32px;">
+                构建了从调研、AI生成、人工拍摄、剪辑审核到数据分析的全链路内容生产流程，实现高效、可控、可迭代的内容输出。
+            </div>
+            <div class="sop-image" onclick="openImageModal('/images/sop-flow.png')" style="max-width: 100%; border-radius: 16px; overflow: hidden; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08);">
+                <img src="/images/sop-flow.png" alt="项目SOP流程图" style="width: 100%; display: block;">
+            </div>
+        </section>
+        
+        <!-- 搜索期 -->
+        <section class="search-phase-section">
+            <h2 class="search-phase-title">搜索期</h2>
+            
+            <div class="search-phase-content">
+                <!-- 左侧文字内容 -->
+                <div class="search-phase-left">
+                    <!-- 背景介绍 -->
+                    <p class="search-phase-intro">
+                        由于刚开始大家对于这类型的视频运营场景了解有限，在项目初期，陷入了流量误区，利用AI制作了大量吸睛的‘猎奇/热点’视频但缺乏产品卖点拆解，向直播间的引流率和最终转化率较为惨淡。
+                    </p>
+                            
+                    <!-- 前期探索案例 -->
+                    <div class="search-phase-case-wrapper">
+                        <span class="search-phase-case-tag">前期探索案例</span>
+                        <div class="search-phase-case-block">
+                            <h4 class="search-phase-case-title">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="11" cy="11" r="8"></circle>
+                                    <path d="m21 21-4.35-4.35"></path>
+                                </svg>
+                                现象
+                            </h4>
+                            <p class="search-phase-case-content">
+                                陷入“视觉自嗨”，产出了大量吸睛但脱离真实生活场景的素材，用户只是“看热闹”，导致直播间进房率与商品点击率极惨。
+                            </p>
+                        </div>
+                    </div>
+                            
+                    <div class="search-phase-case-block">
+                        <h4 class="search-phase-case-title">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+                            </svg>
+                            反思
+                        </h4>
+                        <p class="search-phase-case-content">
+                            电商的核心是“信任”。猎奇只能换来点赞，真实的“痛点场景+人设背书”才能换来转化。
+                        </p>
+                    </div>
+                            
+                    <!-- 气泡标签 - 位于左侧底部 -->
+                    <div class="bubble-tags">
+                        <span class="bubble-tag">产能低</span>
+                        <span class="bubble-tag">脱离生活</span>
+                        <span class="bubble-tag">无痛点</span>
+                        <span class="bubble-tag">低转化</span>
+                        <span class="bubble-tag">不种草</span>
+                        <span class="bubble-tag">弱化卖点</span>
+                        <span class="bubble-tag">品牌宣传</span>
+                        <span class="bubble-tag">历史恶搞</span>
+                    </div>
+                </div>
+                        
+                <!-- 右侧视频卡片 - 4列×2行=8个 -->
+                <div class="search-phase-right">
+                    <div class="video-card" data-video="/videos/1.mp4">
+                        <video muted loop playsinline preload="metadata">
+                            <source src="/videos/1.mp4" type="video/mp4">
+                        </video>
+                        <div class="video-overlay">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                        </div>
+                    </div>
+                    <div class="video-card" data-video="/videos/2.mp4">
+                        <video muted loop playsinline preload="metadata">
+                            <source src="/videos/2.mp4" type="video/mp4">
+                        </video>
+                        <div class="video-overlay">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                        </div>
+                    </div>
+                    <div class="video-card" data-video="/videos/3.mp4">
+                        <video muted loop playsinline preload="metadata">
+                            <source src="/videos/3.mp4" type="video/mp4">
+                        </video>
+                        <div class="video-overlay">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                        </div>
+                    </div>
+                    <div class="video-card" data-video="/videos/4.mp4">
+                        <video muted loop playsinline preload="metadata">
+                            <source src="/videos/4.mp4" type="video/mp4">
+                        </video>
+                        <div class="video-overlay">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                        </div>
+                    </div>
+                    <div class="video-card" data-video="/videos/5.mp4">
+                        <video muted loop playsinline preload="metadata">
+                            <source src="/videos/5.mp4" type="video/mp4">
+                        </video>
+                        <div class="video-overlay">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                        </div>
+                    </div>
+                    <div class="video-card" data-video="/videos/6.mp4">
+                        <video muted loop playsinline preload="metadata">
+                            <source src="/videos/6.mp4" type="video/mp4">
+                        </video>
+                        <div class="video-overlay">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                        </div>
+                    </div>
+                    <div class="video-card" data-video="/videos/7.mp4">
+                        <video muted loop playsinline preload="metadata">
+                            <source src="/videos/7.mp4" type="video/mp4">
+                        </video>
+                        <div class="video-overlay">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                        </div>
+                    </div>
+                    <div class="video-card" data-video="/videos/8.mp4">
+                        <video muted loop playsinline preload="metadata">
+                            <source src="/videos/8.mp4" type="video/mp4">
+                        </video>
+                        <div class="video-overlay">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 项目破局 -->
+        <section class="breakthrough-section">
+            <h2 class="breakthrough-title">项目破局</h2>
+
+            <div class="breakthrough-content">
+                <!-- 中间虚线分隔 -->
+                <div class="breakthrough-divider">
+                    <span class="breakthrough-divider-dot"></span>
+                    <span class="breakthrough-divider-dot"></span>
+                    <span class="breakthrough-divider-dot"></span>
+                    <span class="breakthrough-divider-dot"></span>
+                    <span class="breakthrough-divider-dot"></span>
+                    <span class="breakthrough-divider-dot"></span>
+                    <span class="breakthrough-divider-dot"></span>
+                    <span class="breakthrough-divider-dot"></span>
+                    <span class="breakthrough-divider-dot"></span>
+                    <span class="breakthrough-divider-dot"></span>
+                    <span class="breakthrough-divider-dot"></span>
+                    <span class="breakthrough-divider-dot"></span>
+                </div>
+
+                <!-- 左栏 -->
+                <div class="breakthrough-column">
+                    <span class="breakthrough-label">改进办法</span>
+                    <div class="breakthrough-text-box">
+                        <p class="breakthrough-text">
+                            通过分析电商短视频场景的结构，输出真人UGC视频可以更高的转化数据赋能直播间，一天内可以输出多条高质量原创视频，包含5种电商脚本结构：<span class="text-highlight">1.黄金钩子2.信任增强3.卖点场景4.情感共鸣5.行为引导</span>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- 右栏 -->
+                <div class="breakthrough-column">
+                    <span class="breakthrough-label">改进办法</span>
+                    <div class="breakthrough-text-box">
+                        <p class="breakthrough-text">
+                            再通过<span class="text-highlight">Python</span>根据短视频脚本结构去混剪可以将5条原创<span class="text-highlight">裂变出1000条</span>，既符合电商场景又满足了维持账号活跃度引流到直播间的需要，
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 底部6个视频 -->
+            <div class="breakthrough-videos">
+                <div class="breakthrough-video-card" data-video="/videos/修丽可_videos/1.mp4">
+                    <video muted loop playsinline preload="metadata">
+                        <source src="/videos/修丽可_videos/1.mp4" type="video/mp4">
+                    </video>
+                    <div class="video-overlay">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                    </div>
+                </div>
+                <div class="breakthrough-video-card" data-video="/videos/修丽可_videos/2.mp4">
+                    <video muted loop playsinline preload="metadata">
+                        <source src="/videos/修丽可_videos/2.mp4" type="video/mp4">
+                    </video>
+                    <div class="video-overlay">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                    </div>
+                </div>
+                <div class="breakthrough-video-card" data-video="/videos/修丽可_videos/3.mp4">
+                    <video muted loop playsinline preload="metadata">
+                        <source src="/videos/修丽可_videos/3.mp4" type="video/mp4">
+                    </video>
+                    <div class="video-overlay">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                    </div>
+                </div>
+                <div class="breakthrough-video-card" data-video="/videos/修丽可_videos/4.mp4">
+                    <video muted loop playsinline preload="metadata">
+                        <source src="/videos/修丽可_videos/4.mp4" type="video/mp4">
+                    </video>
+                    <div class="video-overlay">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                    </div>
+                </div>
+                <div class="breakthrough-video-card" data-video="/videos/修丽可_videos/5.mp4">
+                    <video muted loop playsinline preload="metadata">
+                        <source src="/videos/修丽可_videos/5.mp4" type="video/mp4">
+                    </video>
+                    <div class="video-overlay">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                    </div>
+                </div>
+                <div class="breakthrough-video-card" data-video="/videos/修丽可_videos/6.mp4">
+                    <video muted loop playsinline preload="metadata">
+                        <source src="/videos/修丽可_videos/6.mp4" type="video/mp4">
+                    </video>
+                    <div class="video-overlay">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- UGC视频SOP -->
+        <section class="ugc-sop-section">
+            <span class="breakthrough-label">UGC视频SOP</span>
+            <p class="breakthrough-text" style="margin-top: 16px;">
+                从产品信息、人物及场景设定切入，通过分镜脚本生成、图像/视频生成、混剪等模块，推动内容从需求输入到成片输出，提升制作效率、降低成本。
+            </p>
+
+            <div class="ugc-sop-images">
+                <div class="ugc-sop-image">
+                    <img src="/images/SOP.png" alt="UGC视频SOP流程图">
+                </div>
+                <div class="ugc-sop-image">
+                    <img src="/images/coze.png" alt="Coze工作流">
+                </div>
+            </div>
+        </section>
+
+        <!-- 混剪脚本 -->
+        <section class="ugc-sop-section">
+            <span class="breakthrough-label">混剪脚本</span>
+            <p class="breakthrough-text" style="margin-top: 16px;">
+                利用Python依据短视频脚本结构进行混剪，可将多条原创素材裂变生成上千条内容。
+            </p>
+
+            <div class="mix-script-images">
+                <div class="mix-script-image">
+                    <img src="/images/代码图2.png" alt="混剪脚本代码">
+                </div>
+                <div class="mix-script-image">
+                    <img src="/images/混剪图.png" alt="混剪效果展示">
+                </div>
+            </div>
+        </section>
+
+        <!-- SKILL设计 -->
+        <section class="skill-design-section">
+            <h2 class="breakthrough-title">SKILL设计</h2>
+            <p class="skill-design-intro">生成UGC分镜脚本skill</p>
+
+            <div class="skill-design-content">
+                <!-- 左侧：流程图SVG -->
+                <div class="skill-flow-svg">
+                    <svg viewBox="0 0 616 580" width="100%" height="auto" style="max-width: 616px;">
+                        <!-- 步骤1: 收集产品信息 -->
+                        <g>
+                            <!-- 左括号 [ 开口向右 -->
+                            <polygon fill="#DCDDDD" points="26,22 18,22 18,31.9 26,31.9 26,22"/>
+                            <polygon fill="#DCDDDD" points="18,31.9 10,31.9 10,56.5 18,56.5 18,31.9"/>
+                            <polygon fill="#DCDDDD" points="26,56.5 18,56.5 18,65.3 26,65.3 26,56.5"/>
+                        </g>
+                        <g>
+                            <!-- 右括号 ] 开口向左 -->
+                            <polygon fill="#DCDDDD" points="255,22 263,22 263,31.9 255,31.9 255,22"/>
+                            <polygon fill="#DCDDDD" points="263,31.9 271,31.9 271,56.5 263,56.5 263,31.9"/>
+                            <polygon fill="#DCDDDD" points="255,56.5 263,56.5 263,65.3 255,65.3 255,56.5"/>
+                        </g>
+                        <text x="53" y="51" fill="#1ED760" font-size="29" font-weight="400">收集产品信息</text>
+                        
+                        <!-- 右箭头和说明 -->
+                        <line x1="286" y1="44" x2="341" y2="44" stroke="#C9CACA" stroke-width="2.2"/>
+                        <polygon fill="#C9CACA" points="341,44 330,37.4 330,50.6"/>
+                        <text x="356" y="53" fill="#B5B5B6" font-size="22">AI反推/扩写</text>
+                        
+                        <!-- 下箭头1 -->
+                        <line x1="141" y1="79" x2="141" y2="114" stroke="#FFFFFF" stroke-width="2.2"/>
+                        <polygon fill="#FFFFFF" points="141,114 132,101 150,101"/>
+                        
+                        <!-- 步骤2: 收集人物设定 -->
+                        <g transform="translate(0, 110)">
+                            <polygon fill="#DCDDDD" points="26,22 18,22 18,31.9 26,31.9 26,22"/>
+                            <polygon fill="#DCDDDD" points="18,31.9 10,31.9 10,56.5 18,56.5 18,31.9"/>
+                            <polygon fill="#DCDDDD" points="26,56.5 18,56.5 18,65.3 26,65.3 26,56.5"/>
+                        </g>
+                        <g transform="translate(0, 110)">
+                            <polygon fill="#DCDDDD" points="255,22 263,22 263,31.9 255,31.9 255,22"/>
+                            <polygon fill="#DCDDDD" points="263,31.9 271,31.9 271,56.5 263,56.5 263,31.9"/>
+                            <polygon fill="#DCDDDD" points="255,56.5 263,56.5 263,65.3 255,65.3 255,56.5"/>
+                        </g>
+                        <text x="53" y="161" fill="#1ED760" font-size="29" font-weight="400">收集人物设定</text>
+                        
+                        <!-- 右箭头和说明 -->
+                        <line x1="286" y1="154" x2="341" y2="154" stroke="#C9CACA" stroke-width="2.2"/>
+                        <polygon fill="#C9CACA" points="341,154 330,147.4 330,160.6"/>
+                        <text x="356" y="163" fill="#B5B5B6" font-size="22">AI扩写</text>
+                        
+                        <!-- 下箭头2 -->
+                        <line x1="141" y1="189" x2="141" y2="224" stroke="#FFFFFF" stroke-width="2.2"/>
+                        <polygon fill="#FFFFFF" points="141,224 132,211 150,211"/>
+                        
+                        <!-- 步骤3: 收集场景设定 -->
+                        <g transform="translate(0, 220)">
+                            <polygon fill="#DCDDDD" points="26,22 18,22 18,31.9 26,31.9 26,22"/>
+                            <polygon fill="#DCDDDD" points="18,31.9 10,31.9 10,56.5 18,56.5 18,31.9"/>
+                            <polygon fill="#DCDDDD" points="26,56.5 18,56.5 18,65.3 26,65.3 26,56.5"/>
+                        </g>
+                        <g transform="translate(0, 220)">
+                            <polygon fill="#DCDDDD" points="255,22 263,22 263,31.9 255,31.9 255,22"/>
+                            <polygon fill="#DCDDDD" points="263,31.9 271,31.9 271,56.5 263,56.5 263,31.9"/>
+                            <polygon fill="#DCDDDD" points="255,56.5 263,56.5 263,65.3 255,65.3 255,56.5"/>
+                        </g>
+                        <text x="53" y="271" fill="#1ED760" font-size="29" font-weight="400">收集场景设定</text>
+                        
+                        <!-- 右箭头和说明 -->
+                        <line x1="286" y1="264" x2="341" y2="264" stroke="#C9CACA" stroke-width="2.2"/>
+                        <polygon fill="#C9CACA" points="341,264 330,257.4 330,270.6"/>
+                        <text x="356" y="273" fill="#B5B5B6" font-size="22">AI扩写</text>
+                        
+                        <!-- 下箭头3 -->
+                        <line x1="141" y1="299" x2="141" y2="334" stroke="#FFFFFF" stroke-width="2.2"/>
+                        <polygon fill="#FFFFFF" points="141,334 132,321 150,321"/>
+                        
+                        <!-- 步骤4: 合并到分镜/脚本指令模板 (两行) -->
+                        <!-- 左括号 [ 开口向右 - 与两行文字垂直居中 -->
+                        <polygon fill="#DCDDDD" points="26,376 18,376 18,386 26,386 26,376"/>
+                        <polygon fill="#DCDDDD" points="18,386 10,386 10,410 18,410 18,386"/>
+                        <polygon fill="#DCDDDD" points="26,410 18,410 18,419 26,419 26,410"/>
+                        <!-- 右括号 ] 开口向左 - 与两行文字垂直居中 -->
+                        <polygon fill="#DCDDDD" points="255,376 263,376 263,386 255,386 255,376"/>
+                        <polygon fill="#DCDDDD" points="263,386 271,386 271,410 263,410 263,386"/>
+                        <polygon fill="#DCDDDD" points="255,410 263,410 263,419 255,419 255,410"/>
+                        <text x="53" y="381" fill="#1ED760" font-size="29" font-weight="400">合并到分镜</text>
+                        <text x="53" y="416" fill="#1ED760" font-size="29" font-weight="400">脚本指令模板</text>
+                        
+                        <!-- 下箭头4 -->
+                        <line x1="141" y1="453" x2="141" y2="488" stroke="#FFFFFF" stroke-width="2.2"/>
+                        <polygon fill="#FFFFFF" points="141,488 132,475 150,475"/>
+                        
+                        <!-- 步骤5: 生成分镜脚本 -->
+                        <g transform="translate(0, 484)">
+                            <polygon fill="#DCDDDD" points="26,22 18,22 18,31.9 26,31.9 26,22"/>
+                            <polygon fill="#DCDDDD" points="18,31.9 10,31.9 10,56.5 18,56.5 18,31.9"/>
+                            <polygon fill="#DCDDDD" points="26,56.5 18,56.5 18,65.3 26,65.3 26,56.5"/>
+                        </g>
+                        <g transform="translate(0, 484)">
+                            <polygon fill="#DCDDDD" points="255,22 263,22 263,31.9 255,31.9 255,22"/>
+                            <polygon fill="#DCDDDD" points="263,31.9 271,31.9 271,56.5 263,56.5 263,31.9"/>
+                            <polygon fill="#DCDDDD" points="255,56.5 263,56.5 263,65.3 255,65.3 255,56.5"/>
+                        </g>
+                        <text x="53" y="535" fill="#1ED760" font-size="29" font-weight="400">生成分镜脚本</text>
+                    </svg>
+                </div>
+
+                <!-- 右侧：图片 -->
+                <div class="skill-image">
+                    <img src="/images/SKILL.png" alt="SKILL设计">
+                </div>
+            </div>
+        </section>
+
+        <!-- 数据反馈验证结果 -->
+        <section class="data-feedback-section">
+            <h2 class="breakthrough-title">数据反馈验证结果</h2>
+            <p class="data-feedback-intro">
+                策略转向'高UGC内容 + Python脚本矩阵裂变'后，账号核心转化指标迎来显著变化。
+            </p>
+
+            <!-- 数据卡片 -->
+            <div class="data-cards">
+                <div class="data-card">
+                    <span class="data-label">整体支付ROI</span>
+                    <span class="data-value">5.22</span>
+                </div>
+                <div class="data-card">
+                    <span class="data-label">整体观看次数</span>
+                    <span class="data-value">1976</span>
+                </div>
+                <div class="data-card">
+                    <span class="data-label">整体成交额</span>
+                    <span class="data-value">32817.42</span>
+                </div>
+                <div class="data-card">
+                    <span class="data-label">成交额同比</span>
+                    <span class="data-value">+646.36%</span>
+                </div>
+            </div>
+
+            <!-- 柱状图 -->
+            <div class="chart-container">
+                <p class="chart-title">修丽可单场</p>
+                <svg class="chart-svg" viewBox="0 0 1200 550" width="100%" height="auto" style="max-width: 100%;">
+                    <!-- 背景网格线 -->
+                    <defs>
+                        <pattern id="grid" width="100%" height="20%" patternUnits="userSpaceOnUse">
+                            <line x1="0" y1="0" x2="1200" y2="0" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+                        </pattern>
+                    </defs>
+                    <rect x="0" y="0" width="1200" height="550" fill="url(#grid)"/>
+                    
+                    <!-- 基准线 -->
+                    <line x1="100" y1="490" x2="1100" y2="490" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+                    
+                    <!-- 渐变定义 -->
+                    <defs>
+                        <!-- 柱子1: 主绿色渐变 - 整体支付ROI -->
+                        <linearGradient id="bar1" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" style="stop-color:#1ED760;stop-opacity:1"/>
+                            <stop offset="50%" style="stop-color:#15A34A;stop-opacity:0.8"/>
+                            <stop offset="100%" style="stop-color:#0D5C2A;stop-opacity:0.3"/>
+                        </linearGradient>
+                        <!-- 柱子1发光效果 -->
+                        <filter id="glow1" x="-50%" y="-50%" width="200%" height="200%">
+                            <feGaussianBlur stdDeviation="8" result="coloredBlur"/>
+                            <feMerge>
+                                <feMergeNode in="coloredBlur"/>
+                                <feMergeNode in="SourceGraphic"/>
+                            </feMerge>
+                        </filter>
+                        
+                        <!-- 柱子2: 青绿色渐变 - 整体观看次数 -->
+                        <linearGradient id="bar2" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" style="stop-color:#4ECDC4;stop-opacity:1"/>
+                            <stop offset="50%" style="stop-color:#2BA39B;stop-opacity:0.8"/>
+                            <stop offset="100%" style="stop-color:#1A5F59;stop-opacity:0.3"/>
+                        </linearGradient>
+                        <filter id="glow2" x="-50%" y="-50%" width="200%" height="200%">
+                            <feGaussianBlur stdDeviation="8" result="coloredBlur"/>
+                            <feMerge>
+                                <feMergeNode in="coloredBlur"/>
+                                <feMergeNode in="SourceGraphic"/>
+                            </feMerge>
+                        </filter>
+                        
+                        <!-- 柱子3: 紫色渐变 - 整体成交额 -->
+                        <linearGradient id="bar3" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" style="stop-color:#A78BFA;stop-opacity:1"/>
+                            <stop offset="50%" style="stop-color:#7C3AED;stop-opacity:0.8"/>
+                            <stop offset="100%" style="stop-color:#4C1D95;stop-opacity:0.3"/>
+                        </linearGradient>
+                        <filter id="glow3" x="-50%" y="-50%" width="200%" height="200%">
+                            <feGaussianBlur stdDeviation="8" result="coloredBlur"/>
+                            <feMerge>
+                                <feMergeNode in="coloredBlur"/>
+                                <feMergeNode in="SourceGraphic"/>
+                            </feMerge>
+                        </filter>
+                        
+                        <!-- 柱子4: 金橙色渐变 - 成交额同比 -->
+                        <linearGradient id="bar4" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" style="stop-color:#FBBF24;stop-opacity:1"/>
+                            <stop offset="50%" style="stop-color:#F59E0B;stop-opacity:0.8"/>
+                            <stop offset="100%" style="stop-color:#B45309;stop-opacity:0.3"/>
+                        </linearGradient>
+                        <filter id="glow4" x="-50%" y="-50%" width="200%" height="200%">
+                            <feGaussianBlur stdDeviation="8" result="coloredBlur"/>
+                            <feMerge>
+                                <feMergeNode in="coloredBlur"/>
+                                <feMergeNode in="SourceGraphic"/>
+                            </feMerge>
+                        </filter>
+                    </defs>
+                    
+                    <!-- 柱子1: 整体支付ROI -->
+                    <g class="chart-bar" data-value="5.22">
+                        <rect class="bar-rect bar-1" x="240" y="270" width="120" height="220" rx="8" ry="8" fill="url(#bar1)" filter="url(#glow1)"/>
+                        <text x="300" y="240" fill="#1ED760" font-size="18" font-weight="600" text-anchor="middle">整体支付ROI</text>
+                        <text class="bar-value" x="300" y="265" fill="#FFFFFF" font-size="24" font-weight="700" text-anchor="middle">5.22</text>
+                    </g>
+                    
+                    <!-- 柱子2: 整体观看次数 -->
+                    <g class="chart-bar" data-value="1976">
+                        <rect class="bar-rect bar-2" x="440" y="390" width="120" height="100" rx="8" ry="8" fill="url(#bar2)" filter="url(#glow2)"/>
+                        <text x="500" y="360" fill="#4ECDC4" font-size="18" font-weight="600" text-anchor="middle">整体观看次数</text>
+                        <text class="bar-value" x="500" y="385" fill="#FFFFFF" font-size="24" font-weight="700" text-anchor="middle">1976</text>
+                    </g>
+                    
+                    <!-- 柱子3: 整体成交额 -->
+                    <g class="chart-bar" data-value="32817.42">
+                        <rect class="bar-rect bar-3" x="640" y="230" width="120" height="260" rx="8" ry="8" fill="url(#bar3)" filter="url(#glow3)"/>
+                        <text x="700" y="200" fill="#A78BFA" font-size="18" font-weight="600" text-anchor="middle">整体成交额</text>
+                        <text class="bar-value" x="700" y="225" fill="#FFFFFF" font-size="24" font-weight="700" text-anchor="middle">32817.42</text>
+                    </g>
+                    
+                    <!-- 柱子4: 成交额同比 -->
+                    <g class="chart-bar" data-value="+646.36%">
+                        <rect class="bar-rect bar-4" x="840" y="110" width="120" height="380" rx="8" ry="8" fill="url(#bar4)" filter="url(#glow4)"/>
+                        <text x="900" y="80" fill="#FBBF24" font-size="18" font-weight="600" text-anchor="middle">成交额同比</text>
+                        <text class="bar-value" x="900" y="145" fill="#FFFFFF" font-size="28" font-weight="700" text-anchor="middle">+646.36%</text>
+                    </g>
+                    
+                    <!-- 悬停提示框 -->
+                    <g id="tooltip" class="chart-tooltip" opacity="0">
+                        <rect x="0" y="0" width="160" height="60" rx="8" fill="rgba(0,0,0,0.9)" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+                        <text id="tooltip-label" x="80" y="25" fill="rgba(255,255,255,0.7)" font-size="12" text-anchor="middle"></text>
+                        <text id="tooltip-value" x="80" y="48" fill="#1ED760" font-size="20" font-weight="700" text-anchor="middle"></text>
+                    </g>
+                </svg>
+            </div>
+        </section>
+    </main>
+
+    <!-- 引入导航栏 -->
+    <script type="module">
+        import { renderNavbar } from '/src/components/navbar.js';
+        renderNavbar('navbar');
+    </script>
+
+    <!-- 图片模态框 -->
+    <div id="image-modal" class="image-modal" onclick="closeImageModal(event)">
+        <button class="image-modal-close" onclick="closeImageModal(event)">×</button>
+        <img id="modal-image" src="" alt="大图预览">
+    </div>
+
+    <!-- 视频模态框 -->
+    <div id="video-modal" class="video-modal">
+        <button class="video-modal-close" onclick="closeVideoModal(event)">×</button>
+        <video id="modal-video" controls autoplay>
+            <source src="" type="video/mp4">
+        </video>
+    </div>
+
+    <!-- 模态框控制脚本 -->
+    <script>
+        // ========== 图片模态框 ==========
+        function openImageModal(src) {
+            const modal = document.getElementById('image-modal');
+            const img = document.getElementById('modal-image');
+            img.src = src;
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeImageModal(event) {
+            if (event.target.id === 'modal-image') return; // 点击图片不关闭
+            const modal = document.getElementById('image-modal');
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        // ========== 视频交互逻辑 ==========
+        // 悬停预览播放 - 搜索期视频
+        const videoCards = document.querySelectorAll('.video-card');
+        
+        videoCards.forEach(card => {
+            const video = card.querySelector('video');
+            
+            // 悬停进入 - 播放预览
+            card.addEventListener('mouseenter', () => {
+                video.play().catch(() => {}); // 静音播放不需要用户交互
+            });
+            
+            // 悬停离开 - 暂停并回到开头
+            card.addEventListener('mouseleave', () => {
+                video.pause();
+                video.currentTime = 0;
+            });
+            
+            // 点击 - 打开模态框
+            card.addEventListener('click', () => {
+                const videoSrc = card.dataset.video;
+                openVideoModal(videoSrc);
+            });
+        });
+        
+        // 悬停预览播放 - 项目破局视频
+        const breakthroughVideoCards = document.querySelectorAll('.breakthrough-video-card');
+        
+        breakthroughVideoCards.forEach(card => {
+            const video = card.querySelector('video');
+            
+            // 悬停进入 - 播放预览
+            card.addEventListener('mouseenter', () => {
+                video.play().catch(() => {});
+            });
+            
+            // 悬停离开 - 暂停并回到开头
+            card.addEventListener('mouseleave', () => {
+                video.pause();
+                video.currentTime = 0;
+            });
+            
+            // 点击 - 打开模态框
+            card.addEventListener('click', () => {
+                const videoSrc = card.dataset.video;
+                openVideoModal(videoSrc);
+            });
+        });
+        
+        // 打开视频模态框
+        function openVideoModal(src) {
+            const modal = document.getElementById('video-modal');
+            const video = document.getElementById('modal-video');
+            video.querySelector('source').src = src;
+            video.load();
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+        
+        // 关闭视频模态框
+        function closeVideoModal(event) {
+            if (event.target.id === 'modal-video') return; // 点击视频不关闭
+            const modal = document.getElementById('video-modal');
+            const video = document.getElementById('modal-video');
+            video.pause();
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+        
+        // 点击模态框背景关闭
+        document.getElementById('video-modal').addEventListener('click', (e) => {
+            if (e.target.id === 'video-modal') {
+                closeVideoModal(e);
+            }
+        });
+
+        // ESC 键关闭所有模态框
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                // 图片模态框
+                const imageModal = document.getElementById('image-modal');
+                if (imageModal.classList.contains('active')) {
+                    imageModal.classList.remove('active');
+                    document.body.style.overflow = '';
+                }
+                // 视频模态框
+                const videoModal = document.getElementById('video-modal');
+                if (videoModal.classList.contains('active')) {
+                    const video = document.getElementById('modal-video');
+                    video.pause();
+                    videoModal.classList.remove('active');
+                    document.body.style.overflow = '';
+                }
+            }
+        });
+
+        // ========== 柱状图交互逻辑 ==========
+        const chartBars = document.querySelectorAll('.chart-bar');
+        const tooltip = document.getElementById('tooltip');
+        const tooltipLabel = document.getElementById('tooltip-label');
+        const tooltipValue = document.getElementById('tooltip-value');
+        const chartSvg = document.querySelector('.chart-svg');
+
+        if (chartBars.length > 0 && tooltip) {
+            chartBars.forEach(bar => {
+                // 悬停显示工具提示
+                bar.addEventListener('mouseenter', (e) => {
+                    const label = bar.querySelector('text:first-of-type').textContent;
+                    const value = bar.dataset.value;
+                    
+                    tooltipLabel.textContent = label;
+                    tooltipValue.textContent = value;
+                    
+                    // 获取鼠标位置并计算工具提示位置
+                    const rect = bar.getBoundingClientRect();
+                    const svgRect = chartSvg.getBoundingClientRect();
+                    const scaleX = 1200 / svgRect.width;
+                    const scaleY = 480 / svgRect.height;
+                    
+                    // 计算工具提示位置
+                    const barRect = bar.querySelector('.bar-rect');
+                    const barX = parseFloat(barRect.getAttribute('x'));
+                    const barY = parseFloat(barRect.getAttribute('y'));
+                    
+                    // 将工具提示定位到柱子顶部
+                    const tooltipX = barX - 20;
+                    const tooltipY = barY - 70;
+                    
+                    tooltip.setAttribute('transform', `translate(${tooltipX}, ${tooltipY})`);
+                    tooltip.setAttribute('opacity', '1');
+                });
+
+                // 离开隐藏工具提示
+                bar.addEventListener('mouseleave', () => {
+                    tooltip.setAttribute('opacity', '0');
+                });
+            });
+        }
+
+        // 滚动触发入场动画
+        const chartContainer = document.querySelector('.chart-container');
+        if (chartContainer) {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        chartContainer.classList.add('animate-in');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.3 });
+            
+            observer.observe(chartContainer);
+        }
+    </script>
+</body>
+</html>

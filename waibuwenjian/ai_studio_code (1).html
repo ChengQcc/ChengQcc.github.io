@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>粒子生成器 | 顶级流体按钮复刻</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.150.1/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@0.150.1/examples/jsm/"
+            }
+        }
+    </script>
+
+    <style>
+        body { margin: 0; overflow: hidden; background-color: #050505; }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel" data-type="module">
+        import * as THREE from 'three';
+        import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+        const { useEffect, useRef, useState } = React;
+
+        // ==========================================
+        // 核心组件：可复用的 Web3 流体波浪按钮
+        // ==========================================
+        const LiquidButton = ({ children }) => {
+            const[hoverState, setHoverState] = useState('idle');
+
+            const handleMouseEnter = () => {
+                setHoverState('hovering');
+            };
+
+            const handleMouseLeave = () => {
+                setHoverState('leaving');
+                setTimeout(() => {
+                    setHoverState('idle');
+                }, 600); 
+            };
+
+            let translateY = '0%';
+            let transition = 'transform 0.6s cubic-bezier(0.76, 0, 0.24, 1)';
+
+            if (hoverState === 'idle') {
+                translateY = '0%';
+                transition = 'none'; 
+            } else if (hoverState === 'hovering') {
+                translateY = '-40%'; 
+            } else if (hoverState === 'leaving') {
+                translateY = '-80%'; 
+            }
+
+            return (
+                <button 
+                    onMouseEnter={handleMouseEnter}
+                    onMouseLeave={handleMouseLeave}
+                    className="relative overflow-hidden bg-black rounded-full px-10 py-4 flex items-center justify-center cursor-pointer h-14 min-w-[160px]"
+                    style={{ transform: 'translateZ(0)' }} 
+                >
+                    <div className="absolute inset-0 rounded-full border border-white/20 pointer-events-none z-20" />
+                    
+                    <svg 
+                        className="absolute top-0 left-0 w-full pointer-events-none z-0" 
+                        style={{ 
+                            height: '500%', 
+                            transform: `translateY(${translateY})`, 
+                            transition: transition 
+                        }}
+                        viewBox="0 0 100 500" 
+                        preserveAspectRatio="none"
+                    >
+                        <path 
+                            d="M 0,150 C 30,200 70,200 100,150 L 100,350 C 70,300 30,300 0,350 Z" 
+                            fill="white" 
+                        />
+                    </svg>
+
+                    <span className="relative z-10 text-white mix-blend-difference font-bold tracking-[0.05em] text-[14px] uppercase whitespace-nowrap">
+                        {children}
+                    </span>
+                </button>
+            );
+        };
+
+        // ==========================================
+        // 主页面组件
+        // ==========================================
+        function HeroPage() {
+            const canvasRef = useRef(null);
+
+            useEffect(() => {
+                if (!canvasRef.current) return;
+                const scene = new THREE.Scene();
+                scene.fog = new THREE.FogExp2(0x000000, 0.002);
+                const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 1000);
+                camera.position.set(-100, 20, 250); 
+                const renderer = new THREE.WebGLRenderer({ antialias: false, alpha: true });
+                renderer.setSize(window.innerWidth, window.innerHeight);
+                renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+                canvasRef.current.appendChild(renderer.domElement);
+                const controls = new OrbitControls(camera, renderer.domElement);
+                controls.enableDamping = true; controls.dampingFactor = 0.05;
+                controls.autoRotate = true; controls.autoRotateSpeed = 1.0; controls.target.set(0, 0, 0);
+
+                const particleCount = 20000;
+                const geometry = new THREE.BufferGeometry();
+                const positions = new Float32Array(particleCount * 3);
+                const colors = new Float32Array(particleCount * 3);
+                const colorA = new THREE.Color(0xaaff00); 
+                const colorB = new THREE.Color(0xff00aa); 
+
+                for (let i = 0; i < particleCount * 3; i += 3) {
+                    const radius = 100 + Math.random() * 50;
+                    const theta = Math.random() * Math.PI * 2;
+                    const phi = Math.acos(Math.random() * 2 - 1);
+                    positions[i] = radius * Math.sin(phi) * Math.cos(theta);
+                    positions[i+1] = radius * Math.sin(phi) * Math.sin(theta);
+                    positions[i+2] = radius * Math.cos(phi);
+                    const mixedColor = colorA.clone().lerp(colorB, Math.random());
+                    colors[i] = mixedColor.r; colors[i+1] = mixedColor.g; colors[i+2] = mixedColor.b;
+                }
+
+                geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+                geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+                const material = new THREE.ShaderMaterial({
+                    vertexShader: `
+                        varying vec3 vColor;
+                        void main() {
+                            vColor = color;
+                            vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
+                            gl_PointSize = (80.0 / -mvPosition.z);
+                            gl_Position = projectionMatrix * mvPosition;
+                        }`,
+                    fragmentShader: `
+                        varying vec3 vColor;
+                        void main() {
+                            vec2 xy = gl_PointCoord.xy - vec2(0.5);
+                            if(length(xy) > 0.5) discard;
+                            gl_FragColor = vec4(vColor, 0.8);
+                        }`,
+                    transparent: true, blending: THREE.AdditiveBlending, depthWrite: false, vertexColors: true
+                });
+
+                const particles = new THREE.Points(geometry, material);
+                scene.add(particles);
+
+                let animationId;
+                const animate = () => {
+                    animationId = requestAnimationFrame(animate);
+                    controls.update();
+                    renderer.render(scene, camera);
+                };
+                animate();
+
+                const handleResize = () => {
+                    camera.aspect = window.innerWidth / window.innerHeight;
+                    camera.updateProjectionMatrix();
+                    renderer.setSize(window.innerWidth, window.innerHeight);
+                };
+                window.addEventListener('resize', handleResize);
+
+                return () => {
+                    window.removeEventListener('resize', handleResize);
+                    cancelAnimationFrame(animationId);
+                    geometry.dispose(); material.dispose(); renderer.dispose();
+                    if (canvasRef.current) canvasRef.current.removeChild(renderer.domElement);
+                };
+            },[]);
+
+            return (
+                <div className="relative min-h-screen w-full bg-[#050505] text-white overflow-hidden font-sans selection:bg-green-500 selection:text-black">
+                    
+                    <div ref={canvasRef} className="absolute inset-0 z-0" style={{ cursor: 'grab' }} />
+
+                    <div className="absolute inset-0 z-10 pointer-events-none flex flex-col justify-between p-6 md:p-12 lg:p-16">
+                        
+                        <header className="flex justify-between items-center w-full pointer-events-auto">
+                            <div className="flex items-center gap-3 font-bold text-xl tracking-tighter">
+                                <span className="text-green-500 text-2xl">⚡</span>
+                                Particleify
+                                <span className="text-[10px] font-normal text-gray-500 ml-4 uppercase tracking-[0.2em] hidden sm:block border-l border-gray-700 pl-4">
+                                    From Image to 3D Particles
+                                </span>
+                            </div>
+                            <button className="border border-white/20 px-6 py-2.5 rounded-sm text-xs font-bold tracking-[0.15em] uppercase hover:bg-white hover:text-black transition-all duration-300">
+                                Join the Waitlist
+                            </button>
+                        </header>
+
+                        <main className="max-w-4xl pointer-events-auto mt-20 md:mt-0 flex flex-col justify-center flex-1">
+                            <h1 className="text-6xl md:text-7xl lg:text-[100px] font-black uppercase leading-[0.85] tracking-tighter">
+                                Turn Static <br />
+                                <span className="text-gray-600 block mt-2">Images Into</span>
+                                <span className="text-green-500 block mt-2">3D Particles</span>
+                            </h1>
+                            
+                            <p className="mt-8 text-gray-400 max-w-lg text-sm md:text-base leading-relaxed font-medium">
+                                Turn static images into interactive 3D particle visuals. Create, customize, and export ready-to-use HTML in minutes.
+                            </p>
+
+                            <div className="mt-12 flex flex-col sm:flex-row gap-4 items-center">
+                                
+                                {/* 🎯 两个按钮现在使用了完全统一的极品流体组件 */}
+                                <LiquidButton>
+                                    Start Building
+                                </LiquidButton>
+
+                                <LiquidButton>
+                                    Explore
+                                </LiquidButton>
+                                
+                            </div>
+
+                            <p className="mt-8 text-[11px] tracking-wider uppercase text-gray-600">
+                                Click the gear icon to upload images and customize effects...
+                            </p>
+                        </main>
+
+                    </div>
+                </div>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<HeroPage />);
+    </script>
+</body>
+</html>

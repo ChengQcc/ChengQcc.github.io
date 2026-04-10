@@ -1,0 +1,75 @@
+:root {
+    /* 颜色系统 */
+    --color-bg: #030305;
+    --color-bg-secondary: #0a0a12;
+    --color-primary: #1ed760;
+    --color-primary-dark: #18a84d;
+    --color-text-main: #ffffff;
+    --color-text-muted: rgba(255, 255, 255, 0.5);
+    --color-text-dark: #666677;
+    --color-border: rgba(255, 255, 255, 0.15);
+    --color-card-bg: rgba(255, 255, 255, 0.05);
+    
+    /* Web3 风格色彩 */
+    --web3-neon-green: #00ff88;
+    --web3-neon-blue: #00d4ff;
+    --web3-neon-purple: #a855f7;
+    --web3-neon-pink: #ec4899;
+    --web3-glow-green: rgba(0, 255, 136, 0.4);
+    --web3-glow-blue: rgba(0, 212, 255, 0.4);
+    --web3-glow-purple: rgba(168, 85, 247, 0.3);
+    --web3-card-bg: rgba(15, 23, 42, 0.8);
+    --web3-border-glow: rgba(0, 255, 136, 0.3);
+    
+    /* 字体 */
+    --font-heading: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    --font-body: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    --font-mono: 'SF Mono', Monaco, monospace;
+    
+    /* 间距系统 - 8px 基准 */
+    --space-1: 0.5rem;    /* 8px */
+    --space-2: 1rem;      /* 16px */
+    --space-3: 1.5rem;    /* 24px */
+    --space-4: 2rem;      /* 32px */
+    --space-5: 3rem;      /* 48px */
+    --space-6: 4rem;      /* 64px */
+    --space-7: 6rem;      /* 96px */
+    --space-8: 8rem;      /* 128px */
+    
+    /* 布局间距 */
+    --layout-padding: 4rem;
+    --layout-padding-lg: 6rem;
+    --section-gap: 6rem;
+    
+    /* 圆角 */
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 20px;
+    
+    /* 毛玻璃 */
+    --glass-bg: rgba(255, 255, 255, 0.06);
+    --glass-border: rgba(255, 255, 255, 0.12);
+    --glass-blur: 20px;
+    
+    /* 过渡 */
+    --transition-fast: 0.2s ease;
+    --transition-normal: 0.3s ease;
+    --transition-slow: 0.5s ease;
+}
+
+/* 响应式覆盖 */
+@media (max-width: 1024px) {
+    :root {
+        --layout-padding: 3rem;
+        --layout-padding-lg: 4rem;
+        --section-gap: 4rem;
+    }
+}
+
+@media (max-width: 768px) {
+    :root {
+        --layout-padding: 1.5rem;
+        --layout-padding-lg: 2rem;
+        --section-gap: 3rem;
+    }
+}

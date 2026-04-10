@@ -1,0 +1,1406 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>V5-AI漫剧 - 项目详情</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --color-primary: #1ED760;
+            --color-primary-dark: #1a5a3a;
+            --color-bg: #0D0D0D;
+            --color-card: rgba(255,255,255,0.03);
+            --color-border: rgba(255,255,255,0.08);
+            --color-text: #ffffff;
+            --color-text-secondary: rgba(255,255,255,0.6);
+            --color-text-muted: rgba(255,255,255,0.4);
+        }
+        
+        html {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        }
+        
+        body {
+            background: var(--color-bg);
+            color: var(--color-text);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        /* 导航栏占位 */
+        #navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 100;
+        }
+        
+        .navbar-spacer {
+            height: 60px;
+        }
+        
+        /* 返回箭头 */
+        .back-arrow {
+            position: fixed;
+            left: 60px;
+            top: 90px;
+            z-index: 100;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .back-arrow:hover {
+            background: rgba(30, 215, 96, 0.15);
+            border-color: rgba(30, 215, 96, 0.4);
+            color: #1ED760;
+            transform: translateX(-3px);
+        }
+        
+        /* 主容器 */
+        .project-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 60px 100px;
+        }
+        
+        /* 顶部封面图 */
+        .project-cover {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            border-radius: 16px;
+            overflow: hidden;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+            margin-bottom: 48px;
+            position: relative;
+        }
+        
+        .project-cover img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .project-cover-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #1a3a2a 0%, #0D0D0D 100%);
+        }
+        
+        .project-cover-placeholder span {
+            font-size: 14px;
+            color: var(--color-text-muted);
+            letter-spacing: 0.1em;
+        }
+        
+        /* 项目名称 */
+        .project-title {
+            font-size: 48px;
+            font-weight: 900;
+            color: var(--color-text);
+            margin-bottom: 48px;
+            letter-spacing: -0.02em;
+        }
+        
+        .project-title .highlight {
+            color: var(--color-primary);
+        }
+        
+        /* 两列布局：背景(60%) + 职责/目标(40%) */
+        .info-row {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr;
+            gap: 24px;
+            margin-bottom: 48px;
+        }
+        
+        /* 右侧列：职责和目标上下堆叠 */
+        .info-right-column {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+        
+        /* 右侧卡片样式调整 */
+        .info-right-column .info-card {
+            padding: 24px;
+        }
+        
+        .info-right-column .info-card-header {
+            margin-bottom: 16px;
+        }
+        
+        .info-right-column .info-card-title {
+            font-size: 16px;
+        }
+        
+        .info-right-column .info-card-number {
+            font-size: 18px;
+        }
+        
+        /* 项目背景/职责/目标三个卡片背景 */
+        .info-row .info-card {
+            background: rgba(0, 255, 136, 0.027);
+            border-color: rgba(0, 255, 136, 0.2);
+        }
+        
+        /* 信息卡片 */
+        .info-card {
+            background: var(--color-card);
+            border: 1px solid var(--color-border);
+            border-radius: 16px;
+            padding: 32px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .info-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 3px;
+            height: 100%;
+            background: var(--color-primary);
+            border-radius: 16px 0 0 16px;
+        }
+        
+        .info-card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .info-card-number {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--color-primary);
+        }
+        
+        .info-card-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--color-text);
+        }
+        
+        .info-card-content {
+            font-size: 15px;
+            line-height: 1.8;
+            color: var(--color-text-secondary);
+        }
+        
+        /* 标签列表 */
+        .tag-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 16px;
+        }
+        
+        .tag {
+            display: inline-flex;
+            align-items: center;
+            padding: 8px 16px;
+            background: var(--color-primary-dark);
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--color-text);
+        }
+        
+        /* 章节标题样式 */
+        .section-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--color-text);
+            margin-bottom: 32px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .section-title::before {
+            content: '';
+            width: 4px;
+            height: 28px;
+            background: var(--color-primary);
+            border-radius: 2px;
+        }
+        
+        /* 章节正文内容 */
+        .section-content {
+            font-size: 15px;
+            line-height: 1.8;
+            color: var(--color-text-secondary);
+            margin-bottom: 32px;
+        }
+        
+        /* 架构/SOP图片样式 */
+        .architecture-section {
+            margin-top: 88px;
+        }
+        
+        .architecture-image {
+            transition: transform 0.3s ease;
+            border-radius: 16px;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            cursor: pointer;
+            padding: 40px 0;
+        }
+        
+        .architecture-image:hover {
+            transform: scale(1.02);
+        }
+        
+        .architecture-image img {
+            width: 80%;
+            display: block;
+            margin: 0 auto;
+            filter: blur(0px);
+            transition: filter 0.3s ease;
+        }
+        
+        .architecture-image:hover img {
+            filter: blur(0px);
+        }
+        
+        /* 前端页面模块 */
+        .frontend-section {
+            margin-top: 88px;
+        }
+        
+        .frontend-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+        }
+        
+        .frontend-card {
+            position: relative;
+            border-radius: 16px;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .frontend-card:hover {
+            transform: scale(1.02);
+            border-color: rgba(30, 215, 96, 0.3);
+        }
+        
+        .frontend-card img {
+            width: 100%;
+            display: block;
+        }
+        
+        .frontend-card-label {
+            position: absolute;
+            bottom: 16px;
+            left: 16px;
+            padding: 8px 16px;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--color-text);
+        }
+        
+        /* 链路设计模块 */
+        .pipeline-section {
+            margin-top: 88px;
+        }
+        
+        .pipeline-content {
+            display: grid;
+            grid-template-columns: 40% 1fr;
+            gap: 48px;
+            align-items: start;
+        }
+        
+        .pipeline-flow-svg {
+            display: flex;
+            align-items: flex-start;
+        }
+        
+        .pipeline-flow-svg svg text {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        
+        .pipeline-right {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        
+        .pipeline-pain-point {
+            font-size: 14px;
+            line-height: 1.8;
+            color: rgba(255, 255, 255, 0.65);
+        }
+        
+        .pipeline-pain-point-label {
+            color: #FF6B6B;
+            font-weight: 600;
+            margin-right: 8px;
+        }
+        
+        .pipeline-main-image {
+            border-radius: 12px;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .pipeline-main-image:hover {
+            transform: scale(1.02);
+            border-color: rgba(30, 215, 96, 0.3);
+        }
+        
+        .pipeline-main-image img {
+            width: 100%;
+            display: block;
+        }
+        
+        .pipeline-main-image-placeholder {
+            width: 100%;
+            aspect-ratio: 21 / 7;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #1a2a1a 0%, #0D0D0D 100%);
+            color: var(--color-text-muted);
+            font-size: 14px;
+            letter-spacing: 0.05em;
+        }
+        
+        .pipeline-images-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+        
+        .pipeline-image {
+            border-radius: 8px;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .pipeline-image:hover {
+            transform: scale(1.02);
+            border-color: rgba(30, 215, 96, 0.3);
+        }
+        
+        .pipeline-image img {
+            width: 100%;
+            display: block;
+        }
+        
+        .pipeline-image-placeholder {
+            width: 100%;
+            aspect-ratio: 3 / 4;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #1a2a1a 0%, #0D0D0D 100%);
+            color: var(--color-text-muted);
+            font-size: 11px;
+            letter-spacing: 0.02em;
+        }
+        
+        /* SKILL设计区块样式 */
+        .skill-design-section {
+            margin-top: 88px;
+        }
+
+        .skill-design-intro {
+            font-size: 14px;
+            line-height: 1.9;
+            color: rgba(255, 255, 255, 0.65);
+            margin-top: -20px;
+            margin-bottom: 24px;
+        }
+
+        .skill-design-content {
+            display: grid;
+            grid-template-columns: 40% 1fr;
+            gap: 48px;
+            align-items: start;
+        }
+
+        .skill-flow-svg {
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .skill-flow-svg svg text {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        .skill-image {
+            transition: transform 0.3s ease;
+            border-radius: 16px;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .skill-image:hover {
+            transform: scale(1.02);
+        }
+
+        .skill-image img {
+            width: 100%;
+            display: block;
+        }
+
+        .skill-image-placeholder {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #1a2a1a 0%, #0D0D0D 100%);
+            color: var(--color-text-muted);
+            font-size: 14px;
+            letter-spacing: 0.05em;
+        }
+
+        /* 视频展示模块 */
+        .video-showcase-section {
+            margin-top: 88px;
+        }
+
+        .video-showcase-grid {
+            display: flex;
+            gap: 24px;
+            justify-content: center;
+        }
+
+        .video-showcase-item {
+            position: relative;
+            border-radius: 16px;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 400px;
+            aspect-ratio: 9 / 16;
+        }
+
+        .video-showcase-item:hover {
+            transform: scale(1.02);
+            border-color: var(--color-primary);
+        }
+
+        .video-showcase-item video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .video-showcase-item .video-overlay {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.3);
+            transition: opacity 0.3s ease;
+        }
+
+        .video-showcase-item:hover .video-overlay {
+            opacity: 0;
+        }
+
+        .video-showcase-item .video-overlay svg {
+            width: 48px;
+            height: 48px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .video-showcase-placeholder {
+            width: 100%;
+            aspect-ratio: 9 / 16;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #1a2a1a 0%, #0D0D0D 100%);
+            color: var(--color-text-muted);
+            font-size: 14px;
+            letter-spacing: 0.05em;
+        }
+
+        /* 响应式 */
+        
+        /* 导航栏响应式 - 与首页一致 */
+        @media (min-width: 2400px) and (max-width: 3000px) {
+            .navbar-link { font-size: 18px !important; }
+            .navbar-links { gap: 64px !important; }
+        }
+        
+        @media (min-width: 3001px) {
+            .navbar-link { font-size: 24px !important; }
+            .navbar-links { gap: 80px !important; }
+        }
+        
+        /* 2K 屏幕 - 整体放大 1.25 倍 */
+        @media (min-width: 2400px) and (max-width: 3000px) {
+            .project-container {
+                zoom: 1.25;
+            }
+            .navbar-spacer {
+                height: 76px;
+            }
+            .back-arrow {
+                left: 80px;
+                top: 110px;
+                width: 50px;
+                height: 50px;
+                border-radius: 12px;
+            }
+            .back-arrow svg {
+                width: 24px;
+                height: 24px;
+            }
+        }
+        
+        /* 4K 屏幕 - 整体放大 1.6 倍 */
+        @media (min-width: 3001px) {
+            .project-container {
+                zoom: 1.6;
+            }
+            .navbar-spacer {
+                height: 96px;
+            }
+            .back-arrow {
+                left: 100px;
+                top: 140px;
+                width: 64px;
+                height: 64px;
+                border-radius: 16px;
+            }
+            .back-arrow svg {
+                width: 32px;
+                height: 32px;
+            }
+        }
+
+        /* 图片模态框 */
+        .image-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 9999;
+            background: rgba(0, 0, 0, 0.9);
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+            box-sizing: border-box;
+        }
+        .image-modal.active {
+            display: flex;
+        }
+        .image-modal img {
+            max-width: 70%;
+            max-height: 70%;
+            object-fit: contain;
+            border-radius: 12px;
+        }
+        .image-modal-close {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            color: #ffffff;
+            font-size: 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        .image-modal-close:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* 视频模态框 */
+        .video-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 9999;
+            background: rgba(0, 0, 0, 0.9);
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+            box-sizing: border-box;
+        }
+        
+        .video-modal.active {
+            display: flex;
+        }
+        
+        .video-modal video {
+            max-width: 90%;
+            max-height: 90%;
+            border-radius: 12px;
+        }
+        
+        .video-modal-close {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            color: #ffffff;
+            font-size: 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        
+        .video-modal-close:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+    </style>
+</head>
+<body>
+    <!-- 返回箭头 - 固定定位 -->
+    <a href="index.html#works?expand=2" class="back-arrow" title="返回作品集">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+    </a>
+    
+    <!-- 导航栏 -->
+    <div id="navbar"></div>
+    <div class="navbar-spacer"></div>
+    
+    <!-- 主内容 -->
+    <main class="project-container">
+        <!-- 封面图 -->
+        <div class="project-cover">
+            <img src="/public/images/manju2/jimeng-2026-04-08-2423-这幅画面以黑白水墨风格为主，营造出一种肃杀、神秘且充满力量感的氛围。画面中心是一....png" alt="V5-AI漫剧">
+        </div>
+        
+        <!-- 项目名称 -->
+        <h1 class="project-title">V5-AI<span class="highlight">漫剧</span></h1>
+        
+        <!-- 两列信息 -->
+        <div class="info-row">
+            <!-- 项目背景 -->
+            <div class="info-card">
+                <div class="info-card-header">
+                    <span class="info-card-number">01</span>
+                    <h2 class="info-card-title">项目背景</h2>
+                </div>
+                <div class="info-card-content">
+                    利用公司内部的V5（智能体平台）搭建一款以剧本为输入、AI为引擎、可批量生成高质量漫剧视频的智能创作平台。通过深度融合LLM、图像生成、视频合成与音频克隆技术，降低视觉内容创作门槛，赋能个人创作者、品牌营销与IP运营。
+                </div>
+            </div>
+            
+            <!-- 右侧列：职责 + 目标 -->
+            <div class="info-right-column">
+                <!-- 项目职责 -->
+                <div class="info-card">
+                    <div class="info-card-header">
+                        <span class="info-card-number">02</span>
+                        <h2 class="info-card-title">项目职责</h2>
+                    </div>
+                    <div class="info-card-content">
+                        <div class="tag-list">
+                            <span class="tag">产品设计</span>
+                            <span class="tag">链路搭建</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 项目目标 -->
+                <div class="info-card">
+                    <div class="info-card-header">
+                        <span class="info-card-number">03</span>
+                        <h2 class="info-card-title">项目目标</h2>
+                    </div>
+                    <div class="info-card-content">
+                        <div class="tag-list">
+                            <span class="tag">全流程自动化</span>
+                            <span class="tag">降本增效</span>
+                            <span class="tag">生态闭环</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 全局架构 -->
+        <section class="architecture-section">
+            <h2 class="section-title">全局架构</h2>
+            <p class="section-content">
+                V5-AI漫剧系统构建了一套端到端的AI内容生产平台，集分镜、图像、视频、音频于一体的AI内容生成平台，依托多模态大模型，实现从创意到成片的全流程自动化生产。
+            </p>
+            <div class="architecture-image" onclick="openImageModal('/images/manju/微信图片_2026-04-02_170621_146.png')">
+                <img src="/images/manju/微信图片_2026-04-02_170621_146.png" alt="V5-AI漫剧全局架构图">
+            </div>
+        </section>
+        
+        <!-- 前端页面 -->
+        <section class="frontend-section">
+            <h2 class="section-title">前端页面</h2>
+            <div class="frontend-grid">
+                <!-- 驾驶舱 -->
+                <div class="frontend-card" onclick="openImageModal('/images/manju2/驾驶舱.png')">
+                    <img src="/images/manju2/驾驶舱.png" alt="驾驶舱">
+                    <span class="frontend-card-label">驾驶舱</span>
+                </div>
+                <!-- 创建剧本 -->
+                <div class="frontend-card" onclick="openImageModal('/images/manju2/创建剧本.png')">
+                    <img src="/images/manju2/创建剧本.png" alt="创建剧本">
+                    <span class="frontend-card-label">创建剧本</span>
+                </div>
+                <!-- 角色管理 -->
+                <div class="frontend-card" onclick="openImageModal('/images/manju2/角色管理.png')">
+                    <img src="/images/manju2/角色管理.png" alt="角色管理">
+                    <span class="frontend-card-label">角色管理</span>
+                </div>
+                <!-- 分镜列表 -->
+                <div class="frontend-card" onclick="openImageModal('/images/manju2/分镜列表.png')">
+                    <img src="/images/manju2/分镜列表.png" alt="分镜列表">
+                    <span class="frontend-card-label">分镜列表</span>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 链路设计 -->
+        <section class="pipeline-section">
+            <h2 class="section-title">链路设计</h2>
+            
+            <div class="pipeline-content">
+                <!-- 左侧：流程图SVG -->
+                <div class="pipeline-flow-svg">
+                    <svg viewBox="0 0 420 720" width="100%" height="auto" style="max-width: 420px;">
+                        <!-- 步骤1: 项目创建 -->
+                        <g>
+                            <polygon fill="#DCDDDD" points="16,8 8,8 8,18 16,18 16,8"/>
+                            <polygon fill="#DCDDDD" points="8,18 0,18 0,42 8,42 8,18"/>
+                            <polygon fill="#DCDDDD" points="16,42 8,42 8,52 16,52 16,42"/>
+                        </g>
+                        <g>
+                            <polygon fill="#DCDDDD" points="134,8 142,8 142,18 134,18 134,8"/>
+                            <polygon fill="#DCDDDD" points="142,18 150,18 150,42 142,42 142,18"/>
+                            <polygon fill="#DCDDDD" points="134,42 142,42 142,52 134,52 134,42"/>
+                        </g>
+                        <text x="28" y="38" fill="#FFFFFF" font-size="24" font-weight="400">项目创建</text>
+                        
+                        <!-- 下箭头1 -->
+                        <line x1="75" y1="62" x2="75" y2="92" stroke="#FFFFFF" stroke-width="2"/>
+                        <polygon fill="#FFFFFF" points="75,92 68,82 82,82"/>
+                        
+                        <!-- 步骤2: 角色设计 -->
+                        <g transform="translate(0, 92)">
+                            <polygon fill="#DCDDDD" points="16,8 8,8 8,18 16,18 16,8"/>
+                            <polygon fill="#DCDDDD" points="8,18 0,18 0,42 8,42 8,18"/>
+                            <polygon fill="#DCDDDD" points="16,42 8,42 8,52 16,52 16,42"/>
+                        </g>
+                        <g transform="translate(0, 92)">
+                            <polygon fill="#DCDDDD" points="134,8 142,8 142,18 134,18 134,8"/>
+                            <polygon fill="#DCDDDD" points="142,18 150,18 150,42 142,42 142,18"/>
+                            <polygon fill="#DCDDDD" points="134,42 142,42 142,52 134,52 134,42"/>
+                        </g>
+                        <text x="28" y="130" fill="#1ED760" font-size="24" font-weight="400">角色设计</text>
+                        <!-- 右箭头 -->
+                        <line x1="162" y1="122" x2="400" y2="122" stroke="#1ED760" stroke-width="2" stroke-dasharray="6,4"/>
+                        <polygon fill="#1ED760" points="410,122 400,116 400,128"/>
+                        <!-- 说明文字 - 左对齐括号 -->
+                        <text x="0" y="165" fill="#B5B5B6" font-size="13">系统自动提取角色，用户通过系统的Prompts或</text>
+                        <text x="0" y="183" fill="#B5B5B6" font-size="13">上传参考图生成角色形象。角色形象存入项目</text>
+                        <text x="0" y="201" fill="#B5B5B6" font-size="13">专属角色库，保证后续调用的一致性。</text>
+                        
+                        <!-- 下箭头2 -->
+                        <line x1="75" y1="218" x2="75" y2="248" stroke="#FFFFFF" stroke-width="2"/>
+                        <polygon fill="#FFFFFF" points="75,248 68,238 82,238"/>
+                        
+                        <!-- 步骤3: 分镜生成 -->
+                        <g transform="translate(0, 248)">
+                            <polygon fill="#DCDDDD" points="16,8 8,8 8,18 16,18 16,8"/>
+                            <polygon fill="#DCDDDD" points="8,18 0,18 0,42 8,42 8,18"/>
+                            <polygon fill="#DCDDDD" points="16,42 8,42 8,52 16,52 16,42"/>
+                        </g>
+                        <g transform="translate(0, 248)">
+                            <polygon fill="#DCDDDD" points="134,8 142,8 142,18 134,18 134,8"/>
+                            <polygon fill="#DCDDDD" points="142,18 150,18 150,42 142,42 142,18"/>
+                            <polygon fill="#DCDDDD" points="134,42 142,42 142,52 134,52 134,42"/>
+                        </g>
+                        <text x="28" y="286" fill="#FFFFFF" font-size="24" font-weight="400">分镜生成</text>
+                        <text x="0" y="318" fill="#B5B5B6" font-size="13">系统根据剧本和角色库，自动生成分镜脚本和分镜静帧</text>
+                        
+                        <!-- 下箭头3 -->
+                        <line x1="75" y1="335" x2="75" y2="365" stroke="#FFFFFF" stroke-width="2"/>
+                        <polygon fill="#FFFFFF" points="75,365 68,355 82,355"/>
+                        
+                        <!-- 步骤4: 视频生成 -->
+                        <g transform="translate(0, 365)">
+                            <polygon fill="#DCDDDD" points="16,8 8,8 8,18 16,18 16,8"/>
+                            <polygon fill="#DCDDDD" points="8,18 0,18 0,42 8,42 8,18"/>
+                            <polygon fill="#DCDDDD" points="16,42 8,42 8,52 16,52 16,42"/>
+                        </g>
+                        <g transform="translate(0, 365)">
+                            <polygon fill="#DCDDDD" points="134,8 142,8 142,18 134,18 134,8"/>
+                            <polygon fill="#DCDDDD" points="142,18 150,18 150,42 142,42 142,18"/>
+                            <polygon fill="#DCDDDD" points="134,42 142,42 142,52 134,52 134,42"/>
+                        </g>
+                        <text x="28" y="403" fill="#FFFFFF" font-size="24" font-weight="400">视频生成</text>
+                        <text x="0" y="435" fill="#B5B5B6" font-size="13">根据生成的分镜静帧生成动态视频</text>
+                        
+                        <!-- 下箭头4 -->
+                        <line x1="75" y1="452" x2="75" y2="482" stroke="#FFFFFF" stroke-width="2"/>
+                        <polygon fill="#FFFFFF" points="75,482 68,472 82,472"/>
+                        
+                        <!-- 步骤5: 音频生成 -->
+                        <g transform="translate(0, 482)">
+                            <polygon fill="#DCDDDD" points="16,8 8,8 8,18 16,18 16,8"/>
+                            <polygon fill="#DCDDDD" points="8,18 0,18 0,42 8,42 8,18"/>
+                            <polygon fill="#DCDDDD" points="16,42 8,42 8,52 16,52 16,42"/>
+                        </g>
+                        <g transform="translate(0, 482)">
+                            <polygon fill="#DCDDDD" points="134,8 142,8 142,18 134,18 134,8"/>
+                            <polygon fill="#DCDDDD" points="142,18 150,18 150,42 142,42 142,18"/>
+                            <polygon fill="#DCDDDD" points="134,42 142,42 142,52 134,52 134,42"/>
+                        </g>
+                        <text x="28" y="520" fill="#FFFFFF" font-size="24" font-weight="400">音频生成</text>
+                        <text x="0" y="552" fill="#B5B5B6" font-size="13">支持TTS（文本转语音）根据对白生成配音，</text>
+                        <text x="0" y="570" fill="#B5B5B6" font-size="13">或用户上传已有角色音频文件。</text>
+                        
+                        <!-- 下箭头5 -->
+                        <line x1="75" y1="587" x2="75" y2="617" stroke="#FFFFFF" stroke-width="2"/>
+                        <polygon fill="#FFFFFF" points="75,617 68,607 82,607"/>
+                        
+                        <!-- 步骤6: 项目导出 -->
+                        <g transform="translate(0, 617)">
+                            <polygon fill="#DCDDDD" points="16,8 8,8 8,18 16,18 16,8"/>
+                            <polygon fill="#DCDDDD" points="8,18 0,18 0,42 8,42 8,18"/>
+                            <polygon fill="#DCDDDD" points="16,42 8,42 8,52 16,52 16,42"/>
+                        </g>
+                        <g transform="translate(0, 617)">
+                            <polygon fill="#DCDDDD" points="134,8 142,8 142,18 134,18 134,8"/>
+                            <polygon fill="#DCDDDD" points="142,18 150,18 150,42 142,42 142,18"/>
+                            <polygon fill="#DCDDDD" points="134,42 142,42 142,52 134,52 134,42"/>
+                        </g>
+                        <text x="28" y="655" fill="#FFFFFF" font-size="24" font-weight="400">项目导出</text>
+                        <text x="0" y="687" fill="#B5B5B6" font-size="13">用户可批量下载各分镜视频片段、完整配音，</text>
+                        <text x="0" y="705" fill="#B5B5B6" font-size="13">或一键合成带配音的完整漫剧视频。</text>
+                    </svg>
+                </div>
+                
+                <!-- 右侧：痛点说明 + 图片 -->
+                <div class="pipeline-right">
+                    <!-- 业务痛点 -->
+                    <p class="pipeline-pain-point">
+                        <span class="pipeline-pain-point-label">痛点：</span>剧本字数过长，无法一次性建立全剧本的角色库，且角色状态多变，AI经常在同一集里分不清角色是换了件衣服（换装）、变了种形态（变异），还是出现了一个全新的路人甲（新角色）。
+                    </p>
+                    
+                    <!-- 顶部大图 -->
+                    <div class="pipeline-main-image" onclick="openImageModal('/public/images/manju2/资源 9@5x.png')" style="cursor: pointer;">
+                        <img src="/public/images/manju2/资源 9@5x.png" alt="流程图" style="width: 100%; height: 100%; object-fit: cover; border-radius: 12px; transition: transform 0.3s ease;">
+                    </div>
+                    
+                    <!-- 下方3张小图 - 并排 -->
+                    <div class="pipeline-images-grid">
+                        <div class="pipeline-image" onclick="openImageModal('/public/images/manju2/资源 10@5x.png')" style="cursor: pointer;">
+                            <img src="/public/images/manju2/资源 10@5x.png" alt="角色prompts模版" style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px; transition: transform 0.3s ease;">
+                        </div>
+                        <div class="pipeline-image" onclick="openImageModal('/public/images/manju2/资源 11@5x.png')" style="cursor: pointer;">
+                            <img src="/public/images/manju2/资源 11@5x.png" alt="角色检测" style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px; transition: transform 0.3s ease;">
+                        </div>
+                        <div class="pipeline-image" onclick="openImageModal('/public/images/manju2/资源 12@5x.png')" style="cursor: pointer;">
+                            <img src="/public/images/manju2/资源 12@5x.png" alt="角色更新特征" style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px; transition: transform 0.3s ease;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 链路设计2 -->
+        <section class="pipeline-section">
+            <h2 class="section-title">链路设计</h2>
+            
+            <div class="pipeline-content">
+                <!-- 左侧：流程图SVG -->
+                <div class="pipeline-flow-svg">
+                    <svg viewBox="0 0 420 720" width="100%" height="auto" style="max-width: 420px;">
+                        <!-- 步骤1: 项目创建 -->
+                        <g>
+                            <polygon fill="#DCDDDD" points="16,8 8,8 8,18 16,18 16,8"/>
+                            <polygon fill="#DCDDDD" points="8,18 0,18 0,42 8,42 8,18"/>
+                            <polygon fill="#DCDDDD" points="16,42 8,42 8,52 16,52 16,42"/>
+                        </g>
+                        <g>
+                            <polygon fill="#DCDDDD" points="134,8 142,8 142,18 134,18 134,8"/>
+                            <polygon fill="#DCDDDD" points="142,18 150,18 150,42 142,42 142,18"/>
+                            <polygon fill="#DCDDDD" points="134,42 142,42 142,52 134,52 134,42"/>
+                        </g>
+                        <text x="28" y="38" fill="#FFFFFF" font-size="24" font-weight="400">项目创建</text>
+                        
+                        <!-- 下箭头1 -->
+                        <line x1="75" y1="62" x2="75" y2="92" stroke="#B5B5B6" stroke-width="2"/>
+                        <polygon fill="#B5B5B6" points="75,92 68,82 82,82"/>
+                        
+                        <!-- 步骤2: 角色设计 -->
+                        <g transform="translate(0, 92)">
+                            <polygon fill="#DCDDDD" points="16,8 8,8 8,18 16,18 16,8"/>
+                            <polygon fill="#DCDDDD" points="8,18 0,18 0,42 8,42 8,18"/>
+                            <polygon fill="#DCDDDD" points="16,42 8,42 8,52 16,52 16,42"/>
+                        </g>
+                        <g transform="translate(0, 92)">
+                            <polygon fill="#DCDDDD" points="134,8 142,8 142,18 134,18 134,8"/>
+                            <polygon fill="#DCDDDD" points="142,18 150,18 150,42 142,42 142,18"/>
+                            <polygon fill="#DCDDDD" points="134,42 142,42 142,52 134,52 134,42"/>
+                        </g>
+                        <text x="28" y="130" fill="#FFFFFF" font-size="24" font-weight="400">角色设计</text>
+                        <!-- 说明文字 - 左对齐括号 -->
+                        <text x="0" y="165" fill="#B5B5B6" font-size="13">系统自动提取角色，用户通过系统的Prompts或</text>
+                        <text x="0" y="183" fill="#B5B5B6" font-size="13">上传参考图生成角色形象。角色形象存入项目</text>
+                        <text x="0" y="201" fill="#B5B5B6" font-size="13">专属角色库，保证后续调用的一致性。</text>
+                        
+                        <!-- 下箭头2 -->
+                        <line x1="75" y1="218" x2="75" y2="248" stroke="#B5B5B6" stroke-width="2"/>
+                        <polygon fill="#B5B5B6" points="75,248 68,238 82,238"/>
+                        
+                        <!-- 步骤3: 分镜生成 -->
+                        <g transform="translate(0, 248)">
+                            <polygon fill="#DCDDDD" points="16,8 8,8 8,18 16,18 16,8"/>
+                            <polygon fill="#DCDDDD" points="8,18 0,18 0,42 8,42 8,18"/>
+                            <polygon fill="#DCDDDD" points="16,42 8,42 8,52 16,52 16,42"/>
+                        </g>
+                        <g transform="translate(0, 248)">
+                            <polygon fill="#DCDDDD" points="134,8 142,8 142,18 134,18 134,8"/>
+                            <polygon fill="#DCDDDD" points="142,18 150,18 150,42 142,42 142,18"/>
+                            <polygon fill="#DCDDDD" points="134,42 142,42 142,52 134,52 134,42"/>
+                        </g>
+                        <text x="28" y="286" fill="#1ED760" font-size="24" font-weight="400">分镜生成</text>
+                        <!-- 右箭头 -->
+                        <line x1="162" y1="278" x2="400" y2="278" stroke="#1ED760" stroke-width="2" stroke-dasharray="6,4"/>
+                        <polygon fill="#1ED760" points="410,278 400,272 400,284"/>
+                        <text x="0" y="318" fill="#B5B5B6" font-size="13">系统根据剧本和角色库，自动生成分镜脚本和分镜静帧</text>
+                        
+                        <!-- 下箭头3 -->
+                        <line x1="75" y1="335" x2="75" y2="365" stroke="#B5B5B6" stroke-width="2"/>
+                        <polygon fill="#B5B5B6" points="75,365 68,355 82,355"/>
+                        
+                        <!-- 步骤4: 视频生成 -->
+                        <g transform="translate(0, 365)">
+                            <polygon fill="#DCDDDD" points="16,8 8,8 8,18 16,18 16,8"/>
+                            <polygon fill="#DCDDDD" points="8,18 0,18 0,42 8,42 8,18"/>
+                            <polygon fill="#DCDDDD" points="16,42 8,42 8,52 16,52 16,42"/>
+                        </g>
+                        <g transform="translate(0, 365)">
+                            <polygon fill="#DCDDDD" points="134,8 142,8 142,18 134,18 134,8"/>
+                            <polygon fill="#DCDDDD" points="142,18 150,18 150,42 142,42 142,18"/>
+                            <polygon fill="#DCDDDD" points="134,42 142,42 142,52 134,52 134,42"/>
+                        </g>
+                        <text x="28" y="403" fill="#1ED760" font-size="24" font-weight="400">视频生成</text>
+                        <!-- 右箭头 -->
+                        <line x1="162" y1="395" x2="400" y2="395" stroke="#1ED760" stroke-width="2" stroke-dasharray="6,4"/>
+                        <polygon fill="#1ED760" points="410,395 400,389 400,401"/>
+                        <text x="0" y="435" fill="#B5B5B6" font-size="13">根据生成的分镜静帧生成动态视频</text>
+                        
+                        <!-- 下箭头4 -->
+                        <line x1="75" y1="452" x2="75" y2="482" stroke="#B5B5B6" stroke-width="2"/>
+                        <polygon fill="#B5B5B6" points="75,482 68,472 82,472"/>
+                        
+                        <!-- 步骤5: 音频生成 -->
+                        <g transform="translate(0, 482)">
+                            <polygon fill="#DCDDDD" points="16,8 8,8 8,18 16,18 16,8"/>
+                            <polygon fill="#DCDDDD" points="8,18 0,18 0,42 8,42 8,18"/>
+                            <polygon fill="#DCDDDD" points="16,42 8,42 8,52 16,52 16,42"/>
+                        </g>
+                        <g transform="translate(0, 482)">
+                            <polygon fill="#DCDDDD" points="134,8 142,8 142,18 134,18 134,8"/>
+                            <polygon fill="#DCDDDD" points="142,18 150,18 150,42 142,42 142,18"/>
+                            <polygon fill="#DCDDDD" points="134,42 142,42 142,52 134,52 134,42"/>
+                        </g>
+                        <text x="28" y="520" fill="#1ED760" font-size="24" font-weight="400">音频生成</text>
+                        <!-- 右箭头 -->
+                        <line x1="162" y1="512" x2="400" y2="512" stroke="#1ED760" stroke-width="2" stroke-dasharray="6,4"/>
+                        <polygon fill="#1ED760" points="410,512 400,506 400,518"/>
+                        <text x="0" y="552" fill="#B5B5B6" font-size="13">支持TTS（文本转语音）根据对白生成配音，</text>
+                        <text x="0" y="570" fill="#B5B5B6" font-size="13">或用户上传已有角色音频文件。</text>
+                        
+                        <!-- 下箭头5 -->
+                        <line x1="75" y1="587" x2="75" y2="617" stroke="#B5B5B6" stroke-width="2"/>
+                        <polygon fill="#B5B5B6" points="75,617 68,607 82,607"/>
+                        
+                        <!-- 步骤6: 项目导出 -->
+                        <g transform="translate(0, 617)">
+                            <polygon fill="#DCDDDD" points="16,8 8,8 8,18 16,18 16,8"/>
+                            <polygon fill="#DCDDDD" points="8,18 0,18 0,42 8,42 8,18"/>
+                            <polygon fill="#DCDDDD" points="16,42 8,42 8,52 16,52 16,42"/>
+                        </g>
+                        <g transform="translate(0, 617)">
+                            <polygon fill="#DCDDDD" points="134,8 142,8 142,18 134,18 134,8"/>
+                            <polygon fill="#DCDDDD" points="142,18 150,18 150,42 142,42 142,18"/>
+                            <polygon fill="#DCDDDD" points="134,42 142,42 142,52 134,52 134,42"/>
+                        </g>
+                        <text x="28" y="655" fill="#FFFFFF" font-size="24" font-weight="400">项目导出</text>
+                        <text x="0" y="687" fill="#B5B5B6" font-size="13">用户可批量下载各分镜视频片段、完整配音，</text>
+                        <text x="0" y="705" fill="#B5B5B6" font-size="13">或一键合成带配音的完整漫剧视频。</text>
+                    </svg>
+                </div>
+                
+                <!-- 右侧：上下两张图片 -->
+                <div class="pipeline-right">
+                    <!-- 上方图片 -->
+                    <div class="pipeline-main-image" onclick="openImageModal('/public/images/manju2/资源 15@5x.png', 0.8)" style="cursor: pointer;">
+                        <img src="/public/images/manju2/资源 15@5x.png" alt="链路设计图1" style="width: 100%; height: 100%; object-fit: cover; border-radius: 12px; transition: transform 0.3s ease;">
+                    </div>
+                    
+                    <!-- 下方图片 -->
+                    <div class="pipeline-main-image" onclick="openImageModal('/public/images/manju2/资源 14@5x.png', 0.8)" style="cursor: pointer;">
+                        <img src="/public/images/manju2/资源 14@5x.png" alt="链路设计图2" style="width: 100%; height: 100%; object-fit: cover; border-radius: 12px; transition: transform 0.3s ease;">
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- SKILL设计 -->
+        <section class="skill-design-section">
+            <h2 class="section-title">SKILL设计</h2>
+            <p class="skill-design-intro">漫剧分镜脚本生成skill</p>
+
+            <div class="skill-design-content">
+                <!-- 左侧：流程图SVG -->
+                <div class="skill-flow-svg">
+                    <svg viewBox="0 0 616 800" width="100%" height="auto" style="max-width: 616px;">
+                        <!-- 步骤1: 输入剧本 -->
+                        <g>
+                            <polygon fill="#DCDDDD" points="26,22 18,22 18,31.9 26,31.9 26,22"/>
+                            <polygon fill="#DCDDDD" points="18,31.9 10,31.9 10,56.5 18,56.5 18,31.9"/>
+                            <polygon fill="#DCDDDD" points="26,56.5 18,56.5 18,65.3 26,65.3 26,56.5"/>
+                        </g>
+                        <g>
+                            <polygon fill="#DCDDDD" points="166,22 174,22 174,31.9 166,31.9 166,22"/>
+                            <polygon fill="#DCDDDD" points="174,31.9 182,31.9 182,56.5 174,56.5 174,31.9"/>
+                            <polygon fill="#DCDDDD" points="166,56.5 174,56.5 174,65.3 166,65.3 166,56.5"/>
+                        </g>
+                        <text x="38" y="51" fill="#1ED760" font-size="29" font-weight="400">输入剧本</text>
+                        <line x1="197" y1="44" x2="252" y2="44" stroke="#C9CACA" stroke-width="2.2"/>
+                        <polygon fill="#C9CACA" points="252,44 241,37.4 241,50.6"/>
+                        <text x="267" y="53" fill="#B5B5B6" font-size="22">上传剧本内容</text>
+                        
+                        <!-- 下箭头1 -->
+                        <line x1="96" y1="79" x2="96" y2="114" stroke="#B5B5B6" stroke-width="2.2"/>
+                        <polygon fill="#B5B5B6" points="96,114 87,101 105,101"/>
+                        
+                        <!-- 步骤2: 按需读取references -->
+                        <g transform="translate(0, 110)">
+                            <polygon fill="#DCDDDD" points="26,22 18,22 18,31.9 26,31.9 26,22"/>
+                            <polygon fill="#DCDDDD" points="18,31.9 10,31.9 10,56.5 18,56.5 18,31.9"/>
+                            <polygon fill="#DCDDDD" points="26,56.5 18,56.5 18,65.3 26,65.3 26,56.5"/>
+                        </g>
+                        <g transform="translate(0, 110)">
+                            <polygon fill="#DCDDDD" points="295,22 303,22 303,31.9 295,31.9 295,22"/>
+                            <polygon fill="#DCDDDD" points="303,31.9 311,31.9 311,56.5 303,56.5 303,31.9"/>
+                            <polygon fill="#DCDDDD" points="295,56.5 303,56.5 303,65.3 295,65.3 295,56.5"/>
+                        </g>
+                        <text x="38" y="161" fill="#1ED760" font-size="29" font-weight="400">按需读取references</text>
+                        <line x1="326" y1="154" x2="381" y2="154" stroke="#C9CACA" stroke-width="2.2"/>
+                        <polygon fill="#C9CACA" points="381,154 370,147.4 370,160.6"/>
+                        <text x="396" y="163" fill="#B5B5B6" font-size="22">分镜框架/提示词规范</text>
+                        
+                        <!-- 下箭头2 -->
+                        <line x1="96" y1="189" x2="96" y2="224" stroke="#B5B5B6" stroke-width="2.2"/>
+                        <polygon fill="#B5B5B6" points="96,224 87,211 105,211"/>
+                        
+                        <!-- 步骤3: 判断剧本长度 -->
+                        <g transform="translate(0, 220)">
+                            <polygon fill="#DCDDDD" points="26,22 18,22 18,31.9 26,31.9 26,22"/>
+                            <polygon fill="#DCDDDD" points="18,31.9 10,31.9 10,56.5 18,56.5 18,31.9"/>
+                            <polygon fill="#DCDDDD" points="26,56.5 18,56.5 18,65.3 26,65.3 26,56.5"/>
+                        </g>
+                        <g transform="translate(0, 220)">
+                            <polygon fill="#DCDDDD" points="224,22 232,22 232,31.9 224,31.9 224,22"/>
+                            <polygon fill="#DCDDDD" points="232,31.9 240,31.9 240,56.5 232,56.5 232,31.9"/>
+                            <polygon fill="#DCDDDD" points="224,56.5 232,56.5 232,65.3 224,65.3 224,56.5"/>
+                        </g>
+                        <text x="38" y="271" fill="#1ED760" font-size="29" font-weight="400">判断剧本长度</text>
+                        <line x1="255" y1="264" x2="310" y2="264" stroke="#C9CACA" stroke-width="2.2"/>
+                        <polygon fill="#C9CACA" points="310,264 299,257.4 299,270.6"/>
+                        <text x="325" y="273" fill="#B5B5B6" font-size="22">一次生成/分批处理</text>
+                        
+                        <!-- 下箭头3 -->
+                        <line x1="96" y1="299" x2="96" y2="334" stroke="#B5B5B6" stroke-width="2.2"/>
+                        <polygon fill="#B5B5B6" points="96,334 87,321 105,321"/>
+                        
+                        <!-- 步骤4: 生成分镜内容 -->
+                        <g transform="translate(0, 330)">
+                            <polygon fill="#DCDDDD" points="26,22 18,22 18,31.9 26,31.9 26,22"/>
+                            <polygon fill="#DCDDDD" points="18,31.9 10,31.9 10,56.5 18,56.5 18,31.9"/>
+                            <polygon fill="#DCDDDD" points="26,56.5 18,56.5 18,65.3 26,65.3 26,56.5"/>
+                        </g>
+                        <g transform="translate(0, 330)">
+                            <polygon fill="#DCDDDD" points="224,22 232,22 232,31.9 224,31.9 224,22"/>
+                            <polygon fill="#DCDDDD" points="232,31.9 240,31.9 240,56.5 232,56.5 232,31.9"/>
+                            <polygon fill="#DCDDDD" points="224,56.5 232,56.5 232,65.3 224,65.3 224,56.5"/>
+                        </g>
+                        <text x="38" y="381" fill="#1ED760" font-size="29" font-weight="400">生成分镜内容</text>
+                        <line x1="255" y1="374" x2="310" y2="374" stroke="#C9CACA" stroke-width="2.2"/>
+                        <polygon fill="#C9CACA" points="310,374 299,367.4 299,380.6"/>
+                        <text x="325" y="383" fill="#B5B5B6" font-size="22">分镜基础内容</text>
+                        
+                        <!-- 下箭头4 -->
+                        <line x1="96" y1="409" x2="96" y2="444" stroke="#B5B5B6" stroke-width="2.2"/>
+                        <polygon fill="#B5B5B6" points="96,444 87,431 105,431"/>
+                        
+                        <!-- 步骤5: 生成视频提示词 -->
+                        <g transform="translate(0, 440)">
+                            <polygon fill="#DCDDDD" points="26,22 18,22 18,31.9 26,31.9 26,22"/>
+                            <polygon fill="#DCDDDD" points="18,31.9 10,31.9 10,56.5 18,56.5 18,31.9"/>
+                            <polygon fill="#DCDDDD" points="26,56.5 18,56.5 18,65.3 26,65.3 26,56.5"/>
+                        </g>
+                        <g transform="translate(0, 440)">
+                            <polygon fill="#DCDDDD" points="253,22 261,22 261,31.9 253,31.9 253,22"/>
+                            <polygon fill="#DCDDDD" points="261,31.9 269,31.9 269,56.5 261,56.5 261,31.9"/>
+                            <polygon fill="#DCDDDD" points="253,56.5 261,56.5 261,65.3 253,65.3 253,56.5"/>
+                        </g>
+                        <text x="38" y="491" fill="#1ED760" font-size="29" font-weight="400">生成视频提示词</text>
+                        <line x1="284" y1="484" x2="339" y2="484" stroke="#C9CACA" stroke-width="2.2"/>
+                        <polygon fill="#C9CACA" points="339,484 328,477.4 328,490.6"/>
+                        <text x="354" y="493" fill="#B5B5B6" font-size="22">动态提示词</text>
+                        
+                        <!-- 下箭头5 -->
+                        <line x1="96" y1="519" x2="96" y2="554" stroke="#B5B5B6" stroke-width="2.2"/>
+                        <polygon fill="#B5B5B6" points="96,554 87,541 105,541"/>
+                        
+                        <!-- 步骤6: 生成excel文件 -->
+                        <g transform="translate(0, 550)">
+                            <polygon fill="#DCDDDD" points="26,22 18,22 18,31.9 26,31.9 26,22"/>
+                            <polygon fill="#DCDDDD" points="18,31.9 10,31.9 10,56.5 18,56.5 18,31.9"/>
+                            <polygon fill="#DCDDDD" points="26,56.5 18,56.5 18,65.3 26,65.3 26,56.5"/>
+                        </g>
+                        <g transform="translate(0, 550)">
+                            <polygon fill="#DCDDDD" points="238,22 246,22 246,31.9 238,31.9 238,22"/>
+                            <polygon fill="#DCDDDD" points="246,31.9 254,31.9 254,56.5 246,56.5 246,31.9"/>
+                            <polygon fill="#DCDDDD" points="238,56.5 246,56.5 246,65.3 238,65.3 238,56.5"/>
+                        </g>
+                        <text x="38" y="601" fill="#1ED760" font-size="29" font-weight="400">生成excel文件</text>
+                        <line x1="269" y1="594" x2="324" y2="594" stroke="#C9CACA" stroke-width="2.2"/>
+                        <polygon fill="#C9CACA" points="324,594 313,587.4 313,600.6"/>
+                        <text x="339" y="603" fill="#B5B5B6" font-size="22">本地文件</text>
+                        
+                        <!-- 下箭头6 -->
+                        <line x1="96" y1="629" x2="96" y2="664" stroke="#B5B5B6" stroke-width="2.2"/>
+                        <polygon fill="#B5B5B6" points="96,664 87,651 105,651"/>
+                        
+                        <!-- 步骤7: 输出分镜表 -->
+                        <g transform="translate(0, 660)">
+                            <polygon fill="#DCDDDD" points="26,22 18,22 18,31.9 26,31.9 26,22"/>
+                            <polygon fill="#DCDDDD" points="18,31.9 10,31.9 10,56.5 18,56.5 18,31.9"/>
+                            <polygon fill="#DCDDDD" points="26,56.5 18,56.5 18,65.3 26,65.3 26,56.5"/>
+                        </g>
+                        <g transform="translate(0, 660)">
+                            <polygon fill="#DCDDDD" points="195,22 203,22 203,31.9 195,31.9 195,22"/>
+                            <polygon fill="#DCDDDD" points="203,31.9 211,31.9 211,56.5 203,56.5 203,31.9"/>
+                            <polygon fill="#DCDDDD" points="195,56.5 203,56.5 203,65.3 195,65.3 195,56.5"/>
+                        </g>
+                        <text x="38" y="711" fill="#1ED760" font-size="29" font-weight="400">输出分镜表</text>
+                        <line x1="226" y1="704" x2="281" y2="704" stroke="#C9CACA" stroke-width="2.2"/>
+                        <polygon fill="#C9CACA" points="281,704 270,697.4 270,710.6"/>
+                        <text x="296" y="713" fill="#B5B5B6" font-size="22">导入分镜数据</text>
+                    </svg>
+                </div>
+
+                <!-- 右侧：图片 -->
+                <div class="skill-image" onclick="openImageModal('/public/images/manju2/Snipaste_2026-04-08_22-00-33.png')" style="cursor: pointer;">
+                    <img src="/public/images/manju2/Snipaste_2026-04-08_22-00-33.png" alt="SKILL设计图" style="width: 100%; height: auto; object-fit: cover; border-radius: 12px; transition: transform 0.3s ease;">
+                </div>
+            </div>
+        </section>
+        
+        <!-- 视频展示 -->
+        <section class="video-showcase-section">
+            <h2 class="section-title">视频展示</h2>
+            <div class="video-showcase-grid">
+                <div class="video-showcase-item" data-video="/public/videos/漫剧/1.mp4">
+                    <video muted loop playsinline preload="metadata">
+                        <source src="/public/videos/漫剧/1.mp4" type="video/mp4">
+                    </video>
+                    <div class="video-overlay">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                    </div>
+                </div>
+                <div class="video-showcase-item" data-video="/public/videos/漫剧/2.mp4">
+                    <video muted loop playsinline preload="metadata">
+                        <source src="/public/videos/漫剧/2.mp4" type="video/mp4">
+                    </video>
+                    <div class="video-overlay">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+    </main>
+
+    <!-- 引入导航栏 -->
+    <script type="module">
+        import { renderNavbar } from '/src/components/navbar.js';
+        renderNavbar('navbar');
+    </script>
+
+    <!-- 图片模态框 -->
+    <div id="image-modal" class="image-modal" onclick="closeImageModal(event)">
+        <button class="image-modal-close" onclick="closeImageModal(event)">×</button>
+        <img id="modal-image" src="" alt="大图预览">
+    </div>
+
+    <!-- 视频模态框 -->
+    <div id="video-modal" class="video-modal">
+        <button class="video-modal-close" onclick="closeVideoModal(event)">×</button>
+        <video id="modal-video" controls autoplay>
+            <source src="" type="video/mp4">
+        </video>
+    </div>
+
+    <!-- 模态框控制脚本 -->
+    <script>
+        // ========== 图片模态框 ==========
+        function openImageModal(src, scale = 1) {
+            const modal = document.getElementById('image-modal');
+            const img = document.getElementById('modal-image');
+            img.src = src;
+            // 根据scale参数调整图片大小
+            const baseSize = 70 * scale;
+            img.style.maxWidth = baseSize + '%';
+            img.style.maxHeight = baseSize + '%';
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeImageModal(event) {
+            if (event.target.id === 'modal-image') return;
+            const modal = document.getElementById('image-modal');
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        // ========== 视频模态框 ==========
+        function openVideoModal(src) {
+            const modal = document.getElementById('video-modal');
+            const video = document.getElementById('modal-video');
+            video.querySelector('source').src = src;
+            video.load();
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeVideoModal(event) {
+            if (event.target.id === 'modal-video') return;
+            const modal = document.getElementById('video-modal');
+            const video = document.getElementById('modal-video');
+            video.pause();
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+        
+        // 点击模态框背景关闭
+        document.getElementById('video-modal').addEventListener('click', (e) => {
+            if (e.target.id === 'video-modal') {
+                closeVideoModal(e);
+            }
+        });
+
+        // ESC 键关闭所有模态框
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                const imageModal = document.getElementById('image-modal');
+                if (imageModal.classList.contains('active')) {
+                    imageModal.classList.remove('active');
+                    document.body.style.overflow = '';
+                }
+                const videoModal = document.getElementById('video-modal');
+                if (videoModal.classList.contains('active')) {
+                    const video = document.getElementById('modal-video');
+                    video.pause();
+                    videoModal.classList.remove('active');
+                    document.body.style.overflow = '';
+                }
+            }
+        });
+
+        // ========== 视频展示交互逻辑 ==========
+        const showcaseItems = document.querySelectorAll('.video-showcase-item');
+        
+        showcaseItems.forEach(item => {
+            const video = item.querySelector('video');
+            
+            // 悬停进入 - 播放预览
+            item.addEventListener('mouseenter', () => {
+                video.play().catch(() => {});
+            });
+            
+            // 悬停离开 - 暂停并回到开头
+            item.addEventListener('mouseleave', () => {
+                video.pause();
+                video.currentTime = 0;
+            });
+            
+            // 点击 - 打开模态框
+            item.addEventListener('click', () => {
+                const videoSrc = item.dataset.video;
+                openVideoModal(videoSrc);
+            });
+        });
+    </script>
+</body>
+</html>

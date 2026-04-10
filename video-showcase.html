@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>创意视频 - 项目详情</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --color-primary: #1ED760;
+            --color-primary-dark: #1a5a3a;
+            --color-bg: #0D0D0D;
+            --color-card: rgba(255,255,255,0.03);
+            --color-border: rgba(255,255,255,0.08);
+            --color-text: #ffffff;
+            --color-text-secondary: rgba(255,255,255,0.6);
+            --color-text-muted: rgba(255,255,255,0.4);
+        }
+        
+        html {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        }
+        
+        body {
+            background: var(--color-bg);
+            color: var(--color-text);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        /* 导航栏占位 */
+        #navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 100;
+        }
+        
+        .navbar-spacer {
+            height: 60px;
+        }
+        
+        /* 返回箭头 */
+        .back-arrow {
+            position: fixed;
+            left: 60px;
+            top: 90px;
+            z-index: 100;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .back-arrow:hover {
+            background: rgba(30, 215, 96, 0.15);
+            border-color: rgba(30, 215, 96, 0.4);
+            color: #1ED760;
+            transform: translateX(-3px);
+        }
+        
+        /* 主容器 */
+        .project-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 60px 100px;
+        }
+        
+        /* 顶部封面图 */
+        .project-cover {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            border-radius: 16px;
+            overflow: hidden;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+            margin-bottom: 48px;
+            position: relative;
+        }
+        
+        .project-cover img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .project-cover-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #1a3a2a 0%, #0D0D0D 100%);
+        }
+        
+        .project-cover-placeholder span {
+            font-size: 14px;
+            color: var(--color-text-muted);
+            letter-spacing: 0.1em;
+        }
+        
+        /* 项目名称 */
+        .project-title {
+            font-size: 48px;
+            font-weight: 900;
+            color: var(--color-text);
+            margin-bottom: 48px;
+            letter-spacing: -0.02em;
+        }
+        
+        .project-title .highlight {
+            color: var(--color-primary);
+        }
+        
+        /* 章节标题样式 */
+        .section-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--color-text);
+            margin-bottom: 32px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .section-title::before {
+            content: '';
+            width: 4px;
+            height: 28px;
+            background: var(--color-primary);
+            border-radius: 2px;
+        }
+        
+        /* 章节正文内容 */
+        .section-content {
+            font-size: 15px;
+            line-height: 1.8;
+            color: var(--color-text-secondary);
+            margin-bottom: 32px;
+        }
+        
+        /* 系统集成流程图模块 */
+        .integration-section {
+            margin-top: 64px;
+        }
+        
+        .integration-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 48px;
+            align-items: start;
+        }
+        
+        .integration-flow {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+        
+        .integration-flow svg text {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+        }
+        
+        /* 流程图交互动画 */
+        .flow-card {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .flow-card:hover .card-bg {
+            filter: brightness(1.3);
+        }
+        
+        .flow-card:hover .card-glow {
+            opacity: 0.6;
+        }
+        
+        /* 节点脉冲动画 */
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.2); }
+        }
+        
+        .flow-node-pulse {
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        /* 箭头流动动画 */
+        @keyframes flowRight {
+            0% { stroke-dashoffset: 14; }
+            100% { stroke-dashoffset: 0; }
+        }
+        
+        @keyframes flowRightToLeft {
+            0% { stroke-dashoffset: -14; }
+            100% { stroke-dashoffset: 0; }
+        }
+        
+        @keyframes flowDown {
+            0% { stroke-dashoffset: 15; }
+            100% { stroke-dashoffset: 0; }
+        }
+        
+        .flow-arrow-right {
+            stroke-dasharray: 8, 6;
+            animation: flowRight 0.8s linear infinite;
+        }
+        
+        .flow-arrow-right-to-left {
+            stroke-dasharray: 8, 6;
+            animation: flowRightToLeft 0.8s linear infinite;
+        }
+        
+        .flow-arrow-down {
+            stroke-dasharray: 10, 5;
+            animation: flowDown 0.6s linear infinite;
+        }
+        
+        /* 第4步虚线 - 独立控制 */
+        @keyframes flowStep4 {
+            0% { stroke-dashoffset: 0; }
+            100% { stroke-dashoffset: 14; }
+        }
+        .flow-arrow-step4 {
+            stroke-dasharray: 8, 6;
+            animation: flowStep4 0.8s linear infinite;
+        }
+        
+        /* 第5步虚线 - 独立控制 */
+        @keyframes flowStep5 {
+            0% { stroke-dashoffset: 0; }
+            100% { stroke-dashoffset: 14; }
+        }
+        .flow-arrow-step5 {
+            stroke-dasharray: 8, 6;
+            animation: flowStep5 0.8s linear infinite;
+        }
+        
+        /* 垂直线呼吸动画 */
+        @keyframes breathe {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.6; }
+        }
+        
+        .flow-line-breathe {
+            animation: breathe 3s ease-in-out infinite;
+        }
+        
+        /* 步骤标签悬浮效果 */
+        .flow-step-group {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .flow-step-group:hover .step-label-bg {
+            fill: rgba(30, 215, 96, 0.2);
+        }
+        
+        .flow-step-group:hover .step-number {
+            fill: #00FF88;
+        }
+        
+        .integration-image {
+            border-radius: 16px;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            aspect-ratio: 4 / 3;
+        }
+        
+        .integration-image:hover {
+            transform: scale(1.02);
+            border-color: rgba(30, 215, 96, 0.3);
+        }
+        
+        .integration-image img {
+            width: 100%;
+            display: block;
+        }
+        
+        /* 响应式 */
+        
+        /* 导航栏响应式 - 与首页一致 */
+        @media (min-width: 2400px) and (max-width: 3000px) {
+            .navbar-link { font-size: 18px !important; }
+            .navbar-links { gap: 64px !important; }
+        }
+        
+        @media (min-width: 3001px) {
+            .navbar-link { font-size: 24px !important; }
+            .navbar-links { gap: 80px !important; }
+        }
+        
+        /* 2K 屏幕 - 整体放大 1.25 倍 */
+        @media (min-width: 2400px) and (max-width: 3000px) {
+            .project-container {
+                zoom: 1.25;
+            }
+            .navbar-spacer {
+                height: 76px;
+            }
+            .back-arrow {
+                left: 80px;
+                top: 110px;
+                width: 50px;
+                height: 50px;
+                border-radius: 12px;
+            }
+            .back-arrow svg {
+                width: 24px;
+                height: 24px;
+            }
+        }
+        
+        /* 4K 屏幕 - 整体放大 1.6 倍 */
+        @media (min-width: 3001px) {
+            .project-container {
+                zoom: 1.6;
+            }
+            .navbar-spacer {
+                height: 96px;
+            }
+            .back-arrow {
+                left: 100px;
+                top: 140px;
+                width: 64px;
+                height: 64px;
+                border-radius: 16px;
+            }
+            .back-arrow svg {
+                width: 32px;
+                height: 32px;
+            }
+        }
+
+        /* 图片模态框 */
+        .image-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 9999;
+            background: rgba(0, 0, 0, 0.9);
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+            box-sizing: border-box;
+        }
+        .image-modal.active {
+            display: flex;
+            overflow-y: auto;
+            padding: 40px 0;
+        }
+        .image-modal img {
+            max-width: 85%;
+            max-height: none;
+            object-fit: contain;
+            border-radius: 12px;
+            margin: auto;
+        }
+        .image-modal-close {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            color: #ffffff;
+            font-size: 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        .image-modal-close:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* 飞书多维表格模块 */
+        .feishu-section {
+            margin-top: 80px;
+        }
+
+        .feishu-gallery {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+            margin-top: 32px;
+        }
+
+        .feishu-gallery-item {
+            aspect-ratio: 21 / 9;
+            border-radius: 12px;
+            overflow: hidden;
+            background: linear-gradient(135deg, #1a2a1a 0%, #0D0D0D 100%);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .feishu-gallery-item:hover {
+            transform: scale(1.02);
+            border-color: rgba(30, 215, 96, 0.3);
+            box-shadow: 0 8px 32px rgba(30, 215, 96, 0.1);
+        }
+
+        .feishu-gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .feishu-gallery-placeholder {
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 14px;
+            letter-spacing: 0.1em;
+        }
+
+        /* 视频展示：上行 2×9:16，下行 16:9 居中（交互对齐 scroll-reveal 直播矩阵） */
+        .vs-video-showcase-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 24px;
+            width: min(100%, 840px);
+            margin: 0 auto;
+        }
+
+        .vs-video-card {
+            position: relative;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .vs-video-card:hover {
+            border-color: var(--color-primary);
+            transform: scale(1.02);
+        }
+
+        .vs-video-card--portrait {
+            aspect-ratio: 9 / 16;
+        }
+
+        .vs-video-wide-row {
+            grid-column: 1 / -1;
+            display: flex;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .vs-video-card--wide {
+            aspect-ratio: 16 / 9;
+            width: 100%;
+            max-width: 100%;
+        }
+
+        .vs-video-wide-stack {
+            grid-column: 1 / -1;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            width: 100%;
+        }
+
+        .vs-video-card--placeholder {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: default;
+            background: linear-gradient(135deg, #181818 0%, #0a0a0a 100%);
+        }
+
+        .vs-video-card--placeholder:hover {
+            transform: none;
+            border-color: rgba(30, 215, 96, 0.4);
+        }
+
+        .vs-video-placeholder-label {
+            font-size: 13px;
+            color: var(--color-text-muted);
+            letter-spacing: 0.06em;
+        }
+
+        .vs-video-card video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .vs-video-overlay {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.3);
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+
+        .vs-video-card:hover .vs-video-overlay {
+            opacity: 0;
+        }
+
+        .vs-video-overlay svg {
+            width: 40px;
+            height: 40px;
+            color: rgba(255, 255, 255, 0.92);
+        }
+
+        .vs-video-duration {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            z-index: 2;
+            padding: 4px 9px;
+            background: rgba(0, 0, 0, 0.72);
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 600;
+            color: #ffffff;
+            font-variant-numeric: tabular-nums;
+            letter-spacing: 0.02em;
+            pointer-events: none;
+        }
+
+        .vs-video-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 10000;
+            background: rgba(0, 0, 0, 0.9);
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+            box-sizing: border-box;
+        }
+
+        .vs-video-modal.active {
+            display: flex;
+        }
+
+        .vs-video-modal video {
+            max-width: 90%;
+            max-height: 90%;
+            border-radius: 12px;
+        }
+
+        .vs-video-modal-close {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            color: #ffffff;
+            font-size: 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .vs-video-modal-close:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        @media (max-width: 768px) {
+            .vs-video-showcase-grid {
+                grid-template-columns: 1fr;
+                width: 100%;
+            }
+
+            .vs-video-wide-row {
+                grid-column: 1;
+            }
+
+            .vs-video-card--wide {
+                max-width: 100%;
+            }
+
+            .vs-video-wide-stack {
+                grid-column: 1;
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <!-- 返回箭头 - 固定定位 -->
+    <a href="index.html#works" class="back-arrow" title="返回作品集">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+    </a>
+    
+    <!-- 导航栏 -->
+    <div id="navbar"></div>
+    <div class="navbar-spacer"></div>
+    
+    <!-- 主内容 -->
+    <main class="project-container">
+        <!-- 封面图 -->
+        <div class="project-cover">
+            <img src="/public/images/fengmian/未标题-2.jpg" alt="创意视频封面" loading="lazy">
+        </div>
+        
+        <!-- 项目名称 -->
+        <h1 class="project-title">创意<span class="highlight">视频</span></h1>
+        
+        <section class="integration-section vs-showcase-section" aria-label="视频展示">
+            <h2 class="section-title">视频展示</h2>
+            <!-- 视频：public/videos/shipinzhanshi/ -->
+            <div class="vs-video-showcase-grid">
+                <div class="vs-video-card vs-video-card--portrait" data-video="/public/videos/shipinzhanshi/0326-2.mp4">
+                    <video muted loop playsinline preload="metadata">
+                        <source src="/public/videos/shipinzhanshi/0326-2.mp4" type="video/mp4">
+                    </video>
+                    <span class="vs-video-duration">00:00</span>
+                    <div class="vs-video-overlay">
+                        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                    </div>
+                </div>
+                <div class="vs-video-card vs-video-card--portrait" data-video="/public/videos/shipinzhanshi/3月26.mp4">
+                    <video muted loop playsinline preload="metadata">
+                        <source src="/public/videos/shipinzhanshi/3月26.mp4" type="video/mp4">
+                    </video>
+                    <span class="vs-video-duration">00:00</span>
+                    <div class="vs-video-overlay">
+                        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                    </div>
+                </div>
+                <div class="vs-video-wide-row">
+                    <div class="vs-video-card vs-video-card--wide" data-video="/public/videos/shipinzhanshi/3月26日.mp4">
+                        <video muted loop playsinline preload="metadata">
+                            <source src="/public/videos/shipinzhanshi/3月26日.mp4" type="video/mp4">
+                        </video>
+                        <span class="vs-video-duration">00:00</span>
+                        <div class="vs-video-overlay">
+                            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                        </div>
+                    </div>
+                </div>
+                <div class="vs-video-wide-stack">
+                    <div class="vs-video-card vs-video-card--wide" data-video="/public/videos/shipinzhanshi/9b2653ae5b8f634c6a37ded7d30e0cc5_raw.mp4">
+                        <video muted loop playsinline preload="metadata">
+                            <source src="/public/videos/shipinzhanshi/9b2653ae5b8f634c6a37ded7d30e0cc5_raw.mp4" type="video/mp4">
+                        </video>
+                        <span class="vs-video-duration">00:00</span>
+                        <div class="vs-video-overlay">
+                            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                        </div>
+                    </div>
+                    <div class="vs-video-card vs-video-card--wide" data-video="/public/videos/shipinzhanshi/00a653e7dba165283c3463f3bc4a1390.mp4">
+                        <video muted loop playsinline preload="metadata">
+                            <source src="/public/videos/shipinzhanshi/00a653e7dba165283c3463f3bc4a1390.mp4" type="video/mp4">
+                        </video>
+                        <span class="vs-video-duration">00:00</span>
+                        <div class="vs-video-overlay">
+                            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                        </div>
+                    </div>
+                    <div class="vs-video-card vs-video-card--wide" data-video="/public/videos/shipinzhanshi/56fa4d7d89a7dd345ce09e0b30aee8d2.mp4">
+                        <video muted loop playsinline preload="metadata">
+                            <source src="/public/videos/shipinzhanshi/56fa4d7d89a7dd345ce09e0b30aee8d2.mp4" type="video/mp4">
+                        </video>
+                        <span class="vs-video-duration">00:00</span>
+                        <div class="vs-video-overlay">
+                            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+    </main>
+
+    <!-- 引入导航栏 -->
+    <script type="module">
+        import { renderNavbar } from '/src/components/navbar.js';
+        renderNavbar('navbar');
+    </script>
+
+    <!-- 图片模态框 -->
+    <div id="image-modal" class="image-modal" onclick="closeImageModal(event)">
+        <button class="image-modal-close" onclick="closeImageModal(event)">×</button>
+        <img id="modal-image" src="" alt="大图预览">
+    </div>
+
+    <div id="vs-video-modal" class="vs-video-modal">
+        <button type="button" class="vs-video-modal-close" onclick="closeVsVideoModal(event)">×</button>
+        <video id="vs-modal-video" controls autoplay>
+            <source src="" type="video/mp4">
+        </video>
+    </div>
+
+    <!-- 模态框控制脚本 -->
+    <script>
+        function openImageModal(src, scale = 1) {
+            const modal = document.getElementById('image-modal');
+            const img = document.getElementById('modal-image');
+            img.src = src;
+            const baseSize = 30 * scale;
+            img.style.maxWidth = baseSize + '%';
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeImageModal(event) {
+            if (event.target.id === 'modal-image') return;
+            const modal = document.getElementById('image-modal');
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        function formatVideoDuration(seconds) {
+            if (!isFinite(seconds) || seconds < 0) return '00:00';
+            var m = Math.floor(seconds / 60);
+            var s = Math.floor(seconds % 60);
+            return String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
+        }
+
+        function openVsVideoModal(src) {
+            var modal = document.getElementById('vs-video-modal');
+            var video = document.getElementById('vs-modal-video');
+            video.querySelector('source').src = src;
+            video.load();
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeVsVideoModal(event) {
+            if (event.target.id === 'vs-modal-video') return;
+            var modal = document.getElementById('vs-video-modal');
+            var video = document.getElementById('vs-modal-video');
+            video.pause();
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        document.getElementById('vs-video-modal').addEventListener('click', function (e) {
+            if (e.target.id === 'vs-video-modal') closeVsVideoModal(e);
+        });
+
+        document.querySelectorAll('.vs-video-card').forEach(function (card) {
+            var video = card.querySelector('video');
+            var badge = card.querySelector('.vs-video-duration');
+            if (video && badge) {
+                video.addEventListener('loadedmetadata', function () {
+                    badge.textContent = formatVideoDuration(video.duration);
+                });
+            }
+            card.addEventListener('mouseenter', function () {
+                video.play().catch(function () {});
+            });
+            card.addEventListener('mouseleave', function () {
+                video.pause();
+                video.currentTime = 0;
+            });
+            card.addEventListener('click', function () {
+                openVsVideoModal(card.getAttribute('data-video'));
+            });
+        });
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key !== 'Escape') return;
+            var imageModal = document.getElementById('image-modal');
+            if (imageModal.classList.contains('active')) {
+                imageModal.classList.remove('active');
+                document.body.style.overflow = '';
+                return;
+            }
+            var videoModal = document.getElementById('vs-video-modal');
+            if (videoModal.classList.contains('active')) {
+                var v = document.getElementById('vs-modal-video');
+                v.pause();
+                videoModal.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        });
+    </script>
+</body>
+</html>
