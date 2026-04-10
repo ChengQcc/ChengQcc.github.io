@@ -1,1 +1,3 @@
-.qoder/ 
+.qoder/
+dist/
+node_modules/

@@ -1,1 +1,0 @@
-import{n as e,t}from"./footer-CIcIOABB.js";document.addEventListener(`DOMContentLoaded`,()=>{e(`navbar`),t(`footer`)});
