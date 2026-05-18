@@ -27,6 +27,8 @@ const viteOk = viteStatus === 0
 const distIndex = path.join(distDir, 'index.html')
 const distReady = fs.existsSync(distIndex)
 
+const rewriteScript = path.join(__dirname, 'rewrite-oss-urls.cjs')
+
 let copyOk = true
 if (fs.existsSync(distDir)) {
   const copyResult = spawnSync(process.execPath, [copyScript], {
@@ -34,6 +36,15 @@ if (fs.existsSync(distDir)) {
     stdio: 'inherit',
   })
   copyOk = copyResult.status === 0
+
+  // 替换 OSS 代理路径为完整 URL（GitHub Pages 静态部署必需）
+  const rewriteResult = spawnSync(process.execPath, [rewriteScript], {
+    cwd: root,
+    stdio: 'inherit',
+  })
+  if (rewriteResult.status !== 0) {
+    process.stderr.write('[build] warning: OSS URL rewrite had non-zero exit, continuing.\n')
+  }
 } else if (viteOk) {
   process.stderr.write('[build] ERROR: vite exited 0 but dist/ is missing.\n')
   process.exit(1)

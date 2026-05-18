@@ -56,6 +56,30 @@ export default defineConfig({
   root: '.',
   // 默认拷贝到 dist 根目录（/images/...）；dist/public 由 npm run build → run-build.cjs 负责
   publicDir: 'public',
+  server: {
+    proxy: {
+      '/oss-videos': {
+        target: 'https://qxc-oss.oss-cn-hangzhou.aliyuncs.com',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/oss-videos/, '/portfolio-videos'),
+      },
+      '/oss-houqi': {
+        target: 'https://qxc-oss.oss-cn-hangzhou.aliyuncs.com',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/oss-houqi/, '/houqi_video'),
+      },
+      '/oss-manju': {
+        target: 'https://qxc-oss.oss-cn-hangzhou.aliyuncs.com',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/oss-manju/, '/manjuvideo'),
+      },
+      '/oss-aivideo': {
+        target: 'https://qxc-oss.oss-cn-hangzhou.aliyuncs.com',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/oss-aivideo/, '/AIvideozhanshi'),
+      },
+    },
+  },
   plugins: [publicUnderPrefix()],
   build: {
     rollupOptions: {
