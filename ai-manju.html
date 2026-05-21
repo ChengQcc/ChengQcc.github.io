@@ -1382,23 +1382,14 @@
         const showcaseItems = document.querySelectorAll('.video-showcase-item');
         
         showcaseItems.forEach(item => {
-            const video = item.querySelector('video');
-            
-            // 悬停进入 - 播放预览
-            item.addEventListener('mouseenter', () => {
-                video.play().catch(() => {});
-            });
-            
-            // 悬停离开 - 暂停并回到开头
-            item.addEventListener('mouseleave', () => {
-                video.pause();
-                video.currentTime = 0;
-            });
-            
-            // 点击 - 打开模态框
+            // 点击 - 播放/暂停切换
             item.addEventListener('click', () => {
-                const videoSrc = item.dataset.video;
-                openVideoModal(videoSrc);
+                const video = item.querySelector('video');
+                if (video.paused) {
+                    video.play().catch(() => {});
+                } else {
+                    video.pause();
+                }
             });
         });
     </script>

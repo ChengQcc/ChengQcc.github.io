@@ -788,15 +788,12 @@
                     badge.textContent = formatVideoDuration(video.duration);
                 });
             }
-            card.addEventListener('mouseenter', function () {
-                video.play().catch(function () {});
-            });
-            card.addEventListener('mouseleave', function () {
-                video.pause();
-                video.currentTime = 0;
-            });
             card.addEventListener('click', function () {
-                openVsVideoModal(card.getAttribute('data-video'));
+                if (video.paused) {
+                    video.play().catch(function () {});
+                } else {
+                    video.pause();
+                }
             });
         });
 

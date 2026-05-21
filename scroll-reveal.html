@@ -1731,51 +1731,33 @@
         }
 
         // ========== 视频交互逻辑 ==========
-        // 悬停预览播放 - 搜索期视频
+        // 点击播放 - 搜索期视频
         const videoCards = document.querySelectorAll('.video-card');
         
         videoCards.forEach(card => {
-            const video = card.querySelector('video');
-            
-            // 悬停进入 - 播放预览
-            card.addEventListener('mouseenter', () => {
-                video.play().catch(() => {}); // 静音播放不需要用户交互
-            });
-            
-            // 悬停离开 - 暂停并回到开头
-            card.addEventListener('mouseleave', () => {
-                video.pause();
-                video.currentTime = 0;
-            });
-            
-            // 点击 - 打开模态框
+            // 点击 - 播放/暂停切换
             card.addEventListener('click', () => {
-                const videoSrc = card.dataset.video;
-                openVideoModal(videoSrc);
+                const video = card.querySelector('video');
+                if (video.paused) {
+                    video.play().catch(() => {});
+                } else {
+                    video.pause();
+                }
             });
         });
         
-        // 悬停预览播放 - 项目破局视频
+        // 点击播放 - 项目破局视频
         const breakthroughVideoCards = document.querySelectorAll('.breakthrough-video-card');
         
         breakthroughVideoCards.forEach(card => {
-            const video = card.querySelector('video');
-            
-            // 悬停进入 - 播放预览
-            card.addEventListener('mouseenter', () => {
-                video.play().catch(() => {});
-            });
-            
-            // 悬停离开 - 暂停并回到开头
-            card.addEventListener('mouseleave', () => {
-                video.pause();
-                video.currentTime = 0;
-            });
-            
-            // 点击 - 打开模态框
+            // 点击 - 播放/暂停切换
             card.addEventListener('click', () => {
-                const videoSrc = card.dataset.video;
-                openVideoModal(videoSrc);
+                const video = card.querySelector('video');
+                if (video.paused) {
+                    video.play().catch(() => {});
+                } else {
+                    video.pause();
+                }
             });
         });
         
