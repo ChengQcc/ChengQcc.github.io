@@ -790,6 +790,7 @@
             }
             card.addEventListener('click', function () {
                 if (video.paused) {
+                    video.muted = false; // 点击播放时解除静音
                     video.play().catch(function () {});
                 } else {
                     video.pause();

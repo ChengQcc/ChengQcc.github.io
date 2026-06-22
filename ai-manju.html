@@ -1386,6 +1386,7 @@
             item.addEventListener('click', () => {
                 const video = item.querySelector('video');
                 if (video.paused) {
+                    video.muted = false; // 点击播放时解除静音
                     video.play().catch(() => {});
                 } else {
                     video.pause();

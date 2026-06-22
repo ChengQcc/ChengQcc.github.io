@@ -344,6 +344,23 @@
             max-width: none;
             max-height: none;
             object-fit: contain;
+            cursor: grab;
+            transition: none;
+            user-select: none;
+            -webkit-user-drag: none;
+        }
+.image-modal img.dragging {
+            cursor: grabbing;
+        }
+.image-modal-zoom-hint {
+            position: absolute;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: rgba(255,255,255,0.5);
+            font-size: 13px;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
         }
         .image-modal-close {
             position: absolute;
@@ -1702,6 +1719,7 @@
     <div id="image-modal" class="image-modal" onclick="closeImageModal(event)">
         <button class="image-modal-close" onclick="closeImageModal(event)">×</button>
         <img id="modal-image" src="" alt="大图预览">
+        <div class="image-modal-zoom-hint" id="zoom-hint">滚轮缩放 · 拖拽平移 · 双击还原</div>
     </div>
 
     <!-- 视频模态框 -->
@@ -1714,21 +1732,99 @@
 
     <!-- 模态框控制脚本 -->
     <script>
-        // ========== 图片模态框 ==========
+        // ========== 图片模态框（含拖拽/缩放） ==========
+        let imgScale = 1, imgTranslateX = 0, imgTranslateY = 0;
+        let isDragging = false, dragStartX = 0, dragStartY = 0, dragOrigX = 0, dragOrigY = 0;
+        const MIN_SCALE = 0.5, MAX_SCALE = 5;
+
+        function resetImageTransform() {
+            imgScale = 1; imgTranslateX = 0; imgTranslateY = 0;
+            applyImageTransform();
+        }
+        function applyImageTransform() {
+            const img = document.getElementById('modal-image');
+            img.style.transform = `translate(${imgTranslateX}px, ${imgTranslateY}px) scale(${imgScale})`;
+        }
+
         function openImageModal(src) {
             const modal = document.getElementById('image-modal');
             const img = document.getElementById('modal-image');
             img.src = src;
+            resetImageTransform();
             modal.classList.add('active');
             document.body.style.overflow = 'hidden';
+            // 显示操作提示
+            const hint = document.getElementById('zoom-hint');
+            hint.style.opacity = '1';
+            setTimeout(() => { hint.style.opacity = '0'; }, 3000);
         }
 
         function closeImageModal(event) {
-            if (event.target.id === 'modal-image') return; // 点击图片不关闭
+            if (event.target.id === 'modal-image') return;
             const modal = document.getElementById('image-modal');
             modal.classList.remove('active');
             document.body.style.overflow = '';
+            resetImageTransform();
         }
+
+        // 图片模态框 - 滚轮缩放
+        (function() {
+            const modal = document.getElementById('image-modal');
+            const img = document.getElementById('modal-image');
+            modal.addEventListener('wheel', function(e) {
+                if (!modal.classList.contains('active')) return;
+                e.preventDefault();
+                const delta = e.deltaY > 0 ? -0.15 : 0.15;
+                const newScale = Math.min(MAX_SCALE, Math.max(MIN_SCALE, imgScale + delta));
+                // 以鼠标位置为中心缩放
+                const rect = img.getBoundingClientRect();
+                const cx = e.clientX - rect.left - rect.width / 2;
+                const cy = e.clientY - rect.top - rect.height / 2;
+                const ratio = 1 - newScale / imgScale;
+                imgTranslateX += cx * ratio;
+                imgTranslateY += cy * ratio;
+                imgScale = newScale;
+                applyImageTransform();
+            }, { passive: false });
+
+            // 图片模态框 - 拖拽平移
+            img.addEventListener('mousedown', function(e) {
+                if (e.button !== 0) return;
+                e.preventDefault();
+                isDragging = true;
+                dragStartX = e.clientX; dragStartY = e.clientY;
+                dragOrigX = imgTranslateX; dragOrigY = imgTranslateY;
+                img.classList.add('dragging');
+            });
+            document.addEventListener('mousemove', function(e) {
+                if (!isDragging) return;
+                imgTranslateX = dragOrigX + (e.clientX - dragStartX);
+                imgTranslateY = dragOrigY + (e.clientY - dragStartY);
+                applyImageTransform();
+            });
+            document.addEventListener('mouseup', function() {
+                if (isDragging) {
+                    isDragging = false;
+                    img.classList.remove('dragging');
+                }
+            });
+
+            // 图片模态框 - 双击缩放/还原
+            img.addEventListener('dblclick', function(e) {
+                e.stopPropagation();
+                if (imgScale !== 1 || imgTranslateX !== 0 || imgTranslateY !== 0) {
+                    resetImageTransform();
+                } else {
+                    imgScale = 2;
+                    const rect = img.getBoundingClientRect();
+                    const cx = e.clientX - rect.left - rect.width / 2;
+                    const cy = e.clientY - rect.top - rect.height / 2;
+                    imgTranslateX = -cx;
+                    imgTranslateY = -cy;
+                    applyImageTransform();
+                }
+            });
+        })();
 
         // ========== 视频交互逻辑 ==========
         // 点击播放 - 搜索期视频
@@ -1739,6 +1835,7 @@
             card.addEventListener('click', () => {
                 const video = card.querySelector('video');
                 if (video.paused) {
+                    video.muted = false; // 点击播放时解除静音
                     video.play().catch(() => {});
                 } else {
                     video.pause();
@@ -1754,6 +1851,7 @@
             card.addEventListener('click', () => {
                 const video = card.querySelector('video');
                 if (video.paused) {
+                    video.muted = false; // 点击播放时解除静音
                     video.play().catch(() => {});
                 } else {
                     video.pause();
@@ -1796,6 +1894,7 @@
                 if (imageModal.classList.contains('active')) {
                     imageModal.classList.remove('active');
                     document.body.style.overflow = '';
+                    resetImageTransform();
                 }
                 // 视频模态框
                 const videoModal = document.getElementById('video-modal');
